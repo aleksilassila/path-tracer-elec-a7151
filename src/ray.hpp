@@ -9,11 +9,21 @@ public:
 
 	Ray(Vector origin, Vector direction) : o_(origin), d_(direction) { }
 
+	Vector GetOrigin() {
+		return o_;
+	}
+
+	Vector GetDirection() {
+		return d_;
+	}
+
 	void UpdateOrigin(Vector origin) {
 		o_ = origin;
+	}
 
-	void UpdateiDirection(Vector direction) {
+	void UpdateDirection(Vector direction) {
 		d_ = direction;
+	}
 
 
 private:
