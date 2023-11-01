@@ -21,8 +21,14 @@ list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 # test files
 file(GLOB TESTS "tests/test_filemanager.cpp")
 
+add_subdirectory(libs/SFML)
+
+include_directories(${SFML_INCLUDE_DIR})
+
 # App
 add_executable(app ${MAIN} ${SOURCES})
+
+target_link_libraries(app sfml-graphics sfml-window sfml-system)
 
 # Tests
 add_executable(tests ${TESTS} ${SOURCES})
