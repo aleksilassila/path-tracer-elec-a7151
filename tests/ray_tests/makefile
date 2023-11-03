@@ -1,6 +1,5 @@
 
-vector.out: ../../src/vector.hpp ../../src/ray.hpp main.cpp
-	g++ -o ray.out main.cpp ../../src/vector.hpp ../../src/ray.hpp
-
+vector.out: ../../src/ray.hpp main.cpp
+	g++ -o ray.out main.cpp 
 clean:
-	rm ray.out *.o
+	rm ray.out 

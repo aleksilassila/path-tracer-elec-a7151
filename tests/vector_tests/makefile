@@ -1,6 +1,6 @@
 
 vector.out: ../../src/vector.hpp main.cpp
-	g++ -o vector.out main.cpp ../../src/vector.hpp
+	g++ -o vector.out main.cpp 
 
 clean:
-	rm vector.out *.o
+	rm vector.out 
