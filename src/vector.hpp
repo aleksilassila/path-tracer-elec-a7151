@@ -1,5 +1,5 @@
 /*
- *Our own excellent vector class
+ * Our own excellent vector class
  */
 
 #ifndef _VECTOR_HPP_
@@ -17,11 +17,11 @@ public:
     double y() const { return y_; }
     double z() const { return z_; }
 
-    Vector operator+(Vector& b) {
+    Vector operator+(const Vector& b) {
 	    return Vector(x_+b.x_, y_+b.y_, z_+b.z_);
     }
 	    
-    Vector operator-(Vector& b) {
+    Vector operator-(const Vector& b) {
 	    return Vector(x_-b.x_, y_-b.y_, z_-b.z_);
     }
 
@@ -46,14 +46,14 @@ public:
 	/**
 	 * \brief Dot Product 
 	 */
-    double operator*(Vector& v2) {
+    double operator*(const Vector& v2) {
 	    return x_ * v2.x_ + y_ * v2.y_ + z_ * v2.z_;
     }
 
 	/**
 	 * \brief Cross Product 
 	 */
-    Vector operator%(Vector& v2) {
+    Vector operator%(const Vector& v2) {
 	    return Vector(y_*v2.z_ - z_*v2.y_,  z_*v2.x_ - x_*v2.z_,
 			    x_*v2.y_ - y_*v2.x_);
     }
@@ -68,7 +68,7 @@ private:
     
 };
 
-std::ostream& operator<<(std::ostream& os, const Vector& v) {
+inline std::ostream& operator<<(std::ostream& os, const Vector& v) {
     os << '(' << v.x_ << ',' << v.y_ << ',' << v.z_  << ')';
     return os;
 }

@@ -9,11 +9,11 @@ public:
 
 	Ray(Vector origin, Vector direction) : o_(origin), d_(direction) { }
 
-	Vector GetOrigin() {
+	Vector GetOrigin() const {
 		return o_;
 	}
 
-	Vector GetDirection() {
+	Vector GetDirection() const {
 		return d_;
 	}
 
