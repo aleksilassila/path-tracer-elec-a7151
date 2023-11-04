@@ -13,8 +13,8 @@ int main() {
     std::cout << r1.GetOrigin() << std::endl;
     std::cout << r1.GetDirection() << std::endl;
 
-    r1.UpdateOrigin(v3);
-    r1.UpdateDirection(v4.Norm());
+    r1.SetOrigin(v3);
+    r1.SetDirection(v4.Norm());
 
     std::cout << r1.GetOrigin() << std::endl;
     std::cout << r1.GetDirection() << std::endl;
