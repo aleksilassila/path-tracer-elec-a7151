@@ -5,7 +5,7 @@
 #include <iostream>
 #include "objects.hpp"
 #include "ray.hpp"
-//#include "vector.hpp"
+#include "vector.hpp"
 
 
 Object::Sphere::Sphere(const Vector & origin, double radius) : Object(origin), radius_(radius) { }
@@ -52,4 +52,39 @@ Vector Object::Sphere::Normal(const Vector & point) {
     Vector normal = point_ - origin_;
     // Return unit vector
     return normal.Norm();
+}
+
+
+
+Object::Triangle::Triangle(const Vector& origin, const Vector& a, const Vector& b) : Object(origin), a_(a), b_(b) {
+        oa_ = a_ - origin_;
+        ob_ = b_ - origin_;
+        oa_ob_ = oa_%ob_;
+        n_ = oa_ob_.Norm();
+    } 
+
+Vector Object::Triangle::Normal(const Vector & point) {return n_;} 
+//This does actually not need a point, have to think about this...
+
+Vector Object::Triangle::Intersection(const Vector & ray) {
+    // TODO 
+    return Vector(0,0,0); 
+}   
+
+double Object::Triangle::Intersect(Ray & ray) {
+    Vector dir = ray.GetDirection();
+    double det = dir * (oa_ob_);
+    if (-0.0001 < det < 0.0001) return 0;
+    std::cout << "det: " << det << std::endl;
+    Vector or_or = ray.GetOrigin() - origin_;
+    Vector temp = or_or * (1/det);
+    double u = ob_%dir * temp;
+    std::cout << "u: " << u << std::endl;
+    if (u < 0 || u > 1) return 0;
+    double v = dir%oa_ * temp;
+    std::cout << "v: " << v << std::endl;
+    if (!(0<v<=1)) return 0;
+    double t = -(oa_ob_ * temp);
+    std::cout << "t: " << t << std::endl;
+    return t > 0 ? t : 0;
 }

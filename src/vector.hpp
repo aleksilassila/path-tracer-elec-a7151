@@ -11,7 +11,7 @@
 class Vector{
 public:
 
-    Vector(double x, double y, double z) : x_(x), y_(y), z_(z) {}
+    Vector(double x=0, double y=0, double z=0) : x_(x), y_(y), z_(z) {}
 
     double x() const { return x_; }
     double y() const { return y_; }

@@ -63,6 +63,40 @@ public:
 };
 
 
+class Triangle : public Object {
+
+/*
+* Triangle class inherits from Object
+*/
+
+private:
+
+    Vector origin_;
+    Vector a_;
+    Vector b_;
+    Vector oa_; // a_ - origin_
+    Vector ob_; // b_ - origin_
+    Vector oa_ob_; // o_a cross o_b
+    Vector n_;
+
+public:
+
+    Triangle(const Vector& origin, const Vector& a, const Vector& b);
+    ~Triangle() override = default;
+
+    Vector Intersection(const Vector & ray) override;
+    /*
+    * Calculates intersection of Ray and Triangle if it exists
+    */
+    double Intersect(Ray & ray) override; 
+
+    Vector Normal(const Vector & point) override;
+    /*
+    * Calculates normal vector of triangle at point given by vector point
+    */
+
+};
+
 } // namespace Object
 
 #endif // OBJECTS_HPP
