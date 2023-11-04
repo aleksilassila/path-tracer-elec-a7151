@@ -82,7 +82,8 @@ double Object::Triangle::Intersect(Ray &ray) {
     if (u < 0 || u > 1) return 0;
     double v = dir % oa_ * temp;
     std::cout << "v: " << v << std::endl;
-    if (!(0 < v <= 1)) return 0;
+    if (v < 0 || v > 1) return 0;
+    if (u + v > 1) return 0;
     double t = -(oa_ob_ * temp);
     std::cout << "t: " << t << std::endl;
     return t > 0 ? t : 0;
