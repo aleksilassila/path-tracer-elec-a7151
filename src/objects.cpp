@@ -56,6 +56,7 @@ Vector Object::Sphere::Normal(const Vector &point) {
 
 
 Object::Triangle::Triangle(const Vector &origin, const Vector &a, const Vector &b) : Object(origin), a_(a), b_(b) {
+    origin_ = origin;
     oa_ = a_ - origin_;
     ob_ = b_ - origin_;
     oa_ob_ = oa_ % ob_;
@@ -73,6 +74,8 @@ Vector Object::Triangle::Intersection(const Vector &ray) {
 double Object::Triangle::Intersect(Ray &ray) {
     Vector dir = ray.GetDirection();
     double det = dir * (oa_ob_);
+    std::cout << "oa: " << oa_ << "ob: " << ob_ << "oa_ob: " << oa_ob_ << std::endl;
+    std::cout << origin_ << std::endl;
     if (-0.0001 < det < 0.0001) return 0;
     std::cout << "det: " << det << std::endl;
     Vector or_or = ray.GetOrigin() - origin_;
