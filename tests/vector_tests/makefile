@@ -1,5 +1,5 @@
 
-vector.out: ../../src/vector.hpp main.cpp
+vector.out: ../../src/utils/vector.hpp main.cpp
 	g++ -o vector.out main.cpp 
 
 clean:

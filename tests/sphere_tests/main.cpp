@@ -1,11 +1,11 @@
 #include <iostream>
-#include "../../src/vector.hpp"
-#include "../../src/ray.hpp"
+#include "../../src/utils/vector.hpp"
+#include "../../src/utils/ray.hpp"
 #include "../../src/objects.hpp"
 
 int main() {
-    Vector v_o = Vector(0,0,0), v_d = Vector(3,1,1).Norm();
-    Vector center = Vector(6,0,0);
+    Vector v_o = Vector(0, 0, 0), v_d = Vector(3, 1, 1).Norm();
+    Vector center = Vector(6, 0, 0);
     Object::Sphere sph = Object::Sphere(center, 3);
     std::cout << sph.getOrigin() << std::endl;
     std::cout << sph.getOrigin() << std::endl;
@@ -20,10 +20,9 @@ int main() {
         std::cout << intersection << std::endl;
         Vector norm = sph.Normal(intersection);
         std::cout << "Normal vector in intersection point is: " << norm << std::endl;
-    }
-    else {
+    } else {
         std::cout << "No intersection." << std::endl;
     }
-         
+
     return 0;
 }

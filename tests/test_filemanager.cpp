@@ -5,8 +5,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../src/filemanager.hpp"
-#include "../src/colour.h"
+#include "../src/utils/filemanager.hpp"
+#include "../src/utils/colour.h"
 
 
 void TestWriteOutput() {
@@ -16,13 +16,13 @@ void TestWriteOutput() {
 
     unsigned int yDim = 255;
     unsigned int xDim = 255;
-   
+
     std::vector<std::vector<Colour>> buffer(yDim, std::vector<Colour>(xDim));
 
     // Fill the buffer
     for (unsigned int i = 0; i < yDim; i++) {
         for (unsigned int j = 0; j < xDim; j++) {
-            buffer[j][i] = {(unsigned char)i, (unsigned char)j, 255};
+            buffer[j][i] = {(unsigned char) i, (unsigned char) j, 255};
         }
     }
 
@@ -30,9 +30,7 @@ void TestWriteOutput() {
 
     if (fm.writeOutput(buffer, xDim, yDim)) {
         std::cout << "Test WriteOutput: Passed" << std::endl;
-    } 
-    
-    else {
+    } else {
         std::cout << "Test WriteOutput: Failed" << std::endl;
     }
 }

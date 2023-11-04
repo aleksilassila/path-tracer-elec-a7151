@@ -19,16 +19,17 @@ Write outout to ppm image file
 Read scene from input file
 */
 
-private: 
+private:
 
     std::string inputPath_;
     std::string outputPath_;
 
 public:
 
-    FileManager(const std::string& inputPath, const std::string& outputPath);
+    FileManager(const std::string &inputPath, const std::string &outputPath);
 
-    bool writeOutput(const std::vector<std::vector<Colour>> & outputBuffer, unsigned int xDim, unsigned int yDim);
+    bool writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
+
     /*
     * Writes output buffer to ppm image file
     * 
@@ -41,7 +42,7 @@ public:
     * Not implemented yet
     * 
     */
-   
+
 };
 
 
