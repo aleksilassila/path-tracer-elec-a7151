@@ -7,6 +7,7 @@
 
 #include "../utils/vector.hpp"
 #include "../utils/ray.hpp"
+#include "SFML/Graphics/Color.hpp"
 
 namespace Object {
 
@@ -20,10 +21,13 @@ namespace Object {
 
         Vector origin_;
         // TODO MATERIAL
+        sf::Color color_ = sf::Color::Magenta; // TODO: Replace with material class?
 
     public:
 
         Object(Vector origin) : origin_(origin) {}
+
+        Object(Vector origin, sf::Color color) : origin_(origin), color_(color) {}
 
         virtual ~Object() = default;
 
@@ -36,6 +40,8 @@ namespace Object {
         virtual Vector Normal(const Vector &point) = 0;
 
         friend std::ostream &operator<<(std::ostream &os, const Object &obj);
+
+        sf::Color getColor() const;
     };
 
     class Sphere : public Object {
@@ -51,6 +57,8 @@ namespace Object {
     public:
 
         Sphere(const Vector &origin, double radius);
+
+        Sphere(const Vector &origin, double radius, sf::Color color);
 
         ~Sphere() override = default;
 

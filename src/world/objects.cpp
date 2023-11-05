@@ -10,6 +10,8 @@
 
 Object::Sphere::Sphere(const Vector &origin, double radius) : Object(origin), radius_(radius) {}
 
+Object::Sphere::Sphere(const Vector &origin, double radius, sf::Color color) : Object(origin, color), radius_(radius) {}
+
 //Object::Sphere::~Sphere(){}
 
 Vector Object::Sphere::GetIntersection(const Vector &ray) {
@@ -96,3 +98,5 @@ std::ostream &Object::operator<<(std::ostream &os, const Object &obj) {
     os << "origin: " << obj.origin_;
     return os;
 }
+
+sf::Color Object::Object::getColor() const { return color_; }

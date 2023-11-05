@@ -22,7 +22,7 @@ sf::Color getPixelColor(float x, float y, Scene &scene) {
     for (const auto &object: scene.GetObjects()) {
         double distance = object->GetIntersectionDistance(ray);
         if (distance != 0) {
-            return sf::Color::Magenta;
+            return object->getColor();
         }
     }
 
@@ -73,7 +73,7 @@ int main() {
     Camera camera = Camera(Vector(0, 0, -5), Vector(0, 0, 1));
 
     auto sphere = std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2), 0.5));
-    auto sphere2 = std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 0), 0.2));
+    auto sphere2 = std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 0), 0.2, sf::Color::Red));
     Scene scene(camera, {sphere, sphere2});
 
     std::cout << scene << std::endl;
