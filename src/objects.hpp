@@ -35,6 +35,7 @@ namespace Object {
 
         virtual Vector Normal(const Vector &point) = 0;
 
+        friend std::ostream &operator<<(std::ostream &os, const Object &obj);
     };
 
     class Sphere : public Object {

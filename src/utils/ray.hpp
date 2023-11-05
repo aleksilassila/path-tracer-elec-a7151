@@ -7,7 +7,7 @@ class Ray {
 
 public:
 
-    Ray(Vector origin, Vector direction) : o_(origin), d_(direction) {}
+    Ray(Vector origin, Vector direction) : o_(origin), d_(direction.Norm()) {}
 
     Vector GetOrigin() const {
         return o_;
@@ -26,7 +26,7 @@ public:
     }
 
 
-private:
+protected:
     Vector o_, d_;
 
 };

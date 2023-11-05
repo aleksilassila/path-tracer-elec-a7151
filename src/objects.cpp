@@ -91,3 +91,8 @@ double Object::Triangle::Intersect(Ray &ray) {
     std::cout << "t: " << t << std::endl;
     return t > 0 ? t : 0;
 }
+
+std::ostream &Object::operator<<(std::ostream &os, const Object &obj) {
+    os << "origin: " << obj.origin_;
+    return os;
+}
