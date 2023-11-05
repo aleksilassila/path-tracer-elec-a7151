@@ -19,7 +19,12 @@ set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
 list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
 # test files
-file(GLOB TESTS "tests/test_filemanager.cpp")
+file(GLOB TESTS 
+
+        "tests/filemanager_tests/test_write_output.cpp"
+        # Other test directories
+
+        )
 
 add_subdirectory(libs/SFML)
 

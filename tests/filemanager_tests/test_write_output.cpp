@@ -5,8 +5,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../src/utils/filemanager.hpp"
-#include "../src/utils/colour.h"
+#include "../../src/utils/filemanager.cpp"
+#include "../../src/utils/colour.h"
 
 
 void TestWriteOutput() {
@@ -35,6 +35,7 @@ void TestWriteOutput() {
     }
 }
 
+    
 int main() {
     // Run tests
     TestWriteOutput();
