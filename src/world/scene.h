@@ -25,6 +25,14 @@ public:
 
     [[nodiscard]] std::vector<std::shared_ptr<Object::Object>> GetObjects() const;
 
+    void SetAmbientLightDirection(Vector direction) {
+        ambientLightDirection_ = direction.Norm();
+    }
+
+    Vector GetAmbientLightDirection() const {
+        return ambientLightDirection_;
+    }
+
     Camera GetCamera() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
@@ -32,6 +40,7 @@ public:
 private:
     Camera camera_;
     std::vector<std::shared_ptr<Object::Object>> objects_;
+    Vector ambientLightDirection_ = Vector(1, -1, -0.5).Norm();
 };
 
 #endif //PATHTRACER_SCENE_H

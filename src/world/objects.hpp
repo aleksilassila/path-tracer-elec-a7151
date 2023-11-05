@@ -33,15 +33,15 @@ namespace Object {
 
         Vector getOrigin() const { return origin_; }
 
-        virtual Vector GetIntersection(const Vector &ray) = 0;
+        Vector GetIntersectionPoint(const Ray &ray);
 
-        virtual double GetIntersectionDistance(Ray &ray) = 0;
+        virtual double GetIntersectionDistance(const Ray &ray) = 0;
 
         virtual Vector Normal(const Vector &point) = 0;
 
         friend std::ostream &operator<<(std::ostream &os, const Object &obj);
 
-        sf::Color getColor() const;
+        sf::Color GetColor() const;
     };
 
     class Sphere : public Object {
@@ -62,12 +62,10 @@ namespace Object {
 
         ~Sphere() override = default;
 
-        Vector GetIntersection(const Vector &ray) override;
-
         /*
         * Calculates intersection of Ray and Sphere if it exists
         */
-        double GetIntersectionDistance(Ray &ray) override;
+        double GetIntersectionDistance(const Ray &ray) override;
 
         Vector Normal(const Vector &point) override;
         /*
@@ -99,12 +97,10 @@ namespace Object {
 
         ~Triangle() override = default;
 
-        Vector GetIntersection(const Vector &ray) override;
-
         /*
         * Calculates intersection of Ray and Triangle if it exists
         */
-        double GetIntersectionDistance(Ray &ray) override;
+        double GetIntersectionDistance(const Ray &ray) override;
 
         Vector Normal(const Vector &point) override;
         /*

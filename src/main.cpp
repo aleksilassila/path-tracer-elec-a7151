@@ -6,28 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "utils/ray.hpp"
 #include "world/scene.h"
-
-sf::Color getPixelColor(float x, float y, Scene &scene) {
-    // This code calculates if there are >= 1 intersections between a ray
-    // shot from cameraOrigin to a direction of (x, y, 1) (where x and y
-    // depend on current pixel coordinate and are values from -1 to 1)
-    // and a sphere with radius 0.5 and center at (0, 0, 0).
-
-    float xScaled = x * 2 - 1;
-    float yScaled = y * 2 - 1;
-
-    Camera camera = scene.GetCamera();
-    Ray ray = camera.GetRay(xScaled, yScaled);
-
-    for (const auto &object: scene.GetObjects()) {
-        double distance = object->GetIntersectionDistance(ray);
-        if (distance != 0) {
-            return object->getColor();
-        }
-    }
-
-    return sf::Color::Black;
-}
+#include "renderer.h"
 
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
@@ -35,6 +14,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     // Create an image to work with
     sf::Image image;
     image.create(windowSize, sf::Color::Transparent);
+
+    Renderer renderer;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -44,14 +25,18 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             }
         }
 
-        for (int x = 0; x < windowSize.x; x++) {
-            for (int y = 0; y < windowSize.y; y++) {
+        for (unsigned int x = 0; x < windowSize.x; x++) {
+            for (unsigned int y = 0; y < windowSize.y; y++) {
+                double scaledX = (double) x * 2 / (double) windowSize.x - 1;
+                double scaledY = (double) y * 2 / (double) windowSize.y - 1;
                 image.setPixel(sf::Vector2u(x, y),
-                               getPixelColor((float) x / (float) windowSize.x, (float) y / (float) windowSize.y,
-                                             scene));
+                               renderer.CalculatePixelColor(
+                                       scaledX,
+                                       scaledY,
+                                       scene
+                               ));
             }
         }
-
 
         // Load the image into a texture and display it
         sf::Texture texture;
@@ -70,11 +55,13 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 int main() {
     sf::Vector2u windowSize(600, 600);
 
-    Camera camera = Camera(Vector(0, 0, -5), Vector(0, 0, 1));
+    Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
 
-    auto sphere = std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2), 0.5));
-    auto sphere2 = std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 0), 0.2, sf::Color::Red));
-    Scene scene(camera, {sphere, sphere2});
+    Scene scene(camera, {
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 8), 5, sf::Color::Red)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-0.2, 0, 1), 0.5)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, sf::Color::Green))
+    });
 
     std::cout << scene << std::endl;
 

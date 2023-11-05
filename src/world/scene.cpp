@@ -9,7 +9,7 @@ void Scene::AddObject(std::shared_ptr<Object::Object> object) {
 }
 
 void Scene::RemoveObject(std::shared_ptr<Object::Object> object) {
-    objects_.erase(std::remove(objects_.begin(), objects_.end(), object), objects_.end());
+//    objects_.erase(std::remove(objects_.begin(), objects_.end(), object), objects_.end());
 }
 
 std::vector<std::shared_ptr<Object::Object>> Scene::GetObjects() const {

@@ -19,12 +19,12 @@ set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
 list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
 # test files
-file(GLOB TESTS 
+file(GLOB TESTS
 
         "tests/filemanager_tests/test_write_output.cpp"
         # Other test directories
 
-        )
+)
 
 add_subdirectory(libs/SFML)
 
@@ -35,7 +35,8 @@ add_executable(app ${MAIN} ${SOURCES}
         src/world/scene.h
         src/world/camera.h
         src/world/scene.cpp
-        src/world/objects.cpp)
+        src/world/objects.cpp
+        src/renderer.h)
 
 target_link_libraries(app sfml-graphics sfml-window sfml-system)
 

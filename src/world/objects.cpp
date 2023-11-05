@@ -12,14 +12,7 @@ Object::Sphere::Sphere(const Vector &origin, double radius) : Object(origin), ra
 
 Object::Sphere::Sphere(const Vector &origin, double radius, sf::Color color) : Object(origin, color), radius_(radius) {}
 
-//Object::Sphere::~Sphere(){}
-
-Vector Object::Sphere::GetIntersection(const Vector &ray) {
-    // TODO 
-    return Vector(0, 0, 0);
-}
-
-double Object::Sphere::GetIntersectionDistance(Ray &ray) {
+double Object::Sphere::GetIntersectionDistance(const Ray &ray) {
     Vector or_or = getOrigin() - ray.GetOrigin();
 //    std::cout << "or_or: " << or_or << std::endl;
 //    std::cout << "ray or: " << ray.GetOrigin() << std::endl;
@@ -68,12 +61,7 @@ Object::Triangle::Triangle(const Vector &origin, const Vector &a, const Vector &
 Vector Object::Triangle::Normal(const Vector &point) { return n_; }
 //This does actually not need a point, have to think about this...
 
-Vector Object::Triangle::GetIntersection(const Vector &ray) {
-    // TODO 
-    return Vector(0, 0, 0);
-}
-
-double Object::Triangle::GetIntersectionDistance(Ray &ray) {
+double Object::Triangle::GetIntersectionDistance(const Ray &ray) {
     Vector dir = ray.GetDirection();
     double det = dir * (oa_ob_);
     std::cout << "oa: " << oa_ << "ob: " << ob_ << "oa_ob: " << oa_ob_ << std::endl;
@@ -99,4 +87,8 @@ std::ostream &Object::operator<<(std::ostream &os, const Object &obj) {
     return os;
 }
 
-sf::Color Object::Object::getColor() const { return color_; }
+sf::Color Object::Object::GetColor() const { return color_; }
+
+Vector Object::Object::GetIntersectionPoint(const Ray &ray) {
+    return ray.GetOrigin() + ray.GetDirection().Norm() * GetIntersectionDistance(ray);
+}
