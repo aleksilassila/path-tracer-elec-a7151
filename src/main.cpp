@@ -19,22 +19,14 @@ sf::Color getPixelColor(float x, float y, Scene &scene) {
     Camera camera = scene.GetCamera();
     Ray ray = camera.GetRay(xScaled, yScaled);
 
-    float sphereRadius = 0.5;
-
-    Vector rayDir = ray.GetDirection();
-    Vector rayOrig = ray.GetOrigin();
-
-    float a = rayDir * rayDir;
-    float b = 2 * (rayDir * rayOrig);
-    float c = (rayOrig * rayOrig) - sphereRadius * sphereRadius;
-
-    float discriminant = b * b - 4 * a * c;
-
-    if (discriminant < 0) { // No hits
-        return sf::Color::Black;
+    for (const auto &object: scene.GetObjects()) {
+        double distance = object->GetIntersectionDistance(ray);
+        if (distance != 0) {
+            return sf::Color::Magenta;
+        }
     }
 
-    return sf::Color::Magenta;
+    return sf::Color::Black;
 }
 
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
@@ -78,10 +70,11 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 int main() {
     sf::Vector2u windowSize(600, 600);
 
-    Camera camera = Camera(Vector(0, 0, -5), Vector(0, 0, 0));
+    Camera camera = Camera(Vector(0, 0, -5), Vector(0, 0, 1));
 
-    auto sphere = std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 1), 0.5));
-    Scene scene(camera, {sphere});
+    auto sphere = std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2), 0.5));
+    auto sphere2 = std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 0), 0.2));
+    Scene scene(camera, {sphere, sphere2});
 
     std::cout << scene << std::endl;
 

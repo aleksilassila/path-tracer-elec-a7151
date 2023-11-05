@@ -5,15 +5,15 @@
 #include "scene.h"
 
 void Scene::AddObject(std::shared_ptr<Object::Object> object) {
-
+    objects_.push_back(object);
 }
 
 void Scene::RemoveObject(std::shared_ptr<Object::Object> object) {
-
+    objects_.erase(std::remove(objects_.begin(), objects_.end(), object), objects_.end());
 }
 
 std::vector<std::shared_ptr<Object::Object>> Scene::GetObjects() const {
-    return {};
+    return objects_;
 }
 
 std::ostream &operator<<(std::ostream &os, const Scene &scene) {

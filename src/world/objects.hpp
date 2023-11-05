@@ -29,9 +29,9 @@ namespace Object {
 
         Vector getOrigin() const { return origin_; }
 
-        virtual Vector Intersection(const Vector &ray) = 0;
+        virtual Vector GetIntersection(const Vector &ray) = 0;
 
-        virtual double Intersect(Ray &ray) = 0;
+        virtual double GetIntersectionDistance(Ray &ray) = 0;
 
         virtual Vector Normal(const Vector &point) = 0;
 
@@ -54,12 +54,12 @@ namespace Object {
 
         ~Sphere() override = default;
 
-        Vector Intersection(const Vector &ray) override;
+        Vector GetIntersection(const Vector &ray) override;
 
         /*
         * Calculates intersection of Ray and Sphere if it exists
         */
-        double Intersect(Ray &ray) override;
+        double GetIntersectionDistance(Ray &ray) override;
 
         Vector Normal(const Vector &point) override;
         /*
@@ -91,12 +91,12 @@ namespace Object {
 
         ~Triangle() override = default;
 
-        Vector Intersection(const Vector &ray) override;
+        Vector GetIntersection(const Vector &ray) override;
 
         /*
         * Calculates intersection of Ray and Triangle if it exists
         */
-        double Intersect(Ray &ray) override;
+        double GetIntersectionDistance(Ray &ray) override;
 
         Vector Normal(const Vector &point) override;
         /*
