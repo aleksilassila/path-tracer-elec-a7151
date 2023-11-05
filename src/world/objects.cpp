@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include "objects.hpp"
-#include "utils/ray.hpp"
-#include "utils/vector.hpp"
+#include "../utils/ray.hpp"
+#include "../utils/vector.hpp"
 
 
 Object::Sphere::Sphere(const Vector &origin, double radius) : Object(origin), radius_(radius) {}

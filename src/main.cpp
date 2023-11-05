@@ -5,7 +5,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "utils/ray.hpp"
-#include "scene.h"
+#include "world/scene.h"
 
 sf::Color getPixelColor(float x, float y, Scene &scene) {
     // This code calculates if there are >= 1 intersections between a ray

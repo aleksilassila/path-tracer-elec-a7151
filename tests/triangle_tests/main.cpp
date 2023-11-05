@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../../src/utils/vector.hpp"
 #include "../../src/utils/ray.hpp"
-#include "../../src/objects.hpp"
+#include "../../src/world/objects.hpp"
 
 
 int main() {

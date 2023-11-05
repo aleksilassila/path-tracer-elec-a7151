@@ -5,7 +5,7 @@
 #ifndef PATHTRACER_CAMERA_H
 #define PATHTRACER_CAMERA_H
 
-#include "utils/ray.hpp"
+#include "../utils/ray.hpp"
 
 /**
  * Camera class is essentially a ray with some

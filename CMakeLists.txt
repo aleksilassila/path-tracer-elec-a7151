@@ -27,9 +27,10 @@ include_directories(${SFML_INCLUDE_DIR})
 
 # App
 add_executable(app ${MAIN} ${SOURCES}
-        src/scene.h
-        src/camera.h
-        src/scene.cpp)
+        src/world/scene.h
+        src/world/camera.h
+        src/world/scene.cpp
+        src/world/objects.cpp)
 
 target_link_libraries(app sfml-graphics sfml-window sfml-system)
 

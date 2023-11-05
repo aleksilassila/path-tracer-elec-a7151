@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../../src/utils/vector.hpp"
 #include "../../src/utils/ray.hpp"
-#include "../../src/objects.hpp"
+#include "../../src/world/objects.hpp"
 
 int main() {
     Vector v_o = Vector(0, 0, 0), v_d = Vector(3, 1, 1).Norm();

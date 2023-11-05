@@ -5,8 +5,8 @@
 #ifndef OBJECTS_HPP
 #define OBJECTS_HPP
 
-#include "utils/vector.hpp"
-#include "utils/ray.hpp"
+#include "../utils/vector.hpp"
+#include "../utils/ray.hpp"
 
 namespace Object {
 
