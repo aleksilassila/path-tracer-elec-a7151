@@ -9,9 +9,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <SFML/Graphics.hpp>
-
 #include "colour.hpp"
+
+#include "SFML/Graphics.hpp"
 
 class FileManager {
 
@@ -34,7 +34,7 @@ public:
     * Writes output buffer to ppm image file
     */
 
-    bool saveRenderImage(sf::Image &image, std::string outPath);
+    void saveRenderImage(sf::Image &image, std::string outPath);
     /*
     * Saves image using SMLF method
     */

@@ -10,7 +10,7 @@
 
 Object::Sphere::Sphere(const Vector &origin, double radius) : Object(origin), radius_(radius) {}
 
-Object::Sphere::Sphere(const Vector &origin, double radius, sf::Color color) : Object(origin, color), radius_(radius) {}
+Object::Sphere::Sphere(const Vector &origin, double radius, const Material &material): Object(origin, material), radius_(radius) { }
 
 double Object::Sphere::GetIntersectionDistance(const Ray &ray) {
     Vector or_or = getOrigin() - ray.GetOrigin();
@@ -87,8 +87,12 @@ std::ostream &Object::operator<<(std::ostream &os, const Object &obj) {
     return os;
 }
 
-sf::Color Object::Object::GetColor() const { return color_; }
+sf::Color Object::Object::GetColor() const {
+    sf::Color materialColor = material_.getColor();
+    return materialColor;
+}
 
 Vector Object::Object::GetIntersectionPoint(const Ray &ray) {
     return ray.GetOrigin() + ray.GetDirection().Norm() * GetIntersectionDistance(ray);
 }
+

@@ -28,7 +28,7 @@ bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuf
     return true;
 }
 
-bool FileManager::saveRenderImage(sf::Image &image, std::string outPath){
+void FileManager::saveRenderImage(sf::Image &image, std::string outPath){
     image.saveToFile(outPath);
 }
 

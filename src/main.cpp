@@ -7,6 +7,7 @@
 #include "utils/ray.hpp"
 #include "world/scene.h"
 #include "renderer.h"
+#include "utils/material.hpp"
 
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
@@ -57,10 +58,14 @@ int main() {
 
     Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
 
+    Material matA(sf::Color::Red, 0.0);
+    Material matB(sf::Color::Green, 0.5);
+
     Scene scene(camera, {
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 8), 5, sf::Color::Red)),
+
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 8), 5, matA)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-0.2, 0, 1), 0.5)),
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, sf::Color::Green))
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, matB))
     });
 
     std::cout << scene << std::endl;

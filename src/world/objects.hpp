@@ -7,27 +7,28 @@
 
 #include "../utils/vector.hpp"
 #include "../utils/ray.hpp"
+#include "../utils/material.hpp"
+
 #include "SFML/Graphics/Color.hpp"
 
 namespace Object {
 
     class Object {
 
-/*
+/**
 * abstract Object class
 */
 
     protected:
 
         Vector origin_;
-        // TODO MATERIAL
-        sf::Color color_ = sf::Color::Magenta; // TODO: Replace with material class?
+        Material material_;
 
     public:
 
         Object(Vector origin) : origin_(origin) {}
 
-        Object(Vector origin, sf::Color color) : origin_(origin), color_(color) {}
+        Object(Vector origin, const Material &material) : origin_(origin), material_(material) {}
 
         virtual ~Object() = default;
 
@@ -58,7 +59,7 @@ namespace Object {
 
         Sphere(const Vector &origin, double radius);
 
-        Sphere(const Vector &origin, double radius, sf::Color color);
+        Sphere(const Vector &origin, double radius, const Material &material);
 
         ~Sphere() override = default;
 
