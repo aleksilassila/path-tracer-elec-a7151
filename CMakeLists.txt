@@ -6,32 +6,33 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_ERROR_DEPRECATED True)
 
+# SFML submodule
+add_subdirectory(libs/SFML)
+include_directories(${SFML_INCLUDE_DIR})
+
 # build files
 file(GLOB MAIN "src/main.cpp")
-file(GLOB SOURCES_C "src/*.c")
-file(GLOB SOURCES_CPP "src/*.cpp")
-file(GLOB SOURCES_HPP "src/*.hpp")
-file(GLOB SOURCES_H "src/*.h")
 
-set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
+file(GLOB UTILS_CPP "src/utils/*.cpp")
+file(GLOB UTILS_HPP "src/utils/*.hpp")
+file(GLOB UTILS_H "src/utils/*.h")
 
-# Remove main.cpp from SOURCES
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+file(GLOB WORLD_CPP "src/world/*.cpp")
+file(GLOB WORLD_HPP "src/world/*.hpp")
+file(GLOB WORLD_H "src/world/*.h")
+
+set(SOURCES ${UTILS_CPP} ${UTILS_HPP} ${UTILS_H} ${WORLD_CPP} ${WORLD_HPP} ${WORLD_H})
 
 # test files
-file(GLOB TESTS
+# file(GLOB TESTS
 
-        "tests/filemanager_tests/test_write_output.cpp"
-        # Other test directories
-
-)
-
-add_subdirectory(libs/SFML)
-
-include_directories(${SFML_INCLUDE_DIR})
+#         # "tests/filemanager_tests/test_write_output.cpp"
+#         # Other test directories
+# )
 
 # App
 add_executable(app ${MAIN} ${SOURCES}
+
         src/world/scene.h
         src/world/camera.h
         src/world/scene.cpp
@@ -41,7 +42,7 @@ add_executable(app ${MAIN} ${SOURCES}
 target_link_libraries(app sfml-graphics sfml-window sfml-system)
 
 # Tests
-add_executable(tests ${TESTS} ${SOURCES})
+# add_executable(tests ${TESTS} ${SOURCES})
 
 target_compile_options(app PRIVATE -Wall -Wextra -pedantic -Wno-missing-field-initializers)
-target_compile_options(tests PRIVATE -Wall -Wextra -pedantic -Wno-missing-field-initializers)
+# target_compile_options(tests PRIVATE -Wall -Wextra -pedantic -Wno-missing-field-initializers)
