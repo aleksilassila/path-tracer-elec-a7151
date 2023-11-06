@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "../../src/utils/filemanager.cpp"
-#include "../../src/utils/colour.h"
 
 
 void TestWriteOutput() {

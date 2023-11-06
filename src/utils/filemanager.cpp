@@ -19,7 +19,7 @@ bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuf
     // write image data
     for (unsigned int i = 0; i < yDim; i++) {
         for (unsigned int j = 0; j < xDim; j++) {
-            ofs << outputBuffer[i][j].red << outputBuffer[i][j].green << outputBuffer[i][j].blue;
+            ofs << outputBuffer[i][j].red() << outputBuffer[i][j].green() << outputBuffer[i][j].blue();
         }
     }
     ofs.close();
@@ -28,7 +28,12 @@ bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuf
     return true;
 }
 
+bool FileManager::saveRenderImage(sf::Image &image, std::string outPath){
+    image.saveToFile(outPath);
+}
+
 
 std::string FileManager::readInput(){
+
     return "readInput method not implemented";
 }

@@ -9,8 +9,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <SFML/Graphics.hpp>
 
-#include "colour.h"
+#include "colour.hpp"
 
 class FileManager {
 
@@ -29,10 +30,13 @@ public:
     FileManager(const std::string &inputPath, const std::string &outputPath);
 
     bool writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
-
     /*
     * Writes output buffer to ppm image file
-    * 
+    */
+
+    bool saveRenderImage(sf::Image &image, std::string outPath);
+    /*
+    * Saves image using SMLF method
     */
 
 
