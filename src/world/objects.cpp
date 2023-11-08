@@ -96,3 +96,6 @@ Vector Object::Object::GetIntersectionPoint(const Ray &ray) {
     return ray.GetOrigin() + ray.GetDirection().Norm() * GetIntersectionDistance(ray);
 }
 
+Material Object::Object::GetMaterial() const {
+    return material_;
+}

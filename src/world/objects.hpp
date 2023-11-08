@@ -43,6 +43,8 @@ namespace Object {
         friend std::ostream &operator<<(std::ostream &os, const Object &obj);
 
         sf::Color GetColor() const;
+
+        Material GetMaterial() const;
     };
 
     class Sphere : public Object {
