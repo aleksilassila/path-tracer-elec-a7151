@@ -13,7 +13,7 @@ int main() {
     Vector o = Vector(1, 0, 0);
     Vector dir = Vector(-1, 0, 0.5).Norm();
     Ray ray = Ray(o, dir);
-    double distance = tria.Intersect(ray);
+    double distance = tria.GetIntersectionDistance(ray);
     if (distance == 0) {
         std::cout << "No hit" << std::endl;
     } else {

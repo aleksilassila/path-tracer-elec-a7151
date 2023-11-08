@@ -96,7 +96,7 @@ namespace Object {
 
     public:
 
-        Triangle(const Vector &origin, const Vector &a, const Vector &b);
+        Triangle(const Vector &origin, const Vector &a, const Vector &b, const Material &material);
 
         ~Triangle() override = default;
 

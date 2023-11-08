@@ -50,7 +50,8 @@ Vector Object::Sphere::Normal(const Vector &point) {
 }
 
 
-Object::Triangle::Triangle(const Vector &origin, const Vector &a, const Vector &b) : Object(origin), a_(a), b_(b) {
+Object::Triangle::Triangle(const Vector &origin, const Vector &a, const Vector &b, const Material &material) :
+                           Object(origin, material), a_(a), b_(b) {
     origin_ = origin;
     oa_ = a_ - origin_;
     ob_ = b_ - origin_;
@@ -64,21 +65,21 @@ Vector Object::Triangle::Normal(const Vector &point) { return n_; }
 double Object::Triangle::GetIntersectionDistance(const Ray &ray) {
     Vector dir = ray.GetDirection();
     double det = dir * (oa_ob_);
-    std::cout << "oa: " << oa_ << "ob: " << ob_ << "oa_ob: " << oa_ob_ << std::endl;
-    std::cout << origin_ << std::endl;
+    //std::cout << "oa: " << oa_ << "ob: " << ob_ << "oa_ob: " << oa_ob_ << std::endl;
+    //std::cout << origin_ << std::endl;
     if ((-0.0001 < det) && (det < 0.0001)) return 0;
-    std::cout << "det: " << det << std::endl;
+    //std::cout << "det: " << det << std::endl;
     Vector or_or = ray.GetOrigin() - origin_;
     Vector temp = or_or * (1 / det);
     double u = ob_ % dir * temp;
-    std::cout << "u: " << u << std::endl;
+    //std::cout << "u: " << u << std::endl;
     if (u < 0 || u > 1) return 0;
     double v = dir % oa_ * temp;
-    std::cout << "v: " << v << std::endl;
+    //std::cout << "v: " << v << std::endl;
     if (v < 0 || v > 1) return 0;
     if (u + v > 1) return 0;
     double t = -(oa_ob_ * temp);
-    std::cout << "t: " << t << std::endl;
+    //std::cout << "t: " << t << std::endl;
     return t > 0 ? t : 0;
 }
 

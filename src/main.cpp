@@ -65,7 +65,9 @@ int main() {
 
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 8), 5, matA)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-0.2, 0, 1), 0.5)),
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, matB))
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, matB)),
+            std::make_shared<Object::Triangle>(Object::Triangle(Vector(-2, 2, 2),
+                                            Vector(2, 2, 2), Vector(0 ,0 ,2 ), matB))
     });
 
     std::cout << scene << std::endl;
