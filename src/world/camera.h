@@ -6,18 +6,19 @@
 #define PATHTRACER_CAMERA_H
 
 #include "../utils/ray.hpp"
+#include <cmath>
 
 /**
  * Camera class is essentially a ray with some
  * extra properties and functionality such as fov
  * and rendering related stuff
  */
-class Camera : public Ray {
+class Camera2 : public Ray {
 
 public:
-    Camera() : Camera(Vector(0, 0, 0), Vector(0, 0, 1)) {}
+    Camera2() : Camera2(Vector(0, 0, 0), Vector(0, 0, 1)) {}
 
-    Camera(Vector origin, Vector direction) : Ray(origin, direction),
+    Camera2(Vector origin, Vector direction) : Ray(origin, direction),
                                               viewPlaneDistance_(1) {}
 
     /**
@@ -31,8 +32,85 @@ public:
         return {o_, Vector(u, v, 1 * viewPlaneDistance_).Norm()};
     }
 
+
+
 private:
     double viewPlaneDistance_;
+};
+
+
+/**
+ * Camera class is essentially a ray with some
+ * extra properties and functionality such as fov
+ * and rendering related stuff
+ */
+// New camera with modifiable position and direction
+// Direction given in sphere coordinate angles phi and theta
+
+class Camera {
+
+public:
+    Camera(Vector position = Vector(0, 0, 0), double vpd = 1, double phi = 0, double theta = 0.001) :
+        position_(position), viewPlaneDistance_(vpd), phi_(phi), theta_(theta) {
+        SetDirection();
+        Set_u_phi();
+        Set_u_theta();
+    }
+
+    void SetPhi(double phi) {
+        phi_ = phi;
+        SetDirection();
+        Set_u_phi();
+        Set_u_theta();
+    }
+
+    void SetTheta(double theta) {
+        theta_ = theta;
+        SetDirection();
+        Set_u_phi();
+        Set_u_theta();
+    }
+
+    void SetDirection() {
+        double x = sin(theta_) * cos(phi_);
+        double y = sin(theta_) * sin(phi_);
+        double z = cos(theta_);
+        direction_ = Vector(x, y, z);
+    }
+
+    void Set_u_phi() {
+        double x = cos(theta_) * cos(phi_);
+        double y = cos(theta_) * sin(phi_);
+        double z = -sin(theta_);
+        u_phi_ = Vector(x, y, z);
+    }
+
+    void Set_u_theta() {
+        double x = -sin(phi_);
+        double y = cos(phi_);
+        u_theta_ = Vector(x, y, 0);
+    }
+
+    Ray GetRay(double u, double v) {
+        Ray ray = Ray(position_, (u_phi_ * u + u_theta_ * v + direction_ * viewPlaneDistance_).Norm());
+        //std::cout << u << std::endl;
+        //std::cout << "u_phi: " << u_phi_ << std::endl;
+        //std::cout << "u_theta: " << u_theta_ << std::endl;
+        //std::cout << v << std::endl;
+        //std::cout << ray.GetOrigin() << std::endl;
+        //std::cout << ray.GetDirection() << std::endl;
+
+        return ray;
+    }
+
+private:
+    Vector position_;
+    double viewPlaneDistance_;
+    double phi_ = 0;
+    double theta_ = 0.0001; //M_PI / 2;
+    Vector direction_; // = Vector(0, 0, 1);
+    Vector u_phi_;
+    Vector u_theta_;
 };
 
 #endif //PATHTRACER_CAMERA_H

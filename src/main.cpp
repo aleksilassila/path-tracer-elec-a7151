@@ -56,7 +56,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 int main() {
     sf::Vector2u windowSize(600, 600);
 
-    Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
+    //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
+    Camera camera(Vector(0, 0, 0), 0.5, 0.2, 0.2);
 
     Material matA(sf::Color::Red, 0.0);
     Material matB(sf::Color::Green, 0.5);
@@ -66,8 +67,8 @@ int main() {
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 8), 5, matA)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-0.2, 0, 1), 0.5)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(2, 0, 4.2), 1, matB)),
-            std::make_shared<Object::Triangle>(Object::Triangle(Vector(-2, 2, 2),
-                                            Vector(2, 2, 2), Vector(0 ,0 ,2 ), matB))
+            std::make_shared<Object::Triangle>(Object::Triangle(Vector(-1, 1, 1),
+                                            Vector(1, 1, 5), Vector(0 ,0 ,2 ), matB))
     });
 
     std::cout << scene << std::endl;
