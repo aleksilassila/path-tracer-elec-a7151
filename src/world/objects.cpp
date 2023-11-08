@@ -66,7 +66,7 @@ double Object::Triangle::GetIntersectionDistance(const Ray &ray) {
     double det = dir * (oa_ob_);
     std::cout << "oa: " << oa_ << "ob: " << ob_ << "oa_ob: " << oa_ob_ << std::endl;
     std::cout << origin_ << std::endl;
-    if (-0.0001 < det < 0.0001) return 0;
+    if ((-0.0001 < det) && (det < 0.0001)) return 0;
     std::cout << "det: " << det << std::endl;
     Vector or_or = ray.GetOrigin() - origin_;
     Vector temp = or_or * (1 / det);
