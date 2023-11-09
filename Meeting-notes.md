@@ -130,14 +130,14 @@ implement. We have familiarized ourselves with the concepts and algorithms used 
 ## Challenges
 
 1. We had some issues getting the project building on setups other than CLion. Everyone is now using CLion :) Something
-   that needs to be figured out though.
+   else has to be figured out though.
 
 ## Actions
 
 1. Johannes is going to work on the camera class, implementing some sort of controls for camera movement and possibly
    parameters for FOV etc.
 2. Markus is going to work on ray bounces and emissive materials
-3. Weronica I forgor
+3. Weronica is going to remove coupling with SFML and add input functionality
 4. Aleksi is going to help with the Camera class and possibly work on material and reflections
 
 ## Project status
