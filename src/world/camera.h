@@ -52,24 +52,30 @@ class Camera {
 public:
     Camera(Vector position = Vector(0, 0, 0), double vpd = 1, double phi = 0, double theta = 0.001) :
         position_(position), viewPlaneDistance_(vpd), phi_(phi), theta_(theta) {
-        SetDirection();
-        Set_u_phi();
-        Set_u_theta();
+        UpdateCamera();
     }
+
+    void SetPosition(const Vector &position) { position_ = position; }
+
+    Vector GetPosition() { return position_ ; }
+
+    void SetViewPlaneDistance(double vpd) { viewPlaneDistance_ = vpd; }
+
+    [[nodiscard]] double GetViewPlaneDistance() const { return viewPlaneDistance_; }
 
     void SetPhi(double phi) {
         phi_ = phi;
-        SetDirection();
-        Set_u_phi();
-        Set_u_theta();
+        UpdateCamera();
     }
+
+    [[nodiscard]] double GetPhi() const {return phi_;}
 
     void SetTheta(double theta) {
         theta_ = theta;
-        SetDirection();
-        Set_u_phi();
-        Set_u_theta();
+        UpdateCamera();
     }
+
+    [[nodiscard]] double GetTheta() const {return theta_;}
 
     void SetDirection() {
         double x = sin(theta_) * cos(phi_);
@@ -78,6 +84,8 @@ public:
         direction_ = Vector(x, y, z);
     }
 
+    [[nodiscard]] Vector GetDirection() const {return direction_;}
+
     void Set_u_phi() {
         double x = cos(theta_) * cos(phi_);
         double y = cos(theta_) * sin(phi_);
@@ -85,10 +93,23 @@ public:
         u_phi_ = Vector(x, y, z);
     }
 
+    [[nodiscard]] Vector Get_u_phi() const {return u_phi_;}
+
     void Set_u_theta() {
         double x = -sin(phi_);
         double y = cos(phi_);
         u_theta_ = Vector(x, y, 0);
+    }
+
+    [[nodiscard]] Vector Get_u_theta() const {return u_theta_;}
+
+    void UpdateCamera() {
+        SetDirection();
+        Set_u_phi();
+        Set_u_theta();
+        std::cout << "Phi: " << phi_ << std::endl;
+        std::cout << "Theta: " << theta_ << std::endl;
+        std::cout << "Camera updated" << std::endl;
     }
 
     Ray GetRay(double u, double v) {
