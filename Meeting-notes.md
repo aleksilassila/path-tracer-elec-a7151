@@ -103,3 +103,44 @@ In this meeting we have:
 
 Project is planned: Class structure is clear, we have divided ourselves into pairs, we know what features we want to
 implement. We have familiarized ourselves with the concepts and algorithms used to implement the project.
+
+# Meeting 08.11.23 13:00
+
+**Participants**: All members
+
+## Summary of works
+
+1. Johannes
+
+   Write Vector class, Ray class, Intersection method for Sphere, Triangle class, simple testfiles for vector, ray,
+   sphere and triangle.
+
+
+2. Markus
+
+   Wrote FileManager, Object, Colour, and Material classes and test for writing image.
+
+
+3. Aleksi
+
+   Set up SFML library for creating windows and drawing to them, put together a simple flat shaded ray tracer, created
+   camera and scene classes, implemented pipeline for rendering multiple objects and added simple ambient lighting for
+   shading. General changes to vectors and project refactoring
+
+## Challenges
+
+1. We had some issues getting the project building on setups other than CLion. Everyone is now using CLion :) Something
+   else has to be figured out though.
+
+## Actions
+
+1. Johannes is going to work on the camera class, implementing some sort of controls for camera movement and possibly
+   parameters for FOV etc.
+2. Markus is going to work on ray bounces and emissive materials
+3. Weronica is going to remove coupling with SFML and add input functionality
+4. Aleksi is going to help with the Camera class and possibly work on material and reflections
+
+## Project status
+
+![Current progress](./images/path-tracer-1.jpg)
+Project is set up, basic tests are implemented, and we have a simple shaded render.
