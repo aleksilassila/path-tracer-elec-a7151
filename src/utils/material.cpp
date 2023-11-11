@@ -29,7 +29,7 @@ Vector Material::findBounceDirection(Ray &ray, Vector &normal) const{
     Vector rayDirection = ray.GetDirection().Norm();
     // Find bounce direction based on 2 unit vectors
     // U = v − 2(v * n)n
-    Vector idealBounceDirection = (rayDirection - 2 * (rayDirection * normal)) * normal;
+    Vector idealBounceDirection = rayDirection - (normal * (rayDirection * normal) * 2);
     // Find randomized vector 
     Vector randomizer = Random::RayScalar(-roughness_, +roughness_);
     // add the the two vectors together and compute norm
