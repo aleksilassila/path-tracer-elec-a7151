@@ -86,30 +86,33 @@ public:
 
     [[nodiscard]] Vector GetDirection() const {return direction_;}
 
-    void Set_u_phi() {
+    void Set_u_theta() {
         double x = cos(theta_) * cos(phi_);
         double y = cos(theta_) * sin(phi_);
         double z = -sin(theta_);
-        u_phi_ = Vector(x, y, z);
-    }
-
-    [[nodiscard]] Vector Get_u_phi() const {return u_phi_;}
-
-    void Set_u_theta() {
-        double x = -sin(phi_);
-        double y = cos(phi_);
-        u_theta_ = Vector(x, y, 0);
+        u_theta_ = Vector(x, y, z);
     }
 
     [[nodiscard]] Vector Get_u_theta() const {return u_theta_;}
+
+    void Set_u_phi() {
+        double x = -sin(phi_);
+        double y = cos(phi_);
+        u_phi_ = Vector(x, y, 0);
+    }
+
+    [[nodiscard]] Vector Get_u_phi() const {return u_phi_;}
 
     void UpdateCamera() {
         SetDirection();
         Set_u_phi();
         Set_u_theta();
-        std::cout << "Phi: " << phi_ << std::endl;
-        std::cout << "Theta: " << theta_ << std::endl;
-        std::cout << "Camera updated" << std::endl;
+        //std::cout << "Camera updated" << std::endl;
+        //std::cout << "Phi: " << phi_ << std::endl;
+        //std::cout << "Theta: " << theta_ << std::endl;
+        //std::cout << "u_phi: " << u_phi_<< std::endl;
+        //std::cout << "u_theta: " << u_theta_ << std::endl;
+
     }
 
     Ray GetRay(double u, double v) {

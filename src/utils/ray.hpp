@@ -2,12 +2,15 @@
 #define _RAY_HPP_
 
 #include "vector.hpp"
+#include <SFML/Graphics.hpp>
 
 class Ray {
 
 public:
 
-    Ray(Vector origin, Vector direction) : o_(origin), d_(direction.Norm()) {}
+    Ray(Vector origin, Vector direction, sf::Color color = sf::Color(255,255,255)) : o_(origin), d_(direction.Norm()) {
+        color_ = color;
+    }
 
     Vector GetOrigin() const {
         return o_;
@@ -25,9 +28,14 @@ public:
         d_ = direction;
     }
 
+    sf::Color GetColor() { return color_; }
+
+    void SetColor(sf::Color color) { color_ = color; }
+
 
 protected:
     Vector o_, d_;
+    sf::Color color_;
 
 };
 
