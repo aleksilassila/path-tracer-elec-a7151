@@ -13,9 +13,12 @@
 
 int main(void){
 
-    std::cout << "Testing rand.h ... \nMaking random scalar vector:" << std::endl;
-    Vector randVec = Random::RayScalar(0, 2);
-    std::cout << randVec << std::endl;
+    std::cout << "Testing rand.h ... \nMaking random scalar vectors: \n" << std::endl;
+    for (unsigned int i = 0; i < 10; i++){
+        double rand = Random::GetRandomDoubleNormal(1, 1, i * i);
+        std::cout << rand << std::endl;
+    }
+    
     return 0;
 
 }

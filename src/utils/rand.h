@@ -14,23 +14,27 @@
 namespace Random {
     
 
-    Vector RayScalar(double a, double b){
-
+    double GetRandomDoubleUniform(double min, double max, unsigned int seed){
         /**
-         * @brief Returns a double between a and b to scale ray direction vector.
+         * @brief Random double with uniform distribution
          * 
+         * @return std::default_random_engine 
          */
-        double x, y, z;
-
-        static std::default_random_engine generator(unsigned(time(nullptr)));
-        std::uniform_real_distribution<double> distribution(a, b);
-
-        x = distribution(generator);
-        y = distribution(generator);
-        z = distribution(generator);
-
-        return Vector(x, y, z);
-        
+        static std::default_random_engine generator(seed);
+        std::uniform_real_distribution<double> distribution(min, max);
+        return  distribution(generator);
     }
+
+    double GetRandomDoubleNormal(double stddev, double average, unsigned int seed) {
+        /**
+         * @brief Random double with normal distribution
+         * 
+         * @return std::default_random_engine 
+         */
+        static std::default_random_engine generator(seed);
+        std::normal_distribution<double> distribution(average, stddev);
+        return distribution(generator);
+    }
+
 
 } // namespace Random
