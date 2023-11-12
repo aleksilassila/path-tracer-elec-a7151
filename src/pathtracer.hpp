@@ -32,11 +32,34 @@ public:
     PathTracer();
     ~PathTracer();
 
+    /**
+     * @brief Get the Pixel Color
+     * 
+     * @param u 
+     * @param v 
+     * @param scene 
+     * @return sf::Color 
+     */
     sf::Color GetPixelColor(double u, double v, const Scene &scene);
+
+    /**
+     * @brief Test ray bounce direction on surface, by translating x, y and z componetnts of vector to r, g, and b
+     * 
+     * @param u 
+     * @param v 
+     * @param scene 
+     * @return sf::Color 
+     */
     sf::Color TestBounceDir(double u, double v, const Scene &scene);
-    sf::Color AccumulatePixelColour(double u, double v, const Scene &scene);
+
+    /**
+     * @brief Get the nearest hit information struct
+     * 
+     * @param ray 
+     * @param scene 
+     * @return HitInfo 
+     */
     HitInfo GetNearestHitInfo(const Ray &ray, const Scene &scene);
-    // sf::Color GetAvgColor(const std::vector<sf::Color> &colors);
 
 };
 
