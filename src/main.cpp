@@ -39,6 +39,10 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 image.create(windowSize, sf::Color::Transparent);
                 sf::FloatRect view(sf::Vector2f(0, 0), sf::Vector2f(event.size.width, event.size.height));
                 window.setView(sf::View(view));
+
+                // Reset color buffer
+                colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
+                frameCount = 0;
             }
         }
 
@@ -58,7 +62,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 // average color over the frames
                 sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
 
-                image.setPixel(sf::Vector2u(x,y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
+                image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
             }
         }
 
@@ -87,7 +91,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 }
 
 int main() {
-    sf::Vector2u windowSize(1024, 1024);
+    sf::Vector2u windowSize(256, 256);
 
     //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
     Camera camera(Vector(0, 0, 0), 6, 0, 0.0);
@@ -99,14 +103,14 @@ int main() {
     Material matB(sf::Color(100, 180, 150), 0.5);
     Material matC(sf::Color(50, 100, 250), 0.9);
     Material matD(sf::Color(200, 60, 200), 0.6);
-    Material matE(sf::Color(250,250,10), 0.16);
-    Material matF(sf::Color(200,200,200), 1.0);
-    Material matG(sf::Color(144,20,10), 0.75);
-    
-    Material mirror(sf::Color(255,255,255), 0.008);
+    Material matE(sf::Color(250, 250, 10), 0.16);
+    Material matF(sf::Color(200, 200, 200), 1.0);
+    Material matG(sf::Color(144, 20, 10), 0.75);
+
+    Material mirror(sf::Color(255, 255, 255), 0.008);
 
     // Emissive materials
-    Material lightA(sf::Color::Black, 0.5, Vector(1,1,1));
+    Material lightA(sf::Color::Black, 0.5, Vector(1, 1, 1));
     Material lightB(sf::Color::Black, 0.5, Vector(0.2, 0.5, 1));
     Material lightC(sf::Color::Black, 0.5, Vector(1, 0.8, 0.6));
     Material lightD(sf::Color::Black, 0.5, Vector(0.75, 1, 0.75));
@@ -114,21 +118,21 @@ int main() {
 
     Scene scene(camera, {
 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matC)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, matA)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
 
-        // Room 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2010, 0), 2000,  matA)), // side 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, matB)), // side
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, lightA)), // roof
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(2005, 0, 0), 2000, matF)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)), 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)), 
+            // Room
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2010, 0), 2000, matA)), // side
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, matB)), // side
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, lightA)), // roof
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2005, 0, 0), 2000, matF)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)),
 
     });
 
