@@ -59,6 +59,7 @@ int main() {
     //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
     Camera camera(Vector(0, 0, 0), 6, 0, 0.0);
     camera.LookAt(Vector(-4, 4, 70)); // Look at the mirror
+    camera.SetFovDeg(30);
 
     Material matA(sf::Color(200, 100, 40), 0.4);
     Material matB(sf::Color(100, 180, 150), 0.5);

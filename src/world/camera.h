@@ -47,6 +47,14 @@ public:
         pitch_ = std::asin(direction.y());
     }
 
+    void SetFovDeg(double fov) {
+        viewPlaneDistance_ = 1 / std::tan(fov * M_PI / 360);
+    }
+
+    [[nodiscard]] double GetFovDeg() const {
+        return std::atan(1 / viewPlaneDistance_) * 360 / M_PI;
+    }
+
     /**
      * @param xs x coordinate scaled between -1 and 1
      * @param ys y coordinate scaled between -1 and 1
