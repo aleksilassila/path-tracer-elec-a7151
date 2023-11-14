@@ -38,7 +38,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         for (unsigned int x = 0; x < windowSize.x; x++) {
             for (unsigned int y = 0; y < windowSize.y; y++) {
                 double scaledX = (double) x * 2 / (double) windowSize.x - 1;
-                double scaledY = (double) y * 2 / (double) windowSize.y - 1;
+                double scaledY = -((double) y * 2 / (double) windowSize.y) + 1;
 
                 sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene);
                 sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
