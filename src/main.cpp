@@ -24,8 +24,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
     // Filemanager to save images.
     FileManager filemanager("out.png");
-    unsigned int maxFrameCount = 32;
-    unsigned int frameCount = 0;
+    unsigned long long frameCount = 0;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -44,6 +43,42 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
                 frameCount = 0;
             }
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    filemanager.saveRenderImage(image);
+                } else {
+                    Camera &camera = scene.GetCamera();
+                    double pitch = camera.GetPitch();
+                    double yaw = camera.GetYaw();
+
+                    if (event.key.code == sf::Keyboard::Left) {
+                        camera.Rotate(0.1, 0);
+                    } else if (event.key.code == sf::Keyboard::Right) {
+                        camera.Rotate(-0.1, 0);
+                    } else if (event.key.code == sf::Keyboard::Up) {
+                        camera.Rotate(0, 0.1);
+                    } else if (event.key.code == sf::Keyboard::Down) {
+                        camera.Rotate(0, -0.1);
+                    } else if (event.key.code == sf::Keyboard::W) {
+                        camera.Move(std::sin(yaw) * std::cos(pitch), std::sin(pitch), std::cos(yaw) * std::cos(pitch));
+                    } else if (event.key.code == sf::Keyboard::S) {
+                        camera.Move(-std::sin(yaw) * std::cos(pitch), -std::sin(pitch),
+                                    -std::cos(yaw) * std::cos(pitch));
+                    } else if (event.key.code == sf::Keyboard::A) {
+                        camera.Move(std::cos(yaw), 0, -std::sin(yaw));
+                    } else if (event.key.code == sf::Keyboard::D) {
+                        camera.Move(-std::cos(yaw), 0, std::sin(yaw));
+                    } else if (event.key.code == sf::Keyboard::Q) {
+                        camera.Move(0, 1, 0);
+                    } else if (event.key.code == sf::Keyboard::E) {
+                        camera.Move(0, -1, 0);
+                    }
+
+                    colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
+                    frameCount = 0;
+                }
+            }
         }
 
         double aspectRatio = (double) windowSize.x / (double) windowSize.y;
@@ -51,6 +86,21 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             for (unsigned int y = 0; y < windowSize.y; y++) {
                 double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
                 double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
+
+                /* An implementation without the frame buffer
+                sf::Vector2u pixel(x, y);
+                sf::Color previousColor = image.getPixel(pixel);
+                sf::Color nextColor = tracer.GetPixelColor(scaledX, scaledY, scene);;
+
+                if (frameCount == 0) {
+                    image.setPixel(pixel, nextColor);
+                } else {
+                    image.setPixel(pixel,
+                                   sf::Color((previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+                                             (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+                                             (previousColor.b * (frameCount) + nextColor.b) / (frameCount + 1)));
+                }
+                */
 
                 sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene);
                 sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
@@ -64,12 +114,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
                 image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
             }
-        }
-
-        if (frameCount >= maxFrameCount) {
-            // once enough frames have been accumulated save image and quit program
-            filemanager.saveRenderImage(image);
-            return;
         }
 
         // Load the image into a texture and display it
@@ -86,7 +130,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
         // Update frame count
         frameCount++;
-
     }
 }
 
@@ -117,7 +160,6 @@ int main() {
 
 
     Scene scene(camera, {
-
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
@@ -133,7 +175,6 @@ int main() {
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, matG)),
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)), 
         std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)), 
-
     });
 
     std::cout << scene << std::endl;

@@ -1,11 +1,14 @@
 #include "filemanager.hpp"
 
 
-FileManager::FileManager(const std::string &outputPath): outputPath_(outputPath) { }
-FileManager::FileManager(const std::string& inputPath, const std::string& outputPath): inputPath_(inputPath), outputPath_(outputPath) { }
+FileManager::FileManager(const std::string &outputPath) : outputPath_(outputPath) {}
 
-bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuffer, unsigned int xDim, unsigned int yDim) {
-    
+FileManager::FileManager(const std::string &inputPath, const std::string &outputPath) : inputPath_(inputPath),
+                                                                                        outputPath_(outputPath) {}
+
+bool
+FileManager::writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim) {
+
     std::ofstream ofs(outputPath_, std::ios::out | std::ios::binary);
 
     if (!ofs) {
@@ -32,10 +35,11 @@ bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuf
 
 void FileManager::saveRenderImage(sf::Image &image) {
     image.saveToFile(outputPath_);
+    std::cout << "Image saved to: " << outputPath_ << std::endl;
 }
 
 
-std::string FileManager::readInput(){
+std::string FileManager::readInput() {
 
     return "readInput method not implemented";
 }

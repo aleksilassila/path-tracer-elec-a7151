@@ -21,7 +21,7 @@ public:
             position_(position), viewPlaneDistance_(viewPlaneDistance), yaw_(yaw), pitch_(pitch) {
     }
 
-    void SetPosition(const Vector &position) { position_ = position; }
+    void MoveTo(const Vector &position) { position_ = position; }
 
     Vector GetPosition() { return position_; }
 
@@ -66,6 +66,15 @@ public:
         Vector xCross = yCross.CrossProduct(direction).Norm();
 
         return Ray(position_, direction * viewPlaneDistance_ + (yCross * xs) + (xCross * ys));
+    }
+
+    void Rotate(double yawAdd, double pitchAdd) {
+        SetYaw(yawAdd + yaw_);
+        SetPitch(pitchAdd + pitch_);
+    }
+
+    void Move(double x, double y, double z) {
+        position_ += Vector(x, y, z);
     }
 
 private:

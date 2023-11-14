@@ -1,6 +1,7 @@
 #include "pathtracer.hpp"
 
-PathTracer::PathTracer(): ray_(Vector(), Vector()), maxBounces_(4){ }
+PathTracer::PathTracer() : ray_(Vector(), Vector()), maxBounces_(4) {}
+
 PathTracer::~PathTracer() {}
 
 
@@ -34,7 +35,7 @@ HitInfo PathTracer::GetNearestHitInfo(const Ray &ray, const Scene &scene) {
     return hit;
 }
 
-sf::Color PathTracer::TestBounceDir(double u, double v, const Scene &scene){
+sf::Color PathTracer::TestBounceDir(double u, double v, Scene &scene) {
 
     sf::Color avgCol = sf::Color::Black;
 
@@ -42,16 +43,16 @@ sf::Color PathTracer::TestBounceDir(double u, double v, const Scene &scene){
     // start with ray from camera
     ray_ = camera.GetRay(u, v);
     lastHit_ = GetNearestHitInfo(ray_, scene);
-    Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_ ,lastHit_.sNormal).Norm();
+    Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_, lastHit_.sNormal).Norm();
 
     if (lastHit_.hit)
         avgCol = sf::Color(bounceDir.x() * 255, bounceDir.y() * 255, bounceDir.z() * 255);
-    
+
     return avgCol;
 }
 
 
-sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
+sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene) {
 
     // Initialize color components as white
     double R = 1, G = 1, B = 1;
@@ -71,14 +72,14 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
 
             sf::Color surfaceCol = lastHit_.sMaterial.getColor();
             Vector point = lastHit_.point;
-            Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_ ,lastHit_.sNormal).Norm();
+            Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_, lastHit_.sNormal).Norm();
 
-            if (lastHit_.sMaterial.getEmission().Len() > 0.0){
+            if (lastHit_.sMaterial.getEmission().Len() > 0.0) {
                 light += lastHit_.sMaterial.getEmission();
                 break;
             }
 
-            
+
             // Update color
             R *= (surfaceCol.r / 255.99);
             G *= (surfaceCol.g / 255.99);
@@ -98,8 +99,8 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
     // Apply accumulated light to the color and return
 
     return sf::Color(
-        static_cast<int>(255.99 * R) * light.x(),
-        static_cast<int>(255.99 * G) * light.y(),
-        static_cast<int>(255.99 * B) * light.z()
+            static_cast<int>(255.99 * R) * light.x(),
+            static_cast<int>(255.99 * G) * light.y(),
+            static_cast<int>(255.99 * B) * light.z()
     );
 }

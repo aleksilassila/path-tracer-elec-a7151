@@ -26,6 +26,6 @@ std::ostream &operator<<(std::ostream &os, const Scene &scene) {
     return os;
 }
 
-Camera Scene::GetCamera() const {
+Camera &Scene::GetCamera() {
     return camera_;
 }

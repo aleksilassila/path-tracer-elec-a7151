@@ -33,7 +33,7 @@ public:
         return ambientLightDirection_;
     }
 
-    Camera GetCamera() const;
+    Camera &GetCamera();
 
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 

@@ -13,9 +13,8 @@ struct HitInfo {
     // Material of object hit
     Material sMaterial;
 
-    HitInfo() : hit(false), point(), sNormal(), sMaterial() { }
+    HitInfo() : hit(false), point(), sNormal(), sMaterial() {}
 };
-
 
 
 class PathTracer {
@@ -26,10 +25,11 @@ private:
     Ray ray_;
     int maxBounces_;
 
-    
+
 public:
 
     PathTracer();
+
     ~PathTracer();
 
     /**
@@ -40,7 +40,7 @@ public:
      * @param scene 
      * @return sf::Color 
      */
-    sf::Color GetPixelColor(double u, double v, const Scene &scene);
+    sf::Color GetPixelColor(double u, double v, Scene &scene);
 
     /**
      * @brief Test ray bounce direction on surface, by translating x, y and z componetnts of vector to r, g, and b
@@ -50,7 +50,7 @@ public:
      * @param scene 
      * @return sf::Color 
      */
-    sf::Color TestBounceDir(double u, double v, const Scene &scene);
+    sf::Color TestBounceDir(double u, double v, Scene &scene);
 
     /**
      * @brief Get the nearest hit information struct
