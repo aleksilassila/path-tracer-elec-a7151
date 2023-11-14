@@ -11,9 +11,10 @@ HitInfo PathTracer::GetNearestHitInfo(const Ray &ray, const Scene &scene) {
 
     for (const auto &object: scene.GetObjects()) {
 
-        Vector intersectionPoint = object->GetIntersectionPoint(ray);
+        //Vector intersectionPoint = object->GetIntersectionPoint(ray);
         // Used for finding the closest intersection to ray origin.
-        double intersectionDistance = intersectionPoint.Distance(ray.GetOrigin());
+        //double intersectionDistance = intersectionPoint.Distance(ray.GetOrigin());
+        double intersectionDistance = object->GetIntersectionDistance(ray);
 
         if (intersectionDistance < minDistance && intersectionDistance > 0) {
 
@@ -21,9 +22,11 @@ HitInfo PathTracer::GetNearestHitInfo(const Ray &ray, const Scene &scene) {
 
             // Update hit info
             hit.hit = true;
-            hit.point = intersectionPoint;
+            //hit.point = intersectionPoint;
+            hit.point = object->GetIntersectionPoint(ray);
             hit.sMaterial = object->GetMaterial();
-            hit.sNormal = object->Normal(intersectionPoint);    
+            //hit.sNormal = object->Normal(intersectionPoint);
+            hit.sNormal = object->Normal(hit.point);
 
         }
     }
@@ -69,6 +72,7 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
             Vector point = lastHit_.point;
             Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_ ,lastHit_.sNormal).Norm();
             light += lastHit_.sMaterial.getEmission();
+            if (light > 0) break;
             
             // Update color
             R *= (surfaceCol.r / 255.0);
