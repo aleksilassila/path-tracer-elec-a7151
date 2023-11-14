@@ -39,8 +39,4 @@ public:
 
 };
 
-std::ostream &operator<<(std::ostream &os, Colour &colour) {
-    os << "(" << colour.red_ << ", " << colour.green_ << ", " << colour.blue_ << ")";
-}
-
 #endif // COLOUR_HPP

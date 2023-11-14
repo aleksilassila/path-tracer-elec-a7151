@@ -25,13 +25,14 @@ private:
     // Material attributes
     sf::Color colour_;
     double roughness_;
-    double emission_;
+    Vector emission_;
+
 
 public:
 
     Material();
     Material(sf::Color colour, double roughness);
-    Material(sf::Color colour, double roughness, double emission);
+    Material(sf::Color colour, double roughness, Vector emission);
     ~Material();
 
     /**
@@ -48,7 +49,7 @@ public:
      * @return double 
      */
 
-    double getEmission() const;
+    Vector getEmission() const;
 
 
 

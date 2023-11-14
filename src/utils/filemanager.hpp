@@ -25,8 +25,9 @@ private:
     std::string inputPath_;
     std::string outputPath_;
 
-public:
+public: 
 
+    FileManager(const std::string &outputPath);
     FileManager(const std::string &inputPath, const std::string &outputPath);
 
     bool writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
@@ -34,7 +35,7 @@ public:
     * Writes output buffer to ppm image file
     */
 
-    void saveRenderImage(sf::Image &image, std::string outPath);
+    void saveRenderImage(sf::Image &image);
     /*
     * Saves image using SMLF method
     */

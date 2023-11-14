@@ -11,12 +11,12 @@
 
 Material::Material() : colour_(sf::Color::Magenta), roughness_(0.5), emission_(0.0) {}
 Material::Material(sf::Color colour, double roughness) : colour_(colour), roughness_(roughness), emission_(0.0) {}
-Material::Material(sf::Color colour, double roughness, double emission) : colour_(colour), roughness_(roughness), emission_(emission) {}
-Material::~Material() {}
+Material::Material(sf::Color colour, double roughness, Vector emission) : colour_(colour), roughness_(roughness), emission_(emission) { }
+Material::~Material() { }
 
 sf::Color Material::getColor() const { return colour_; }
 double Material::getRoughness() const { return roughness_; }
-double Material::getEmission() const { return emission_; }
+Vector Material::getEmission() const { return emission_; }
 
 
 Vector Material::findBounceDirection(Ray &ray, Vector &normal) const
@@ -38,7 +38,7 @@ Vector Material::findBounceDirection(Ray &ray, Vector &normal) const
     z = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.z(), seed * 3);
 
     randomizer = Vector(x, y, z);
-    bounceDir = normal + randomizer;
+    bounceDir = idealBounceDirection + randomizer;
     
     if (bounceDir.Dot(normal) < 0){
         return bounceDir * -1;

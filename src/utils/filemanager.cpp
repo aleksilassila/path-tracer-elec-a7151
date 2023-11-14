@@ -1,5 +1,7 @@
 #include "filemanager.hpp"
 
+
+FileManager::FileManager(const std::string &outputPath): outputPath_(outputPath) { }
 FileManager::FileManager(const std::string& inputPath, const std::string& outputPath): inputPath_(inputPath), outputPath_(outputPath) { }
 
 bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuffer, unsigned int xDim, unsigned int yDim) {
@@ -28,8 +30,8 @@ bool FileManager::writeOutput(const std::vector<std::vector<Colour>> & outputBuf
     return true;
 }
 
-void FileManager::saveRenderImage(sf::Image &image, std::string outPath){
-    image.saveToFile(outPath);
+void FileManager::saveRenderImage(sf::Image &image) {
+    image.saveToFile(outputPath_);
 }
 
 

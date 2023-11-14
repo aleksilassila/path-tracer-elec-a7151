@@ -27,6 +27,10 @@ public:
         return Vector(x_ - b.x_, y_ - b.y_, z_ - b.z_);
     }
 
+    Vector operator+=(const Vector &b) {
+        return Vector(x_ += b.x_, y_ += b.y_, z_ += b.z_);
+    }
+
     /**
      * \brief Multiplication by scalar
      */
