@@ -72,6 +72,11 @@ public:
         return x_ * v2.x_ + y_ * v2.y_ + z_ * v2.z_;
     }
 
+    Vector CrossProduct(const Vector &v2) {
+        return Vector(y_ * v2.z_ - z_ * v2.y_, z_ * v2.x_ - x_ * v2.z_,
+                      x_ * v2.y_ - y_ * v2.x_);
+    }
+
     double Distance(const Vector &v2) {
         return std::sqrt(std::pow(x_ - v2.x_, 2) + std::pow(y_ - v2.y_, 2) + std::pow(z_ - v2.z_, 2));
     }

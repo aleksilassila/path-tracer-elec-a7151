@@ -7,134 +7,64 @@
 
 #include "../utils/ray.hpp"
 #include <cmath>
+#include <algorithm>
 
 /**
  * Camera class is essentially a ray with some
  * extra properties and functionality such as fov
  * and rendering related stuff
  */
-class Camera2 : public Ray {
-
-public:
-    Camera2() : Camera2(Vector(0, 0, 0), Vector(0, 0, 1)) {}
-
-    Camera2(Vector origin, Vector direction) : Ray(origin, direction),
-                                              viewPlaneDistance_(1) {}
-
-    /**
-     * Calculates the ray for a given pixel
-     * TODO: Take camera orientation (direction, d_) into account
-     * @param u between -1 and 1
-     * @param v between -1 and 1
-     * @return
-     */
-    Ray GetRay(double u, double v) const {
-        return {o_, Vector(u, v, 1 * viewPlaneDistance_).Norm()};
-    }
-
-
-
-private:
-    double viewPlaneDistance_;
-};
-
-
-/**
- * Camera class is essentially a ray with some
- * extra properties and functionality such as fov
- * and rendering related stuff
- */
-// New camera with modifiable position and direction
-// Direction given in sphere coordinate angles phi and theta
-
 class Camera {
 
 public:
-    Camera(Vector position = Vector(0, 0, 0), double vpd = 1, double phi = 0, double theta = 0.001) :
-        position_(position), viewPlaneDistance_(vpd), phi_(phi), theta_(theta) {
-        UpdateCamera();
+    Camera(Vector position = Vector(0, 0, 0), double viewPlaneDistance = 1, double yaw = 0, double pitch = 0) :
+            position_(position), viewPlaneDistance_(viewPlaneDistance), yaw_(yaw), pitch_(pitch) {
     }
 
     void SetPosition(const Vector &position) { position_ = position; }
 
-    Vector GetPosition() { return position_ ; }
+    Vector GetPosition() { return position_; }
 
-    void SetViewPlaneDistance(double vpd) { viewPlaneDistance_ = vpd; }
+    void SetViewPlaneDistance(double viewPlaneDistance) { viewPlaneDistance_ = viewPlaneDistance; }
 
     [[nodiscard]] double GetViewPlaneDistance() const { return viewPlaneDistance_; }
 
-    void SetPhi(double phi) {
-        phi_ = phi;
-        UpdateCamera();
+    void SetYaw(double yaw) {
+        yaw_ = std::fmod(yaw, 2 * M_PI);
     }
 
-    [[nodiscard]] double GetPhi() const {return phi_;}
+    [[nodiscard]] double GetYaw() const { return yaw_; }
 
-    void SetTheta(double theta) {
-        theta_ = theta;
-        UpdateCamera();
+    void SetPitch(double pitch) {
+        pitch_ = std::clamp(pitch, 0.0, M_PI / 2);
     }
 
-    [[nodiscard]] double GetTheta() const {return theta_;}
+    [[nodiscard]] double GetPitch() const { return pitch_; }
 
-    void SetDirection() {
-        double x = sin(theta_) * cos(phi_);
-        double y = sin(theta_) * sin(phi_);
-        double z = cos(theta_);
-        direction_ = Vector(x, y, z);
+    void LookAt(Vector target) {
+        Vector direction = (target - position_).Norm();
+        yaw_ = std::atan2(direction.x(), direction.z());
+        pitch_ = std::asin(direction.y());
     }
 
-    [[nodiscard]] Vector GetDirection() const {return direction_;}
+    /**
+     * @param xs x coordinate scaled between -1 and 1
+     * @param ys y coordinate scaled between -1 and 1
+     */
+    Ray GetRay(double xs, double ys) {
+        Vector direction = Vector(std::sin(yaw_) * std::cos(pitch_), std::sin(pitch_),
+                                  std::cos(yaw_) * std::cos(pitch_));
+        Vector yCross = direction.CrossProduct(Vector(0, 1, 0)).Norm();
+        Vector xCross = yCross.CrossProduct(direction).Norm();
 
-    void Set_u_theta() {
-        double x = cos(theta_) * cos(phi_);
-        double y = cos(theta_) * sin(phi_);
-        double z = -sin(theta_);
-        u_theta_ = Vector(x, y, z);
-    }
-
-    [[nodiscard]] Vector Get_u_theta() const {return u_theta_;}
-
-    void Set_u_phi() {
-        double x = -sin(phi_);
-        double y = cos(phi_);
-        u_phi_ = Vector(x, y, 0);
-    }
-
-    [[nodiscard]] Vector Get_u_phi() const {return u_phi_;}
-
-    void UpdateCamera() {
-        SetDirection();
-        Set_u_phi();
-        Set_u_theta();
-        //std::cout << "Camera updated" << std::endl;
-        //std::cout << "Phi: " << phi_ << std::endl;
-        //std::cout << "Theta: " << theta_ << std::endl;
-        //std::cout << "u_phi: " << u_phi_<< std::endl;
-        //std::cout << "u_theta: " << u_theta_ << std::endl;
-
-    }
-
-    Ray GetRay(double u, double v) {
-        Ray ray = Ray(position_, (u_phi_ * u + u_theta_ * v + direction_ * viewPlaneDistance_).Norm());
-        //std::cout << u << std::endl;
-        //std::cout << "u_phi: " << u_phi_ << std::endl;
-        //std::cout << "u_theta: " << u_theta_ << std::endl;
-        //std::cout << v << std::endl;
-        //std::cout << ray.GetOrigin() << std::endl;
-        //std::cout << ray.GetDirection() << std::endl;
-
-        return ray;
+        return Ray(position_, direction * viewPlaneDistance_ + (yCross * xs) + (xCross * ys));
     }
 
 private:
     Vector position_;
     double viewPlaneDistance_;
-    double phi_ = 0;
-    double theta_ = 0.0001; //M_PI / 2;
-    Vector direction_; // = Vector(0, 0, 1);
-    Vector u_phi_;
-    Vector u_theta_;
+    double yaw_ = 0;
+    double pitch_ = 0;
 };
 
 #endif //PATHTRACER_CAMERA_H

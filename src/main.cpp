@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include "utils/ray.hpp"
 #include "world/scene.h"
-#include "renderer.h"
 #include "utils/material.hpp"
 #include "pathtracer.hpp"
 
@@ -17,7 +16,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::Image image;
     image.create(windowSize, sf::Color::Transparent);
 
-    Renderer renderer;
     PathTracer tracer;
 
     while (window.isOpen()) {
@@ -31,7 +29,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         for (unsigned int x = 0; x < windowSize.x; x++) {
             for (unsigned int y = 0; y < windowSize.y; y++) {
                 double scaledX = (double) x * 2 / (double) windowSize.x - 1;
-                double scaledY = (double) y * 2 / (double) windowSize.y - 1;
+                double scaledY = -((double) y * 2 / (double) windowSize.y) + 1;
                 image.setPixel(sf::Vector2u(x, y),
                                tracer.GetPixelColor(
                                        scaledX,
@@ -59,7 +57,8 @@ int main() {
     sf::Vector2u windowSize(400, 400);
 
     //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
-    Camera camera(Vector(0, 0, 0), 6, 0.2, 0.0);
+    Camera camera(Vector(0, 0, 0), 6, 0, 0.0);
+    camera.LookAt(Vector(-4, 4, 70)); // Look at the mirror
 
     Material matA(sf::Color(200, 100, 40), 0.4);
     Material matB(sf::Color(100, 180, 150), 0.5);
@@ -71,21 +70,21 @@ int main() {
 
     Scene scene(camera, {
 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 70), 4, mirror)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(10, 0, 48), 7, matA)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matB)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, 1, 40), 2, matC)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 2, matD)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-4, 4, 70), 4, mirror)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(10, 0, 48), 7, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matB)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, 1, 40), 2, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 2, matD)),
 
-        // Room 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000, matA)), 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2005, 0), 2000, matB)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2005, 0, 0), 2000, light)), 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(2005, 0, 0), 2000, matC)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -1005), 2000, matD)), 
+            // Room
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2005, 0), 2000, matB)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2005, 0, 0), 2000, light)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2005, 0, 0), 2000, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -1005), 2000, matD)),
 
-        });
+    });
 
     std::cout << scene << std::endl;
 

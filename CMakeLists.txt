@@ -37,9 +37,8 @@ add_executable(app ${MAIN} ${SOURCES}
         src/world/camera.h
         src/world/scene.cpp
         src/world/objects.cpp
-        src/renderer.h
         src/pathtracer.cpp
-        )
+)
 
 target_link_libraries(app sfml-graphics sfml-window sfml-system)
 
