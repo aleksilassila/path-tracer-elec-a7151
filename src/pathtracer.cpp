@@ -55,7 +55,7 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
 
     // Initialize color components as white
     double R = 1, G = 1, B = 1;
-    double light = 0;
+    double light = 0.0;
 
     Camera camera = scene.GetCamera();
 
@@ -71,8 +71,12 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
             sf::Color surfaceCol = lastHit_.sMaterial.getColor();
             Vector point = lastHit_.point;
             Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_ ,lastHit_.sNormal).Norm();
-            light += lastHit_.sMaterial.getEmission();
-            if (light > 0) break;
+
+            if (lastHit_.sMaterial.getEmission() > 0.0){
+                light += lastHit_.sMaterial.getEmission();
+                break;
+            }
+
             
             // Update color
             R *= (surfaceCol.r / 255.0);
@@ -80,7 +84,7 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
             B *= (surfaceCol.b / 255.0);
 
             // Update ray
-            ray_.SetOrigin(point);
+            ray_.SetOrigin(point + (lastHit_.sNormal * 0.001));
             ray_.SetDirection(bounceDir);
 
 
@@ -91,5 +95,5 @@ sf::Color PathTracer::GetPixelColor(double u, double v, const Scene &scene) {
     }
 
     // Apply accumulated light to the color and return
-    return sf::Color(R * 255 * light, G * 255 * light, B * 255 * light);
+    return sf::Color(R * 255.0 * light, G * 255.0 * light, B * 255.0 * light);
 }
