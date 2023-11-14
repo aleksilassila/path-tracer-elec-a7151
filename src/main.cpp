@@ -33,12 +33,20 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+
+            if (event.type == sf::Event::Resized) {
+                windowSize = window.getSize();
+                image.create(windowSize, sf::Color::Transparent);
+                sf::FloatRect view(sf::Vector2f(0, 0), sf::Vector2f(event.size.width, event.size.height));
+                window.setView(sf::View(view));
+            }
         }
 
+        double aspectRatio = (double) windowSize.x / (double) windowSize.y;
         for (unsigned int x = 0; x < windowSize.x; x++) {
             for (unsigned int y = 0; y < windowSize.y; y++) {
-                double scaledX = (double) x * 2 / (double) windowSize.x - 1;
-                double scaledY = -((double) y * 2 / (double) windowSize.y) + 1;
+                double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
+                double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
 
                 sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene);
                 sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
