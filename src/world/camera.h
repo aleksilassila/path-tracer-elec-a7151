@@ -96,6 +96,8 @@ public:
         SetYaw(yawAdd + yaw_);
         SetPitch(pitchAdd + pitch_);
         updateCamera();
+        std::cout << "Yaw: " << yaw_ << std::endl;
+        std::cout << "Pitch: " << pitch_ << std::endl;
     }
 
     void Move(double x, double y, double z) {
