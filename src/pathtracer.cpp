@@ -41,7 +41,7 @@ sf::Color PathTracer::TestBounceDir(double u, double v, Scene &scene) {
 
     Camera camera = scene.GetCamera();
     // start with ray from camera
-    ray_ = camera.GetRay(u, v);
+    ray_ = camera.CastRay(u, v);
     lastHit_ = GetNearestHitInfo(ray_, scene);
     Vector bounceDir = lastHit_.sMaterial.findBounceDirection(ray_, lastHit_.sNormal).Norm();
 
@@ -62,7 +62,7 @@ sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene) {
     Camera camera = scene.GetCamera();
 
     //Start with camera ray.
-    ray_ = camera.GetRay(u, v);
+    ray_ = camera.CastRay(u, v);
 
     for (int b = 0; b < maxBounces_; b++) {
 

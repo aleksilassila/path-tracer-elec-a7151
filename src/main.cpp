@@ -53,13 +53,13 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     double yaw = camera.GetYaw();
 
                     if (event.key.code == sf::Keyboard::Left) {
-                        camera.YawPlus();
+                        camera.LookRight();
                     } else if (event.key.code == sf::Keyboard::Right) {
-                        camera.YawMinus();
+                        camera.LookLeft();
                     } else if (event.key.code == sf::Keyboard::Up) {
-                        camera.PitchPlus();
+                        camera.LookUp();
                     } else if (event.key.code == sf::Keyboard::Down) {
-                        camera.PitchMinus();
+                        camera.LookDown();
                     } else if (event.key.code == sf::Keyboard::W) {
                         camera.MoveForward();
                     } else if (event.key.code == sf::Keyboard::S) {
@@ -75,13 +75,13 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
                         // Set moving speed and angle change amount
                     } else if (event.key.code == sf::Keyboard::U) {
-                        camera.IncrementDAngle();
+                        camera.IncrementLookSensitivity();
                     } else if (event.key.code == sf::Keyboard::J) {
-                        camera.DecrementDAngle();
+                        camera.DecrementLookSensitivity();
                     } else if (event.key.code == sf::Keyboard::O) {
-                        camera.IncrementSpeed();
+                        camera.IncrementMoveSpeed();
                     } else if (event.key.code == sf::Keyboard::L) {
-                        camera.DecrementSpeed();
+                        camera.DecrementMoveSpeed();
                     }
 
                     colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
@@ -169,21 +169,21 @@ int main() {
 
 
     Scene scene(camera, {
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matC)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, matA)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
 
-        // Room 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000,  matF)), // floor
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, lightA)), // roof
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, matB)), // side
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, matG)),
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)), 
-        std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)), 
+            // Room
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000, matF)), // floor
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, lightA)), // roof
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, matB)), // side
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, matG)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)),
     });
 
     std::cout << scene << std::endl;
