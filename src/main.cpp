@@ -53,26 +53,35 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     double yaw = camera.GetYaw();
 
                     if (event.key.code == sf::Keyboard::Left) {
-                        camera.Rotate(0.1, 0);
+                        camera.YawPlus();
                     } else if (event.key.code == sf::Keyboard::Right) {
-                        camera.Rotate(-0.1, 0);
+                        camera.YawMinus();
                     } else if (event.key.code == sf::Keyboard::Up) {
-                        camera.Rotate(0, 0.1);
+                        camera.PitchPlus();
                     } else if (event.key.code == sf::Keyboard::Down) {
-                        camera.Rotate(0, -0.1);
+                        camera.PitchMinus();
                     } else if (event.key.code == sf::Keyboard::W) {
-                        camera.Move(std::sin(yaw) * std::cos(pitch), std::sin(pitch), std::cos(yaw) * std::cos(pitch));
+                        camera.MoveForward();
                     } else if (event.key.code == sf::Keyboard::S) {
-                        camera.Move(-std::sin(yaw) * std::cos(pitch), -std::sin(pitch),
-                                    -std::cos(yaw) * std::cos(pitch));
+                        camera.MoveBackward();
                     } else if (event.key.code == sf::Keyboard::A) {
-                        camera.Move(std::cos(yaw), 0, -std::sin(yaw));
+                        camera.MoveLeft();
                     } else if (event.key.code == sf::Keyboard::D) {
-                        camera.Move(-std::cos(yaw), 0, std::sin(yaw));
+                        camera.MoveRight();
                     } else if (event.key.code == sf::Keyboard::Q) {
-                        camera.Move(0, 1, 0);
+                        camera.MoveUpAlongYaxis();
                     } else if (event.key.code == sf::Keyboard::E) {
-                        camera.Move(0, -1, 0);
+                        camera.MoveDownAlongYaxis();
+
+                        // Set moving speed and angle change amount
+                    } else if (event.key.code == sf::Keyboard::U) {
+                        camera.IncrementDAngle();
+                    } else if (event.key.code == sf::Keyboard::J) {
+                        camera.DecrementDAngle();
+                    } else if (event.key.code == sf::Keyboard::O) {
+                        camera.IncrementSpeed();
+                    } else if (event.key.code == sf::Keyboard::L) {
+                        camera.DecrementSpeed();
                     }
 
                     colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
