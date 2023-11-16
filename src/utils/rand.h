@@ -7,34 +7,29 @@
  */
 
 
+#ifndef RAND_H
+#define RAND_H
+
+
 #include <random>
 #include <iostream>
 #include "vector.hpp"
 
 namespace Random {
-    
 
-    double GetRandomDoubleUniform(double min, double max, unsigned int seed){
-        /**
-         * @brief Random double with uniform distribution
-         * 
-         * @return std::default_random_engine 
-         */
-        static std::default_random_engine generator(seed);
-        std::uniform_real_distribution<double> distribution(min, max);
-        return  distribution(generator);
-    }
+    /**
+     * @brief Random double with uniform distribution
+     * 
+     * @return std::default_random_engine 
+     */
+    double GetRandomDoubleUniform(double min, double max, unsigned int seed);
 
-    double GetRandomDoubleNormal(double stddev, double average, unsigned int seed) {
-        /**
-         * @brief Random double with normal distribution
-         * 
-         * @return std::default_random_engine 
-         */
-        static std::default_random_engine generator(seed);
-        std::normal_distribution<double> distribution(average, stddev);
-        return distribution(generator);
-    }
+    /**
+    * @brief Random double with normal distribution
+    * 
+    * @return std::default_random_engine 
+    */
+    double GetRandomDoubleNormal(double stddev, double average, unsigned int seed);
+}
 
-
-} // namespace Random
+#endif // RAND_H

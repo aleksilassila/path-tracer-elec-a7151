@@ -143,7 +143,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 }
 
 int main() {
-    sf::Vector2u windowSize(256, 256);
+    sf::Vector2u windowSize(400, 400);
 
     //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
     Camera camera(Vector(0, 0, 0), 6, 0.0, 0.0);
@@ -151,21 +151,24 @@ int main() {
     camera.SetFovDeg(30);
 
     // Diffuse materials
-    Material matA(sf::Color(200, 100, 40), 0.4);
-    Material matB(sf::Color(100, 180, 150), 0.5);
-    Material matC(sf::Color(50, 100, 250), 0.9);
-    Material matD(sf::Color(200, 60, 200), 0.6);
-    Material matE(sf::Color(250, 250, 10), 0.16);
-    Material matF(sf::Color(200, 200, 200), 1.0);
-    Material matG(sf::Color(144, 20, 10), 0.75);
+    Material matA(sf::Color(200, 100, 40), 0.4, 0.4, 0);
+    Material matC(sf::Color(50, 100, 250), 0.9, 0, 0);
+    Material matD(sf::Color(200, 60, 200), 0.6, 0, 0);
+    Material matF(sf::Color(200, 200, 200), 1.0, 0, 0);
+    Material matG(sf::Color(144, 20, 10), 0.75, 0, 0);
 
-    Material mirror(sf::Color(255, 255, 255), 0.008);
+    // Specular material
+    Material matE(sf::Color(250, 250, 10), 0.16, 1.0, 0, sf::Color(250, 250, 10), Vector(0, 0, 0));
+    Material mirror(sf::Color(245, 245, 245), 0.008, 1.0, 0);
+
+    // Transparent material:
+    Material matB(sf::Color(100, 180, 150), 0.75, 0, 0);
 
     // Emissive materials
-    Material lightA(sf::Color::Black, 0.5, Vector(1, 1, 1));
-    Material lightB(sf::Color::Black, 0.5, Vector(0.2, 0.5, 1));
-    Material lightC(sf::Color::Black, 0.5, Vector(1, 0.8, 0.6));
-    Material lightD(sf::Color::Black, 0.5, Vector(0.75, 1, 0.75));
+    Material lightA(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(1, 1, 1));
+    Material lightB(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(0.2, 0.5, 1));
+    Material lightC(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(1, 0.8, 0.6));
+    Material lightD(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(0.75, 1, 0.75));
 
 
     Scene scene(camera, {

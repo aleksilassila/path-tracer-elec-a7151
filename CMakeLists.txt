@@ -21,6 +21,7 @@ add_executable(app
         src/world/objects.cpp
         src/pathtracer.cpp
         src/utils/filemanager.cpp
+        src/utils/rand.cpp
 
         )
 

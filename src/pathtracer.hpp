@@ -1,6 +1,10 @@
+#ifndef PATHTRACER_HPP
+#define PATHTRACER_HPP
+
 #include "SFML/Graphics/Color.hpp"
 #include "utils/ray.hpp"
 #include "world/scene.h"
+#include "utils/rand.h"
 
 struct HitInfo {
 
@@ -63,7 +67,7 @@ public:
 
 };
 
-
+#endif // PATHTRACER_HPP
 
 
 

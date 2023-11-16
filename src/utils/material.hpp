@@ -22,17 +22,24 @@ class Material {
 
 private:
 
-    // Material attributes
     sf::Color colour_;
     double roughness_;
+    double specularIntensity_;
+
+    double transparency_;
+
     Vector emission_;
+    // Specular reflections color.
+    sf::Color specularColour_;
+    // How likely rays are to reflect specularly vs diffusely (0 to 1)
+    
 
 
 public:
 
     Material();
-    Material(sf::Color colour, double roughness);
-    Material(sf::Color colour, double roughness, Vector emission);
+    Material(sf::Color colour, double roughness, double specularIntensity, double transparency);
+    Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color speuclarColor, Vector emission);
     ~Material();
 
     /**
@@ -41,6 +48,8 @@ public:
      * @return sf::Color 
      */
     sf::Color getColor() const;
+
+    sf::Color getSpecularColor() const;
 
 
     /**
@@ -59,6 +68,12 @@ public:
    double getRoughness() const;
 
 
+   double getSpecularIntensity() const;
+
+double getTransparency() const;
+
+
+
    /**
     * @brief 
     * Find the bounce direction of ray on object based on normal vector of surface
@@ -68,7 +83,9 @@ public:
     * @param normal 
     * @return Vector 
     */
-    Vector findBounceDirection(Ray &ray, Vector &normal) const;
+    Vector findSpecularBounceDirection(Ray &ray, Vector &normal) const;
+    Vector findDiffuseBounceDirection(Ray &ray, Vector &normal) const;
+    Vector findRefractionDirection(/* Ray &ray, Vector &normal */) const;
 
 };
 
