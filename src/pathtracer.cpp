@@ -52,7 +52,7 @@ sf::Color PathTracer::TestBounceDir(double u, double v, Scene &scene) {
 }
 
 
-sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene) {
+sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene, unsigned int randSeed) {
     // Initialize color components as white
     double R = 1, G = 1, B = 1;
     // No light in the beginning
@@ -80,7 +80,7 @@ sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene) {
             sf::Color surfaceCol;
 
             // Handle diffuse and specular reflections
-            double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0, static_cast<unsigned int> (u * v * 6419123));
+            double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0, static_cast<unsigned int> (u * v * randSeed * 456789) * std::numeric_limits<unsigned int>::max());
 
             if (specularChance < material.getSpecularIntensity()){
                 newRayDir = material.findSpecularBounceDirection(ray_, normal).Norm();

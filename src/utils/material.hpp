@@ -24,21 +24,16 @@ private:
 
     sf::Color colour_;
     double roughness_;
-    double specularIntensity_;
-
+    double specularIntensity_;     // How likely rays are to reflect specularly vs diffusely (0 to 1)
     double transparency_;
-
     Vector emission_;
-    // Specular reflections color.
-    sf::Color specularColour_;
-    // How likely rays are to reflect specularly vs diffusely (0 to 1)
-    
-
+    sf::Color specularColour_;     // Specular reflections color.
 
 public:
 
     Material();
     Material(sf::Color colour, double roughness, double specularIntensity, double transparency);
+    Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color speuclarColor);
     Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color speuclarColor, Vector emission);
     ~Material();
 
@@ -77,7 +72,7 @@ double getTransparency() const;
    /**
     * @brief 
     * Find the bounce direction of ray on object based on normal vector of surface
-    * Ray must reflect within 180 degrees of normal vector
+    * Ray must reflect within 90 degrees of normal vector
     * 
     * @param ray 
     * @param normal 

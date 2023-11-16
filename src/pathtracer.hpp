@@ -44,7 +44,7 @@ public:
      * @param scene 
      * @return sf::Color 
      */
-    sf::Color GetPixelColor(double u, double v, Scene &scene);
+    sf::Color GetPixelColor(double u, double v, Scene &scene, unsigned int randSeed);
 
     /**
      * @brief Test ray bounce direction on surface, by translating x, y and z componetnts of vector to r, g, and b

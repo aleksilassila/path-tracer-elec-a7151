@@ -15,6 +15,10 @@ Material::Material()
 Material::Material(sf::Color colour, double roughness, double specularIntensity, double transparency) 
     : colour_(colour), roughness_(roughness), transparency_(transparency), emission_(0.0), specularIntensity_(specularIntensity), specularColour_(sf::Color::White) {}
 
+    Material::Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color specularColor) 
+    : colour_(colour), roughness_(roughness), transparency_(transparency), specularIntensity_(specularIntensity), specularColour_(specularColor){ }
+
+
 Material::Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color specularColor, Vector emission) 
     : colour_(colour), roughness_(roughness), emission_(emission), transparency_(transparency), specularIntensity_(specularIntensity), specularColour_(specularColor){ }
 
@@ -26,7 +30,6 @@ double Material::getRoughness() const { return roughness_; }
 double Material::getSpecularIntensity() const { return specularIntensity_; }
 double Material::getTransparency() const { return transparency_; }
 Vector Material::getEmission() const { return emission_; }
-
 
 
 Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal) const {
@@ -80,8 +83,6 @@ Vector Material::findDiffuseBounceDirection(Ray &ray, Vector &normal) const {
 
     
     Vector inHemisphere(x, y, z);
-    // Align with normal
-    // This is a basic alignment, consider using a more robust method to align with the normal
     if (inHemisphere.Dot(normal) < 0) {
         return inHemisphere * -1;
     }

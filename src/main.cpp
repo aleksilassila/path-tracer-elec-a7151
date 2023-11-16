@@ -111,7 +111,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 }
                 */
 
-                sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene);
+                sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount); // More random 
                 sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
 
                 // Accumulate color
@@ -152,7 +152,7 @@ int main() {
 
     // Diffuse materials
     Material matA(sf::Color(200, 100, 40), 0.4, 0.4, 0);
-    Material matC(sf::Color(50, 100, 250), 0.9, 0, 0);
+    Material matC(sf::Color(50, 100, 250), 0.7, 0.6, 0, sf::Color(255, 255, 255));
     Material matD(sf::Color(200, 60, 200), 0.6, 0, 0);
     Material matF(sf::Color(200, 200, 200), 1.0, 0, 0);
     Material matG(sf::Color(144, 20, 10), 0.75, 0, 0);
@@ -186,7 +186,7 @@ int main() {
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, matB)), // side
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, matG)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)),
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, lightC)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, matA)),
     });
 
     std::cout << scene << std::endl;
