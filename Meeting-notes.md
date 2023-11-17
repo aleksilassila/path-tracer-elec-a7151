@@ -144,3 +144,47 @@ implement. We have familiarized ourselves with the concepts and algorithms used 
 
 ![Current progress](./images/path-tracer-1.jpg)
 Project is set up, basic tests are implemented, and we have a simple shaded render.
+
+# Meeting 17.11.23 12:00
+
+**Participants**: All members
+
+## Summary of works
+
+1. Johannes
+
+
+2. Markus
+
+
+3. Aleksi
+
+   Work on camera class: Fov, movement, rotation and utility. Window resizing.
+
+4. Weronica
+
+## Challenges
+
+1. Camera class had some bugs that were fixed, same goes for ray accumulation
+
+## Actions
+
+1. Aleksi will work on GPU acceleration next
+2.
+3.
+4.
+
+## Project status
+
+![Current progress](./images/path-tracer-2.png)
+We have camera movement, fov, ray accumulation and basic materials.
+
+Upcoming features (if time allows):
+
+- [ ] GPU Acceleration
+- [ ] Refractions
+    - [ ] Subsurface scattering?
+    - [ ] Volumetric rendering?
+- [ ] Triangle meshes
+- [ ] Load models from files (.obj)
+- [ ] Animation / Blur?
