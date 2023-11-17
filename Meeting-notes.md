@@ -155,7 +155,9 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 
 2. Markus
-
+   
+   Worked on PathTracer class: Path tracing algorithm.
+   Worked on Material class: Specular, emissive, and diffuse materials. 
 
 3. Aleksi
 
@@ -170,7 +172,7 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 ## Actions
 
 1. Aleksi will work on GPU acceleration next
-2.
+2. Markus will work on translucent materials (Refractions)
 3.
 4.
 
