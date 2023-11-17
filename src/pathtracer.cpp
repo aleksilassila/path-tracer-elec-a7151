@@ -43,7 +43,7 @@ sf::Color PathTracer::TestBounceDir(double u, double v, Scene &scene) {
     // start with ray from camera
     ray_ = camera.CastRay(u, v);
     lastHit_ = GetNearestHitInfo(ray_, scene);
-    Vector bounceDir = lastHit_.sMaterial.findSpecularBounceDirection(ray_, lastHit_.sNormal).Norm();
+    Vector bounceDir = lastHit_.sMaterial.findSpecularBounceDirection(ray_, lastHit_.sNormal, 1).Norm();
 
     if (lastHit_.hit)
         avgCol = sf::Color(bounceDir.x() * 255, bounceDir.y() * 255, bounceDir.z() * 255);
@@ -83,10 +83,10 @@ sf::Color PathTracer::GetPixelColor(double u, double v, Scene &scene, unsigned i
             double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0, static_cast<unsigned int> (u * v * randSeed * 456789) * std::numeric_limits<unsigned int>::max());
 
             if (specularChance < material.getSpecularIntensity()){
-                newRayDir = material.findSpecularBounceDirection(ray_, normal).Norm();
+                newRayDir = material.findSpecularBounceDirection(ray_, normal, static_cast<unsigned int> (u * v * randSeed * 456789)).Norm();
                 surfaceCol = material.getSpecularColor();
             } else {
-                newRayDir = material.findDiffuseBounceDirection(ray_, normal).Norm();
+                newRayDir = material.findDiffuseBounceDirection(ray_, normal, static_cast<unsigned int> (u * v * randSeed * 456789)).Norm();
                 surfaceCol = material.getColor();
             }
 

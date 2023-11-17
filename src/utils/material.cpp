@@ -32,12 +32,8 @@ double Material::getTransparency() const { return transparency_; }
 Vector Material::getEmission() const { return emission_; }
 
 
-Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal) const {
-    /**
-     * @todo Add propper seeding to random number generation
-     * 
-     */
-
+Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const {
+    
     // Get normalized ray directions
     Vector rayDirection = ray.GetDirection().Norm();
 
@@ -45,14 +41,13 @@ Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal) const {
     // Reflection formula: U = v − 2 * (v * n) * n
     Vector idealBounceDirection = rayDirection - (normal * (rayDirection * normal) * 2);
     // Generate a random vector based on the ray direction and roughness
-    unsigned int seed = 1;
     Vector randomizer;
     Vector bounceDir;
     double x, y, z;
 
-    x = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.x(), seed);
-    y = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.y(), seed * 2);
-    z = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.z(), seed * 3);
+    x = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.x(), randSeed * std::numeric_limits<unsigned int>::max() * 12314);
+    y = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.y(), randSeed * std::numeric_limits<unsigned int>::max() * 73495);
+    z = Random::GetRandomDoubleNormal(roughness_, idealBounceDirection.z(), randSeed * std::numeric_limits<unsigned int>::max() * 91247);
 
     randomizer = Vector(x, y, z);
     bounceDir = idealBounceDirection + randomizer;
@@ -64,23 +59,13 @@ Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal) const {
     return bounceDir;
 }
 
-Vector Material::findDiffuseBounceDirection(Ray &ray, Vector &normal) const {
-
-    /**
-     * @todo Add propper seeding to random number generation
-     * 
-     */
+Vector Material::findDiffuseBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const {
 
     // Random unit vector in hemisphere
-    // Generate random angles for spherical coordinates
     double x, y, z;
-    int seed = 1;
-
-    // Convert spherical coordinates to cartesian coordinates
-    x = Random::GetRandomDoubleNormal(roughness_, normal.x(), seed);
-    y = Random::GetRandomDoubleNormal(roughness_, normal.y(), seed * 2);
-    z = Random::GetRandomDoubleNormal(roughness_, normal.z(), seed * 3);
-
+    x = Random::GetRandomDoubleNormal(roughness_, normal.x(), randSeed * std::numeric_limits<unsigned int>::max() * 12314);
+    y = Random::GetRandomDoubleNormal(roughness_, normal.y(), randSeed * std::numeric_limits<unsigned int>::max() * 73495);
+    z = Random::GetRandomDoubleNormal(roughness_, normal.z(), randSeed * std::numeric_limits<unsigned int>::max() * 91247);
     
     Vector inHemisphere(x, y, z);
     if (inHemisphere.Dot(normal) < 0) {

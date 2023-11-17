@@ -78,8 +78,8 @@ double getTransparency() const;
     * @param normal 
     * @return Vector 
     */
-    Vector findSpecularBounceDirection(Ray &ray, Vector &normal) const;
-    Vector findDiffuseBounceDirection(Ray &ray, Vector &normal) const;
+    Vector findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
+    Vector findDiffuseBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
     Vector findRefractionDirection(/* Ray &ray, Vector &normal */) const;
 
 };

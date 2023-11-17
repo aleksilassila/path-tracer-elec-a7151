@@ -148,11 +148,11 @@ int main() {
     //Camera camera = Camera(Vector(0, 0, 0), Vector(0, 0, 1));
     Camera camera(Vector(0, 0, 0), 6, 0.0, 0.0);
     camera.LookAt(Vector(0, 0, 70)); // Look at the mirror
-    camera.SetFovDeg(30);
+    camera.SetFovDeg(80);
 
     // Diffuse materials
     Material matA(sf::Color(200, 100, 40), 0.4, 0.4, 0);
-    Material matC(sf::Color(50, 100, 250), 0.7, 0.6, 0, sf::Color(255, 255, 255));
+    Material matC(sf::Color(50, 100, 250), 0.7, 0, 0);
     Material matD(sf::Color(200, 60, 200), 0.6, 0, 0);
     Material matF(sf::Color(200, 200, 200), 1.0, 0, 0);
     Material matG(sf::Color(144, 20, 10), 0.75, 0, 0);
@@ -160,6 +160,7 @@ int main() {
     // Specular material
     Material matE(sf::Color(250, 250, 10), 0.16, 1.0, 0, sf::Color(250, 250, 10), Vector(0, 0, 0));
     Material mirror(sf::Color(245, 245, 245), 0.008, 1.0, 0);
+    Material ceramic(sf::Color(240,240,240), 1, 0.3, 0.005, sf::Color::White);
 
     // Transparent material:
     Material matB(sf::Color(100, 180, 150), 0.75, 0, 0);
@@ -177,14 +178,14 @@ int main() {
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2, 4, 41), 2, matC)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, matA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, ceramic)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
 
             // Room
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000, matF)), // floor
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, lightA)), // roof
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, matB)), // side
-            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, matG)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, mirror)), // side
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, mirror)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, -2000), 2000, matA)),
     });
