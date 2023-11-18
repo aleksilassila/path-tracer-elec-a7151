@@ -165,15 +165,18 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 4. Weronica
 
+   Worked on testing using Doctest library. Rewritten most tests and created new ones. 
+
 ## Challenges
 
 1. Camera class had some bugs that were fixed, same goes for ray accumulation
+2. CMake for testing doesn't always work as expected, not linking sfml properly
 
 ## Actions
 
 1. Aleksi will work on GPU acceleration next
 2. Markus will work on translucent materials (Refractions)
-3.
+3. Weronica will continue with improving automated testing, and then on input file management.
 4.
 
 ## Project status
