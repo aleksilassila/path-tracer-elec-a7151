@@ -9,7 +9,37 @@
 #include "utils/material.hpp"
 #include "pathtracer.hpp"
 #include <vector>
+#include <thread>
 #include "utils/filemanager.hpp"
+
+const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
+
+void
+renderIndexes(int startIndex, int endIndex, int frameCount, std::vector<sf::Vector3f> &colorBuffer,
+              sf::Vector2u &windowSize,
+              Scene &scene, sf::Image &image) {
+    PathTracer tracer;
+
+    double aspectRatio = (double) windowSize.x / (double) windowSize.y;
+    for (unsigned int x = startIndex; x < endIndex; x++) {
+        for (unsigned int y = 0; y < windowSize.y; y++) {
+            double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
+            double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
+
+            sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount);
+            sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
+
+            // Accumulate color
+            unsigned int bufferIndex = y * windowSize.x + x;
+            colorBuffer[bufferIndex] += currentColor;
+
+            // average color over the frames
+            sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
+
+            image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
+        }
+    }
+}
 
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
@@ -19,6 +49,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     image.create(windowSize, sf::Color::Transparent);
 
     std::vector<sf::Vector3f> colorBuffer(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
+
+    sf::Vector3f colorArray[windowSize.x * windowSize.y];
 
     PathTracer tracer;
 
@@ -90,40 +122,53 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             }
         }
 
-        double aspectRatio = (double) windowSize.x / (double) windowSize.y;
-        for (unsigned int x = 0; x < windowSize.x; x++) {
-            for (unsigned int y = 0; y < windowSize.y; y++) {
-                double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
-                double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
-
-                /* An implementation without the frame buffer
-                sf::Vector2u pixel(x, y);
-                sf::Color previousColor = image.getPixel(pixel);
-                sf::Color nextColor = tracer.GetPixelColor(scaledX, scaledY, scene);;
-
-                if (frameCount == 0) {
-                    image.setPixel(pixel, nextColor);
-                } else {
-                    image.setPixel(pixel,
-                                   sf::Color((previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-                                             (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-                                             (previousColor.b * (frameCount) + nextColor.b) / (frameCount + 1)));
-                }
-                */
-
-                sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount); // More random 
-                sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
-
-                // Accumulate color
-                unsigned int bufferIndex = y * windowSize.x + x;
-                colorBuffer[bufferIndex] += currentColor;
-
-                // average color over the frames
-                sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
-
-                image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
-            }
+        std::thread threads[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = std::thread(renderIndexes, i * windowSize.x / threadCount,
+                                     (i + 1) * windowSize.x / threadCount, frameCount, std::ref(colorBuffer),
+                                     std::ref(windowSize), std::ref(scene), std::ref(image));
         }
+
+        for (int i = 0; i < threadCount; i++) {
+            threads[i].join();
+        }
+
+//        double aspectRatio = (double) windowSize.x / (double) windowSize.y;
+//
+//        for (unsigned int x = 0; x < windowSize.x; x++) {
+//            for (unsigned int y = 0; y < windowSize.y; y++) {
+//                double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
+//                double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
+//
+//                /* An implementation without the frame buffer
+//                sf::Vector2u pixel(x, y);
+//                sf::Color previousColor = image.getPixel(pixel);
+//                sf::Color nextColor = tracer.GetPixelColor(scaledX, scaledY, scene);;
+//
+//                if (frameCount == 0) {
+//                    image.setPixel(pixel, nextColor);
+//                } else {
+//                    image.setPixel(pixel,
+//                                   sf::Color((previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+//                                             (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+//                                             (previousColor.b * (frameCount) + nextColor.b) / (frameCount + 1)));
+//                }
+//                */
+//
+//                sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene,
+//                                                            x * y * frameCount); // More random
+//                sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
+//
+//                // Accumulate color
+//                unsigned int bufferIndex = y * windowSize.x + x;
+//                colorBuffer[bufferIndex] += currentColor;
+//
+//                // average color over the frames
+//                sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
+//
+//                image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
+//            }
+//        }
 
         // Load the image into a texture and display it
         sf::Texture texture;
@@ -160,7 +205,7 @@ int main() {
     // Specular material
     Material matE(sf::Color(250, 250, 10), 0.16, 1.0, 0, sf::Color(250, 250, 10), Vector(0, 0, 0));
     Material mirror(sf::Color(245, 245, 245), 0.008, 1.0, 0);
-    Material ceramic(sf::Color(240,240,240), 1, 0.3, 0.005, sf::Color::White);
+    Material ceramic(sf::Color(240, 240, 240), 1, 0.3, 0.005, sf::Color::White);
 
     // Transparent material:
     Material matB(sf::Color(100, 180, 150), 0.75, 0, 0);
@@ -191,6 +236,7 @@ int main() {
     });
 
     std::cout << scene << std::endl;
+    std::cout << "Number of threads used: " << threadCount << std::endl;
 
     renderLoop(windowSize, scene);
     return 0;
