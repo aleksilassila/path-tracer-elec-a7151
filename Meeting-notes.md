@@ -153,6 +153,8 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 1. Johannes
 
+   Worked on Camera class: movement and rotation. 
+   Helped with PathTracer
 
 2. Markus
    
@@ -177,7 +179,7 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 1. Aleksi will work on GPU acceleration next
 2. Markus will work on translucent materials (Refractions)
 3. Weronica will continue with improving automated testing, and then on input file management.
-4.
+4. Johannes will help with refractions and possibly implement additional types of geometry.
 
 ## Project status
 
