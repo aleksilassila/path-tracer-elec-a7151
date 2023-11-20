@@ -34,7 +34,7 @@ FileManager::writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, u
 }
 
 void FileManager::saveRenderImage(sf::Image &image) {
-    image.saveToFile(outputPath_);
+    bool result = image.saveToFile(outputPath_);
     std::cout << "Image saved to: " << outputPath_ << std::endl;
 }
 

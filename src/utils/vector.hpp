@@ -45,7 +45,11 @@ public:
         return std::sqrt(std::pow(x_, 2) + std::pow(y_, 2) + std::pow(z_, 2));
     }
 
+    //todo
+    // name is very confusing as norm usually means length
+    // also it didn't have a division by zero check
     Vector Norm() {
+        if (Len() == 0) return {0,0,0};
         return *this * (1 / Len());
     }
 
@@ -71,6 +75,8 @@ public:
     bool operator!=(const Vector &v2) {
         return !(*this == v2);
     }
+
+    //todo we have double of dot product, cross product
 
     double Dot(const Vector &v2) {
         return x_ * v2.x_ + y_ * v2.y_ + z_ * v2.z_;

@@ -1,14 +1,8 @@
-/*
-* Tests for file manager class
-*/
+#include "doctest.h"
+#include "../src/utils/filemanager.hpp"
 
-#include <iostream>
-#include <vector>
-
-#include "../../src/utils/filemanager.cpp"
-
-
-void TestWriteOutput() {
+//todo so far it terminates, but at least complies
+TEST_CASE("Testing output writing") {
     /*
     * test writing a buffer to file
     */
@@ -16,7 +10,7 @@ void TestWriteOutput() {
     unsigned int yDim = 255;
     unsigned int xDim = 255;
 
-    std::vector<std::vector<Colour>> buffer(yDim, std::vector<Colour>(xDim));
+    std::vector<std::vector<Colour>> buffer(yDim, std::vector<Colour>());
 
     // Fill the buffer
     for (unsigned int i = 0; i < yDim; i++) {
@@ -26,17 +20,10 @@ void TestWriteOutput() {
     }
 
     FileManager fm("input.txt", "output.ppm");
-
-    if (fm.writeOutput(buffer, xDim, yDim)) {
+    bool result = fm.writeOutput(buffer, xDim, yDim);
+    if (result) {
         std::cout << "Test WriteOutput: Passed" << std::endl;
     } else {
         std::cout << "Test WriteOutput: Failed" << std::endl;
     }
-}
-
-    
-int main() {
-    // Run tests
-    TestWriteOutput();
-    return 0;
 }

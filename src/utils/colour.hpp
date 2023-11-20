@@ -28,7 +28,7 @@ public:
     * Color from sf::Color class
     */
     Colour(sf::Color colour): red_((unsigned char) colour.r), green_((unsigned char) colour.g), blue_((unsigned char) colour.b){}
-    ~Colour();
+    ~Colour() = default;
     
     // Colour component getters
     unsigned char red() const {return red_;}
