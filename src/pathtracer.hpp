@@ -24,19 +24,82 @@ struct HitInfo {
 };
 
 struct RenderContext {
-    const Scene scene;
-    const sf::Vector2u dimensions;
+private:
+    const Scene scene_;
+    const sf::Vector2u dimensions_;
 
 //    const std::vector<sf::Vector3f> colorBuffer;
-    sf::Image image;
-    int frameCount;
+    sf::Image image_;
 
     std::mutex mutex;
+public:
+    std::atomic<int> frameCount = 0;
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene) : scene(scene), dimensions(dimensions),
-                                                            frameCount(0) {
-        image.create(dimensions, sf::Color::Transparent);
+    RenderContext(sf::Vector2u &dimensions, Scene &scene) : scene_(scene), dimensions_(dimensions) {
+        image_.create(dimensions, sf::Color::Transparent);
     }
+
+    sf::Color GetPixel(sf::Vector2u pos) {
+        std::lock_guard<std::mutex> lock(mutex);
+        return image_.getPixel(pos);
+    }
+
+    void SetPixel(sf::Vector2u pos, sf::Color color) {
+        std::lock_guard<std::mutex> lock(mutex);
+        image_.setPixel(pos, color);
+    }
+
+    sf::Image GetImage() {
+        std::lock_guard<std::mutex> lock(mutex);
+        return image_;
+    }
+
+    Scene GetScene() {
+        std::lock_guard<std::mutex> lock(mutex);
+        return scene_;
+    }
+
+    sf::Vector2u GetDimensions() {
+        std::lock_guard<std::mutex> lock(mutex);
+        return dimensions_;
+    }
+
+//    sf::Color GetPixel(int frameIndex, sf::Vector2u pos) {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        if (frameIndex == -2) {
+//            return image_.getPixel(pos);
+//        } else {
+//            return previewImage_.getPixel(GetPreviewCoords(pos));
+//        }
+//    }
+//
+//    void SetPixel(int frameIndex, sf::Vector2u pos, sf::Color color) {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        if (frameIndex == -2) {
+//            image_.setPixel(pos, color);
+//        } else {
+//            previewImage_.setPixel(GetPreviewCoords(pos), color);
+//        }
+//    }
+//
+//    sf::Image GetImage(int frameIndex) {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        if (frameIndex == -2) {
+//            return image_;
+//        } else {
+//            return previewImage_;
+//        }
+//    }
+//
+//    Scene GetScene() {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        return scene_;
+//    }
+//
+//    sf::Vector2u GetDimensions() {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        return dimensions_;
+//    }
 };
 
 class PathTracer {
@@ -194,8 +257,8 @@ public:
     }
 
     // Updates texture
-    void Renderer() {
-        while (true) {
+    void Renderer(sf::RenderWindow &window) {
+        while (window.isOpen()) {
             std::shared_ptr<RenderContext> context = context_;
 
             std::thread threads[threadCount];
@@ -208,61 +271,47 @@ public:
             }
 
             std::lock_guard<std::mutex> lock(imageMutex_);
-            std::lock_guard<std::mutex> lock2(context->mutex);
+            image_ = context->GetImage();
             context->frameCount++;
-            image_ = context->image;
         }
     }
 
     static void
     RenderWorker(int threadIndex, int threadCount, std::shared_ptr<RenderContext> context) {
-        std::mutex &mutex = context->mutex;
-
-        mutex.lock();
-        auto dimensions = context->dimensions;
+        auto dimensions = context->GetDimensions();
 //        auto &colorBuffer = context->colorBuffer;
-        auto scene = context->scene;
-        auto frameCount = context->frameCount;
-        mutex.unlock();
+        auto scene = context->GetScene();
+        int frameCount = context->frameCount;
 
-        double aspectRatio = (double) dimensions.y / dimensions.x;
+//        double resolution = 0.5;
+
+        double aspectRatio = (double) dimensions.x / dimensions.y;
         for (unsigned int x = threadIndex; x < dimensions.x; x += threadCount) {
             for (unsigned int y = 0; y < dimensions.y; y++) {
+//                if (Random::GetRandomDoubleUniform(0.0, 1.0,
+//                                                   frameCount) > resolution) {
+//                    continue;
+//                }
+
                 double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
                 double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
 
                 sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, 12);
 
-                std::lock_guard<std::mutex> lock(mutex);
-
                 sf::Vector2u pixel(x, y);
-                sf::Color previousColor = context->image.getPixel(pixel);
 
                 if (frameCount == 0) {
-                    context->image.setPixel(pixel, nextColor);
+                    context->SetPixel(pixel, nextColor);
                 } else {
-                    context->image.setPixel(pixel,
-                                            sf::Color((previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-                                                      (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-                                                      (previousColor.b * (frameCount) + nextColor.b) /
-                                                      (frameCount + 1)));
+                    sf::Color previousColor = context->GetPixel(pixel);
+
+                    context->SetPixel(pixel,
+                                      sf::Color(
+                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+                                              (previousColor.b * (frameCount) + nextColor.b) /
+                                              (frameCount + 1)));
                 }
-
-
-//                sf::Color pixelColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, 12);
-//                sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
-//
-//                // Accumulate color
-//                unsigned int bufferIndex = y * dimensions.x + x;
-//                mutex.lock();
-//                colorBuffer[bufferIndex] += currentColor;
-//
-//                // average color over the frames
-//                sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
-//
-//                context->image.setPixel(sf::Vector2u(x, y),
-//                                        sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
-//                mutex.unlock();
             }
         }
     }

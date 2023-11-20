@@ -47,8 +47,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     PathTracer tracer(windowSize, scene);
 
     // Start render thread
-    std::thread renderer([&tracer]() {
-        tracer.Renderer();
+    std::thread renderer([&tracer, &window]() {
+        tracer.Renderer(window);
     });
 
     FileManager filemanager("out.png");
@@ -150,6 +150,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         if (!textureDidLoad) continue;
 
         sf::Sprite sprite(texture);
+//        sprite.setScale(sf::Vector2f(4, 4));
 
         window.clear();
         window.draw(sprite);
