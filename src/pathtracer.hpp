@@ -23,6 +23,9 @@ struct HitInfo {
     HitInfo() : hit(false), point(), sNormal(), sMaterial() {}
 };
 
+/**
+ * This struct is a thread-safe way of representing the data needed to render a frame.
+ */
 struct RenderContext {
 private:
     const Scene scene_;
@@ -34,8 +37,12 @@ private:
     std::mutex mutex;
 public:
     std::atomic<int> frameCount = 0;
+    std::atomic<int> maxBounces = 12;
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene) : scene_(scene), dimensions_(dimensions) {
+    RenderContext(sf::Vector2u &dimensions, Scene &scene) : RenderContext(dimensions, scene, 12) {}
+
+    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces) : scene_(scene), dimensions_(dimensions),
+                                                                            maxBounces(maxBounces) {
         image_.create(dimensions, sf::Color::Transparent);
     }
 
@@ -63,43 +70,6 @@ public:
         std::lock_guard<std::mutex> lock(mutex);
         return dimensions_;
     }
-
-//    sf::Color GetPixel(int frameIndex, sf::Vector2u pos) {
-//        std::lock_guard<std::mutex> lock(mutex);
-//        if (frameIndex == -2) {
-//            return image_.getPixel(pos);
-//        } else {
-//            return previewImage_.getPixel(GetPreviewCoords(pos));
-//        }
-//    }
-//
-//    void SetPixel(int frameIndex, sf::Vector2u pos, sf::Color color) {
-//        std::lock_guard<std::mutex> lock(mutex);
-//        if (frameIndex == -2) {
-//            image_.setPixel(pos, color);
-//        } else {
-//            previewImage_.setPixel(GetPreviewCoords(pos), color);
-//        }
-//    }
-//
-//    sf::Image GetImage(int frameIndex) {
-//        std::lock_guard<std::mutex> lock(mutex);
-//        if (frameIndex == -2) {
-//            return image_;
-//        } else {
-//            return previewImage_;
-//        }
-//    }
-//
-//    Scene GetScene() {
-//        std::lock_guard<std::mutex> lock(mutex);
-//        return scene_;
-//    }
-//
-//    sf::Vector2u GetDimensions() {
-//        std::lock_guard<std::mutex> lock(mutex);
-//        return dimensions_;
-//    }
 };
 
 class PathTracer {
@@ -107,20 +77,15 @@ class PathTracer {
 private:
 
     const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
-    int maxBounces_;
     std::shared_ptr<RenderContext> context_;
-    std::mutex contextMutex_;
 
     sf::Image image_;
     std::mutex imageMutex_;
 
 public:
-    PathTracer(sf::Vector2u &dimensions, Scene &scene) : PathTracer(dimensions, scene, 12) {}
-
-    PathTracer(sf::Vector2u &dimensions, Scene &scene, int maxBounces) : maxBounces_(maxBounces), context_(
+    PathTracer(sf::Vector2u &dimensions, Scene &scene) : context_(
             std::make_shared<RenderContext>(dimensions, scene)
     ) {}
-
 
     ~PathTracer();
 
@@ -200,16 +165,6 @@ public:
         );
     }
 
-//    /**
-//     * @brief Test ray bounce direction on surface, by translating x, y and z componetnts of vector to r, g, and b
-//     *
-//     * @param u
-//     * @param v
-//     * @param scene
-//     * @return sf::Color
-//     */
-//    sf::Color TestBounceDir(double u, double v, Scene &scene);
-
     /**
      * @brief Get the nearest hit information struct
      * 
@@ -256,7 +211,10 @@ public:
         return image_;
     }
 
-    // Updates texture
+    /**
+     * This function runs inside a thread and continuously renders an image based on the rendering context.
+     * @param window
+     */
     void Renderer(sf::RenderWindow &window) {
         while (window.isOpen()) {
             std::shared_ptr<RenderContext> context = context_;
@@ -276,12 +234,19 @@ public:
         }
     }
 
+    /**
+     * This function renders a specific part of the image inside a thread.
+     * @param threadIndex Current thread eg which part of the image to render
+     * @param threadCount Amount of threads used
+     * @param context Rendering context from which to copy values
+     */
     static void
     RenderWorker(int threadIndex, int threadCount, std::shared_ptr<RenderContext> context) {
         auto dimensions = context->GetDimensions();
 //        auto &colorBuffer = context->colorBuffer;
         auto scene = context->GetScene();
         int frameCount = context->frameCount;
+        int maxBounces = context->maxBounces;
 
 //        double resolution = 0.5;
 
@@ -296,10 +261,11 @@ public:
                 double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
                 double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
 
-                sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, 12);
+                sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, maxBounces);
 
                 sf::Vector2u pixel(x, y);
 
+                // Accumulate rays
                 if (frameCount == 0) {
                     context->SetPixel(pixel, nextColor);
                 } else {
@@ -318,8 +284,3 @@ public:
 };
 
 #endif // PATHTRACER_HPP
-
-
-
-
-
