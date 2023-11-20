@@ -9,69 +9,109 @@
 #include "utils/material.hpp"
 #include "pathtracer.hpp"
 #include <vector>
+#include <thread>
 #include "utils/filemanager.hpp"
+
+const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
+
+//void
+//renderIndexes(int startIndex, int endIndex, int frameCount, std::vector<sf::Vector3f> &colorBuffer,
+//              sf::Vector2u &windowSize,
+//              Scene &scene, sf::Image &image) {
+//    PathTracer tracer;
+//
+//    double aspectRatio = (double) windowSize.x / (double) windowSize.y;
+//    for (unsigned int x = startIndex; x < endIndex; x++) {
+//        for (unsigned int y = 0; y < windowSize.y; y++) {
+//            double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
+//            double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
+//
+//            sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount);
+//            sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
+//
+//            // Accumulate color
+//            unsigned int bufferIndex = y * windowSize.x + x;
+//            colorBuffer[bufferIndex] += currentColor;
+//
+//            // average color over the frames
+//            sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
+//
+//            image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
+//        }
+//    }
+//}
 
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
 
-    // Create an image to work with
-    sf::Image image;
-    image.create(windowSize, sf::Color::Transparent);
+    PathTracer tracer(windowSize, scene);
 
-    std::vector<sf::Vector3f> colorBuffer(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
+    // Start render thread
+    std::thread renderer([&tracer, &window]() {
+        tracer.Renderer(window);
+    });
 
-    PathTracer tracer;
-
-    // Filemanager to save images.
     FileManager filemanager("out.png");
-    unsigned long long frameCount = 0;
 
+    // Update loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
+            bool resetContext = false;
+
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
 
             if (event.type == sf::Event::Resized) {
                 windowSize = window.getSize();
-                image.create(windowSize, sf::Color::Transparent);
+//                image.create(windowSize, sf::Color::Transparent);
                 sf::FloatRect view(sf::Vector2f(0, 0), sf::Vector2f(event.size.width, event.size.height));
                 window.setView(sf::View(view));
 
+                resetContext = true;
                 // Reset color buffer
-                colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
-                frameCount = 0;
+//                colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
+//                frameCount = 0;
             }
 
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
+                    sf::Image image = tracer.GetLatestImage();
                     filemanager.saveRenderImage(image);
                 } else {
                     Camera &camera = scene.GetCamera();
-                    double pitch = camera.GetPitch();
-                    double yaw = camera.GetYaw();
 
                     if (event.key.code == sf::Keyboard::Left) {
                         camera.LookRight();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::Right) {
                         camera.LookLeft();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::Up) {
                         camera.LookUp();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::Down) {
                         camera.LookDown();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::W) {
                         camera.MoveForward();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::S) {
                         camera.MoveBackward();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::A) {
                         camera.MoveLeft();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::D) {
                         camera.MoveRight();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::Q) {
                         camera.MoveUpAlongYaxis();
+                        resetContext = true;
                     } else if (event.key.code == sf::Keyboard::E) {
                         camera.MoveDownAlongYaxis();
+                        resetContext = true;
 
                         // Set moving speed and angle change amount
                     } else if (event.key.code == sf::Keyboard::U) {
@@ -83,62 +123,30 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     } else if (event.key.code == sf::Keyboard::L) {
                         camera.DecrementMoveSpeed();
                     }
-
-                    colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
-                    frameCount = 0;
                 }
+            }
+
+            // If the camera has moved, send the new render context to the renderer thread
+            if (resetContext) {
+                tracer.UpdateRenderContext(windowSize, scene);
             }
         }
 
-        double aspectRatio = (double) windowSize.x / (double) windowSize.y;
-        for (unsigned int x = 0; x < windowSize.x; x++) {
-            for (unsigned int y = 0; y < windowSize.y; y++) {
-                double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
-                double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
-
-                /* An implementation without the frame buffer
-                sf::Vector2u pixel(x, y);
-                sf::Color previousColor = image.getPixel(pixel);
-                sf::Color nextColor = tracer.GetPixelColor(scaledX, scaledY, scene);;
-
-                if (frameCount == 0) {
-                    image.setPixel(pixel, nextColor);
-                } else {
-                    image.setPixel(pixel,
-                                   sf::Color((previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-                                             (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-                                             (previousColor.b * (frameCount) + nextColor.b) / (frameCount + 1)));
-                }
-                */
-
-                sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount); // More random 
-                sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
-
-                // Accumulate color
-                unsigned int bufferIndex = y * windowSize.x + x;
-                colorBuffer[bufferIndex] += currentColor;
-
-                // average color over the frames
-                sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
-
-                image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
-            }
+        sf::Image image = tracer.GetLatestImage();
+        if (image.getSize().x == 0 || image.getSize().y == 0) {
+            continue;
         }
 
-        // Load the image into a texture and display it
         sf::Texture texture;
-        bool didLoad = texture.loadFromImage(image);
+        bool textureDidLoad = texture.loadFromImage(image);
+        if (!textureDidLoad) continue;
+
         sf::Sprite sprite(texture);
+//        sprite.setScale(sf::Vector2f(4, 4));
 
         window.clear();
-
-        // Draw the sprite with the averaged colored pixels
         window.draw(sprite);
-
         window.display();
-
-        // Update frame count
-        frameCount++;
     }
 }
 
@@ -160,19 +168,21 @@ int main() {
     // Specular material
     Material matE(sf::Color(250, 250, 10), 0.16, 1.0, 0, sf::Color(250, 250, 10), Vector(0, 0, 0));
     Material mirror(sf::Color(245, 245, 245), 0.008, 1.0, 0);
-    Material ceramic(sf::Color(240,240,240), 1, 0.3, 0.005, sf::Color::White);
+    Material ceramic(sf::Color(240, 240, 240), 1, 0.3, 0.005, sf::Color::White);
 
     // Transparent material:
     Material matB(sf::Color(100, 180, 150), 0.75, 0, 0);
 
     // Emissive materials
-    Material lightA(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(1, 1, 1));
+    Material lightA(sf::Color::Black, 0.5, 0.5, 0, sf::Color::Magenta, Vector(1, 1, 1));
     Material lightB(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(0.2, 0.5, 1));
     Material lightC(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(1, 0.8, 0.6));
     Material lightD(sf::Color::Black, 0.5, 0.5, 0, sf::Color::White, Vector(0.75, 1, 0.75));
 
 
     Scene scene(camera, {
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, lightA)),
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 44), 3, mirror)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(4, -3, 48), 3, matA)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -5, 36), 2, matB)),
@@ -180,10 +190,11 @@ int main() {
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-3, -2, 40), 1.2, matD)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-5, -1, 36), 2, ceramic)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(3, 3, 39), 1.8, matE)),
-
-            // Room
+//
+//            // Room
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, -2005, 0), 2000, matF)), // floor
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 2010, 0), 2000, lightA)), // roof
+            std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 0), 2000, lightA)), // roof
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(-2010, 0, 0), 2000, mirror)), // side
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(2010, 0, 0), 2000, mirror)),
             std::make_shared<Object::Sphere>(Object::Sphere(Vector(0, 0, 2100), 2000, matC)),
@@ -191,6 +202,7 @@ int main() {
     });
 
     std::cout << scene << std::endl;
+    std::cout << "Number of threads used: " << threadCount << std::endl;
 
     renderLoop(windowSize, scene);
     return 0;

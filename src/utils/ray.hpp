@@ -39,4 +39,4 @@ protected:
 
 };
 
-#endif //! _RAY_HPP_ 
+#endif //! _RAY_HPP_
