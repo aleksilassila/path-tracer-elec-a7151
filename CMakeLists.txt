@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_ERROR_DEPRECATED True)
 
+add_compile_definitions("MY_FILE_PATH=\"${PROJECT_SOURCE_DIR}\"")
+
 # SFML
 set(SFML sfml-graphics sfml-window sfml-system)
 add_subdirectory(libs/SFML)
@@ -14,6 +16,9 @@ link_libraries(${SFML})
 
 # Doctest
 add_subdirectory(tests)
+
+# JSON
+include_directories(libs/JSON)
 
 # app
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")

@@ -1,54 +1,85 @@
-
-/*
-* File manager class
-*/
-
 #ifndef FILEMANAGER_HPP
 #define FILEMANAGER_HPP
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "colour.hpp"
+#include <vector>
 
 #include "SFML/Graphics.hpp"
+#include "../../libs/JSON/json.hpp"
+#include "../world/scene.h"
+#include "colour.hpp"
 
-class FileManager {
+using json = nlohmann::json;
 
-/*
-Write outout to ppm image file
-Read scene from input file
-*/
+/**
+ * Namespace for managing files
+ * - Writes output to ppm image file
+ * - Saves rendered SFML image
+ * - Reads scene from json input file
+ */
+namespace FileManager {
 
-private:
+    /**
+     * Writes output buffer to ppm image file
+     * @param outputPath
+     * @param outputBuffer
+     * @param xDim
+     * @param yDim
+     * @return bool
+     */
+    bool writeOutput(const std::string& outputPath, const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
 
-    std::string inputPath_;
-    std::string outputPath_;
+    /**
+     * Saves an image using SFML method
+     * @param outputPath
+     * @param image
+     * @return bool
+     */
+    bool saveRenderImage(const std::string& outputPath, sf::Image &image);
 
-public: 
+    /**
+     * Reads sf::Color from json format
+     * @param json reference
+     * @param name of the attribute
+     * @return sf::Color
+     */
+    auto ColorFromJSON(const json& j, const std::string& name);
 
-    FileManager(const std::string &outputPath);
-    FileManager(const std::string &inputPath, const std::string &outputPath);
+    /**
+     * Reads Vector from json format
+     * @param json reference
+     * @param name of the attribute
+     * @return Vector
+     */
+    auto VectorFromJSON(const json& j, const std::string& name);
 
-    bool writeOutput(const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
-    /*
-    * Writes output buffer to ppm image file
-    */
+    /**
+     * Reads Camera from json format
+     * @param json reference
+     * @return Camera
+     */
+    Camera CameraFromJSON(const json& j);
 
-    void saveRenderImage(sf::Image &image);
-    /*
-    * Saves image using SMLF method
-    */
+    /**
+     * Reads Material from json format
+     * @param json reference
+     * @return Material
+     */
+    auto MaterialFromJSON(const json& j);
 
+    /**
+     * Reads Sphere from json format
+     * @param json reference
+     * @param mat Material reference
+     * @return Sphere
+     */
+    auto SphereFromJSON(const json& j, const Material& mat);
 
-    std::string readInput();
-    /*
-    * Reads scene information from input file
-    * Not implemented yet
-    * 
-    */
-
-};
-
+    /**
+     * Creates a scene based on a json file
+     * @param inputPath
+     * @return Scene
+     */
+    Scene createScene(const std::string &inputPath);
+}
 
 #endif // FILEMANAGER_HPP

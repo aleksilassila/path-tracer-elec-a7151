@@ -1,0 +1,43 @@
+{
+  "camera": {
+    "position": [0.0, 0.0, 0.0],
+    "viewPlaneDistance": 6.0,
+    "yaw": 0.0,
+    "pitch": 0.0,
+    "target": [0.0, 0.0, 70.0],
+    "fov": 80.0
+  },
+  "materials": [
+    {
+      "type": "r",
+      "colour": [200, 100, 40],
+      "roughness": 0.4,
+      "specularIntensity": 0.4,
+      "transparency": 0.0
+    },
+    {
+      "type": "s",
+      "colour": [240, 240, 240],
+      "roughness": 1.0,
+      "specularIntensity": 0.3,
+      "transparency": 0.005,
+      "specularColor": [255, 255, 255]
+    },
+    {
+      "type": "e",
+      "colour": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "transparency": 0.0,
+      "specularColor": [255, 0, 255],
+      "emission": [1.0, 1.0, 1.0]
+    }
+  ],
+  "spheres": [
+    {
+      "origin": [0.0, 0.0, 44.0],
+      "radius": 3.0,
+      "materialIndex": 0
+    }
+  ]
+}

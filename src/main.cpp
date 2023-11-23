@@ -51,8 +51,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         tracer.Renderer(window);
     });
 
-    FileManager filemanager("out.png");
-
     // Update loop
     while (window.isOpen()) {
         sf::Event event;
@@ -78,7 +76,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     sf::Image image = tracer.GetLatestImage();
-                    filemanager.saveRenderImage(image);
+                    FileManager::saveRenderImage("out.png", image);
                 } else {
                     Camera &camera = scene.GetCamera();
 
