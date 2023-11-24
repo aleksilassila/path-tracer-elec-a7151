@@ -186,6 +186,30 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 ![Current progress](./images/path-tracer-2.png)
 We have camera movement, fov, ray accumulation and basic materials.
 
+# Meeting 24.11.23 12:30
+
+**Participants**: Markus, Johannes, Weronika
+
+## Summary of works
+
+1. Weronika: <br>
+   - fully implemented tests. <br>
+   - refactored FileMangager to namespace <br>
+   - wrote scene creation function from json input file using nlohmann library. <br>
+   link: https://json.nlohmann.me/
+
+## Challenges
+
+1. Scene input file doesn't work correctly yet.
+
+## Actions
+
+1. Aleksi will work on GPU acceleration next
+2. Markus will work on translucent materials (Refractions)
+3. Weronica will add function documentation, refactor Material class and improve tests.
+4. Johannes will help with refractions and possibly implement additional types of geometry.
+
+
 Upcoming features (if time allows):
 
 - [ ] GPU Acceleration
