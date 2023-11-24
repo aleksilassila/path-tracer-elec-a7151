@@ -1,0 +1,196 @@
+{
+  "camera": {
+    "position": [0.0, 0.0, 0.0],
+    "viewPlaneDistance": 6.0,
+    "yaw": 0.0,
+    "pitch": 0.0,
+    "target": [0.0, 0.0, 70.0],
+    "fov": 80.0
+  },
+  "materials": [
+    {
+      "type": "r",
+      "colour": [200, 100, 40],
+      "roughness": 0.4,
+      "specularIntensity": 0.4,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [100, 180, 150],
+      "roughness": 0.75,
+      "specularIntensity": 0.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [50, 100, 250],
+      "roughness": 0.7,
+      "specularIntensity": 0.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [200, 60, 200],
+      "roughness": 0.6,
+      "specularIntensity": 0.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [200, 200, 200],
+      "roughness": 1.0,
+      "specularIntensity": 0.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [144, 20, 10],
+      "roughness": 0.75,
+      "specularIntensity": 0.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "r",
+      "colour": [245, 245, 245],
+      "roughness": 0.008,
+      "specularIntensity": 1.0,
+      "transparency": 0.0
+    },
+    {
+      "type": "s",
+      "colour": [240, 240, 240],
+      "roughness": 1.0,
+      "specularIntensity": 0.3,
+      "transparency": 0.005,
+      "specularColor": [255, 255, 255]
+    },
+    {
+      "type": "e",
+      "colour": [250, 250, 10],
+      "roughness": 0.16,
+      "specularIntensity": 1.0,
+      "transparency": 0.0,
+      "specularColor": [250, 250, 10],
+      "emission": [0.0, 0.0, 0.0]
+    },
+    {
+      "type": "e",
+      "colour": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "transparency": 0.0,
+      "specularColor": [255, 0, 255],
+      "emission": [1.0, 1.0, 1.0]
+    },
+    {
+      "type": "e",
+      "colour": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "transparency": 0.0,
+      "specularColor": [255, 255, 255],
+      "emission": [0.2, 0.5, 1.0]
+    },
+    {
+      "type": "e",
+      "colour": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "transparency": 0.0,
+      "specularColor": [255, 255, 255],
+      "emission": [1.0, 0.8, 0.6]
+    },
+    {
+      "type": "e",
+      "colour": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "transparency": 0.0,
+      "specularColor": [255, 255, 255],
+      "emission": [0.75, 1.0, 0.75]
+    }
+  ],
+  "spheres": [
+    {
+      "origin": [0.0, 0.0, 44.0],
+      "radius": 3.0,
+      "materialIndex": 9
+    },
+    {
+      "origin": [4.0, -3.0, 48.0],
+      "radius": 3.0,
+      "materialIndex": 0
+    },
+    {
+      "origin": [0.0, 0.0, 44.0],
+      "radius": 3.0,
+      "materialIndex": 6
+    },
+    {
+      "origin": [4.0, -3.0, 48.0],
+      "radius": 3.0,
+      "materialIndex": 0
+    },
+    {
+      "origin": [0.0, -5.0, 36.0],
+      "radius": 2.0,
+      "materialIndex": 1
+    },
+    {
+      "origin": [-2.0, 4.0, 41.0],
+      "radius": 2.0,
+      "materialIndex": 2
+    },
+    {
+      "origin": [-3.0, -2.0, 40.0],
+      "radius": 1.2,
+      "materialIndex": 3
+    },
+    {
+      "origin": [-5.0, -1.0, 36.0],
+      "radius": 2.0,
+      "materialIndex": 7
+    },
+    {
+      "origin": [3.0, 3.0, 39.0],
+      "radius": 1.8,
+      "materialIndex": 8
+    },
+    {
+      "origin": [0.0, -2005.0, 0.0],
+      "radius": 2000.0,
+      "materialIndex": 4
+    },
+    {
+      "origin": [0.0, 2010.0, 0.0],
+      "radius": 2000.0,
+      "materialIndex": 9
+    },
+    {
+      "origin": [0.0, 0.0, 0.0],
+      "radius": 2000.0,
+      "materialIndex": 9
+    },
+    {
+      "origin": [-2010.0, 0.0, 0.0],
+      "radius": 2000.0,
+      "materialIndex": 6
+    },
+    {
+      "origin": [2010.0, 0.0, 0.0],
+      "radius": 2000.0,
+      "materialIndex": 6
+    },
+    {
+      "origin": [0.0, 0.0, 2100.0],
+      "radius": 2000.0,
+      "materialIndex": 2
+    },
+    {
+      "origin": [0.0, 0.0, -2000.0],
+      "radius": 2000.0,
+      "materialIndex": 0
+    }
+  ]
+}

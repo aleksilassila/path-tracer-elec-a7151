@@ -63,7 +63,7 @@ namespace FileManager {
     // ugly switch, gotta refactor Material
     // using exact attributes name, they should be standardised (color/colour)
     auto MaterialFromJSON(const json& j) {
-        if (j.at("type") == 'r') {
+        if (j.at("type") == "r") {
             return Material(
                     ColorFromJSON(j, "colour"),
                     j.at("roughness"),
@@ -71,7 +71,7 @@ namespace FileManager {
                     j.at("transparency")
             );
         }
-        if (j.at("type") == 's') {
+        if (j.at("type") == "s") {
             return Material(
                     ColorFromJSON(j, "colour"),
                     j.at("roughness"),
@@ -80,7 +80,7 @@ namespace FileManager {
                     ColorFromJSON(j, "specularColor")
             );
         }
-        if (j.at("type") == 'e') {
+        if (j.at("type") == "e") {
             return Material(
                     ColorFromJSON(j, "colour"),
                     j.at("roughness"),

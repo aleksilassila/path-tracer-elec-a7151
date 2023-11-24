@@ -5,6 +5,10 @@ TEST_CASE("example") {
     Scene scene = FileManager::createScene("/files/example.json");
 }
 
+TEST_CASE("scene1") {
+    Scene scene = FileManager::createScene("/files/scene1.json");
+}
+
 //todo so far it terminates, but at least complies
 TEST_CASE("Testing output writing") {
 //    /*
