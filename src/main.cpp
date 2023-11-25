@@ -110,6 +110,12 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     } else if (event.key.code == sf::Keyboard::E) {
                         camera.MoveDownAlongYaxis();
                         resetContext = true;
+                    } else if (event.key.code == sf::Keyboard::Y) {
+                        camera.MoveUp();
+                        resetContext = true;
+                    } else if (event.key.code == sf::Keyboard::H) {
+                        camera.MoveDown();
+                        resetContext = true;
 
                         // Set moving speed and angle change amount
                     } else if (event.key.code == sf::Keyboard::U) {
