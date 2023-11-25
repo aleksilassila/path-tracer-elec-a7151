@@ -77,15 +77,15 @@ public:
 
     void IncrementLookSensitivity(double amount = DEFAULT_LOOK_INCREMENT) {
         lookSpeed += amount;
-        std::cout << "Angle Change Speed: " << lookSpeed << std::endl;
+        std::cout << "Angle Change Speed: " << lookSpeed / M_PI * 180 << std::endl;
     }
 
     void DecrementLookSensitivity(double amount = DEFAULT_LOOK_INCREMENT) {
         lookSpeed -= amount;
         if (lookSpeed < 0) {
             lookSpeed = 0;
-            std::cout << "Angle Change Speed: " << lookSpeed << std::endl;
         }
+        std::cout << "Angle Change Speed: " << lookSpeed / M_PI * 180 << std::endl;
     }
 
     /**
@@ -100,8 +100,11 @@ public:
         SetYaw(yawAdd + yaw_);
         SetPitch(pitchAdd + pitch_);
         UpdateCamera_();
-        std::cout << "Yaw: " << yaw_ << std::endl;
-        std::cout << "Pitch: " << pitch_ << std::endl;
+        std::cout.setf(std::ios::fixed);
+        std::cout.setf(std::ios::showpoint);
+        std::cout.precision(2);
+        std::cout << "Yaw: " << yaw_ / M_PI * 180 << std::endl;
+        std::cout << "Pitch: " << pitch_ / M_PI * 180 << std::endl;
     }
 
     void Move(double x, double y, double z) {
