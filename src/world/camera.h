@@ -128,11 +128,11 @@ public:
     }
 
     void MoveUp() {
-        position_ += xCross_ * -1 * movementSpeed_;
+        position_ += xCross_ * movementSpeed_;
     }
 
     void MoveDown() {
-        position_ += xCross_ * movementSpeed_;
+        position_ += xCross_ * -1 * movementSpeed_;
     }
 
     void MoveUpAlongYaxis() {
