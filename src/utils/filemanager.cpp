@@ -110,6 +110,15 @@ namespace FileManager {
         );
     }
 
+    auto ParallelogramFromJSON(const json& j, const Material& mat) {
+        return Object::Parallelogram(
+                VectorFromJSON(j, "origin"),
+                VectorFromJSON(j, "a"),
+                VectorFromJSON(j, "b"),
+                mat
+        );
+    }
+
     //gotta add try catch for failed or invalid input file
     Scene createScene(const std::string &inputPath) {
         std::fstream file;
@@ -135,6 +144,11 @@ namespace FileManager {
         for (size_t i = 0; i < Data.at("triangles").size(); i++) {
             size_t materialIndex = Data.at("triangles")[i].at("materialIndex");
             scene.AddObject(std::make_shared<Object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialIndex])));
+        }
+
+        for (size_t i = 0; i < Data.at("parallelograms").size(); i++) {
+            size_t materialIndex = Data.at("parallelograms")[i].at("materialIndex");
+            scene.AddObject(std::make_shared<Object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialIndex])));
         }
 
         return scene;
