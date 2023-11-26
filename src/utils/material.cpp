@@ -1,13 +1,14 @@
 #include "material.hpp"
 #include "rand.h"
 
-Material::Material(sf::Color color, double roughness, double specularIntensity, sf::Color specularColour, Vector emission, const std::string& name) :
+Material::Material(sf::Color color, double roughness, double specularIntensity, sf::Color specularColour, Vector emission, double n, const std::string& name) :
         color_(color),
         roughness_(roughness),
         specularIntensity_(specularIntensity),
         specularColor_(specularColour),
         emission_(emission),
-        name_(name) {}
+        name_(name),
+        n_(n) {}
 
 /*
  * Calculate ideal bounce direction based on the reflection formula:
@@ -46,5 +47,26 @@ Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
     * todo Implement refraction
     *
     */
-    return {};
+    double n = n_;
+    Vector ray_dir = ray.GetDirection().Norm();
+    double dot_pro = ray_dir * normal;
+    if (dot_pro < 0) {
+        //std::cout << 'x' << std::endl;
+    }
+    if (dot_pro > 0) {
+        n = 1 / n;
+        normal = normal * -1;
+    }
+
+    double theta1 = std::acos(abs(dot_pro));
+    double temp = std::sin(theta1) / n;
+
+    if (temp > 1) {
+        return ray_dir - (normal * (ray_dir * normal) * 2);
+    }
+    double theta2 = std::asin(temp);
+    Vector surface_dir = (ray_dir + (normal * abs(dot_pro))).Norm();
+    Vector refr_dir = normal * -std::cos(theta2) +
+           surface_dir * std::sin(theta2);
+    return {refr_dir};
 }

@@ -86,6 +86,7 @@ namespace FileManager {
         if (j.contains("specularIntensity")) builder.setSpecularIntensity(j.at("specularIntensity"));
         if (j.contains("specularColor")) builder.setSpecularColor(ColorFromJSON(j, "specularColor"));
         if (j.contains("emission")) builder.setEmission(VectorFromJSON(j, "emission"));
+        if (j.contains("n")) builder.setn(j.at("n"));
         if (j.contains("name")) builder.setName(j.at("name"));
 
         return builder.buildMaterial();

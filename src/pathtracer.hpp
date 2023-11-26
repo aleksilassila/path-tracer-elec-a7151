@@ -124,22 +124,30 @@ public:
                 Vector newRayDir;
                 sf::Color surfaceCol;
 
-                // Handle diffuse and specular reflections
-                double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0,
-                                                                       static_cast<unsigned int> (u * v * randSeed *
-                                                                                                  456789) *
-                                                                       std::numeric_limits<unsigned int>::max());
-
-                if (specularChance < material.getSpecularIntensity()) {
-                    newRayDir = material.findSpecularBounceDirection(ray_, normal,
-                                                                     static_cast<unsigned int> (u * v * randSeed *
-                                                                                                456789)).Norm();
-                    surfaceCol = material.getSpecularColor();
-                } else {
-                    newRayDir = material.findDiffuseBounceDirection(normal,
-                                                                    static_cast<unsigned int> (u * v * randSeed *
-                                                                                               456789)).Norm();
+                if (material.getn() > 1) {
+                    newRayDir = material.findRefractionDirection(ray_, normal);
                     surfaceCol = material.getColor();
+                    ray_.SetOrigin(point - (normal * 0.001));
+                }
+                else {
+                    // Handle diffuse and specular reflections
+                    double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0,
+                                                                           static_cast<unsigned int> (u * v * randSeed *
+                                                                                                      456789) *
+                                                                           std::numeric_limits<unsigned int>::max());
+
+                    if (specularChance < material.getSpecularIntensity()) {
+                        newRayDir = material.findSpecularBounceDirection(ray_, normal,
+                                                                         static_cast<unsigned int> (u * v * randSeed *
+                                                                                                    456789)).Norm();
+                        surfaceCol = material.getSpecularColor();
+                    } else {
+                        newRayDir = material.findDiffuseBounceDirection(normal,
+                                                                        static_cast<unsigned int> (u * v * randSeed *
+                                                                                                   456789)).Norm();
+                        surfaceCol = material.getColor();
+                    }
+                    ray_.SetOrigin(point + (normal * 0.001));
                 }
 
                 // Update ray color
@@ -148,7 +156,7 @@ public:
                 B *= (surfaceCol.b / 255.99);
 
                 // Update ray
-                ray_.SetOrigin(point + (normal * 0.001));
+                //ray_.SetOrigin(point + (normal * 0.001));
                 ray_.SetDirection(newRayDir);
 
             } else {

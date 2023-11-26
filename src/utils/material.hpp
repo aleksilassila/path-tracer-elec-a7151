@@ -17,6 +17,7 @@ private:
     sf::Color specularColor_;     // Specular reflections color.
     Vector emission_;
     std::string name_;
+    double n_;  // Refractive index
 
 public:
     explicit Material(
@@ -25,6 +26,7 @@ public:
             double specularIntensity = 0.5,
             sf::Color specularColour = sf::Color::White,
             Vector emission = Vector(),
+            double n = 1,
             const std::string& name = "default"
     );
 
@@ -35,6 +37,7 @@ public:
     inline double getSpecularIntensity() const { return specularIntensity_; }
     inline sf::Color getSpecularColor() const { return specularColor_; }
     inline Vector getEmission() const { return emission_; }
+    inline double getn() const { return n_; }
     inline const std::string& getName() const { return name_; }
 
 
