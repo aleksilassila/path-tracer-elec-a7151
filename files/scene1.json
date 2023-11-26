@@ -112,6 +112,11 @@
       "materialName": "White Glass"
     },
     {
+      "origin": [0.0, -0.0, 8.0],
+      "radius": 2.0,
+      "materialName": "White Glass"
+    },
+    {
       "origin": [5.0, -2.0, 40.0],
       "radius": 4.0,
       "materialName": "Diamond"
