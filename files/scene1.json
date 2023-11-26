@@ -18,8 +18,15 @@
       "color": [255, 255, 255],
       "roughness": 0.07,
       "specularIntensity": 0.4,
-      "n": 1.33,
+      "n": 1.5,
       "name": "White Glass"
+    },
+    {
+      "color": [15, 82, 186],
+      "roughness": 0.07,
+      "specularIntensity": 0.4,
+      "n": 1.77,
+      "name": "Sapphire"
     },
     {
       "color": [255, 255, 255],
@@ -105,9 +112,14 @@
       "materialName": "White Glass"
     },
     {
-      "origin": [3.0, -2.0, 30.0],
+      "origin": [5.0, -2.0, 40.0],
       "radius": 4.0,
       "materialName": "Diamond"
+    },
+    {
+      "origin": [-7.0, -2.0, 44.0],
+      "radius": 4.0,
+      "materialName": "Sapphire"
     },
     {
       "origin": [0.0, 0.0, 44.0],
