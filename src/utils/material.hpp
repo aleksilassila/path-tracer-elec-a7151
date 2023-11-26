@@ -1,86 +1,75 @@
-/**
- * @file material.hpp
- * @authors Markus Lång
- * @brief Material class to handle ray interaction with object
- * @version 0.1
- * @date 2023-11-08
- * 
- * @copyright Copyright (c) 2023
- * 
- */
-
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
-
 
 #include <SFML/Graphics.hpp>
 #include "vector.hpp"
 #include "ray.hpp"
 
-
+/**
+ * Material class to gather material information and handle ray interaction with objects
+ */
 class Material {
 
 private:
-
-    sf::Color colour_;
+    sf::Color color_;
     double roughness_;
     double specularIntensity_;     // How likely rays are to reflect specularly vs diffusely (0 to 1)
-    double transparency_;
+    sf::Color specularColor_;     // Specular reflections color.
     Vector emission_;
-    sf::Color specularColour_;     // Specular reflections color.
+    std::string name_;
 
 public:
+    explicit Material(
+            sf::Color color = sf::Color::Magenta,
+            double roughness = 0.5,
+            double specularIntensity = 0.5,
+            sf::Color specularColour = sf::Color::White,
+            Vector emission = Vector(),
+            const std::string& name = "default"
+    );
 
-    Material();
-    Material(sf::Color colour, double roughness, double specularIntensity, double transparency);
-    Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color speuclarColor);
-    Material(sf::Color colour, double roughness, double specularIntensity, double transparency, sf::Color speuclarColor, Vector emission);
-    ~Material();
+    ~Material() = default;
+
+    inline sf::Color getColor() const { return color_; }
+    inline double getRoughness() const { return roughness_; }
+    inline double getSpecularIntensity() const { return specularIntensity_; }
+    inline sf::Color getSpecularColor() const { return specularColor_; }
+    inline Vector getEmission() const { return emission_; }
+    inline const std::string& getName() const { return name_; }
+
 
     /**
-     * @brief Get the Color of Material
-     * 
-     * @return sf::Color 
+     * @brief
+     * Find the bounce direction after a ray hits an object based on a normal vector of a surface
+     * Ray must reflect within 90 degrees of the normal vector
+     *
+     * @param ray
+     * @param normal
+     * @param randSeed
+     * @return Vector
      */
-    sf::Color getColor() const;
-
-    sf::Color getSpecularColor() const;
-
-
-    /**
-     * @brief Get the object emission
-     * 
-     * @return double 
-     */
-
-    Vector getEmission() const;
-
-
-
-    /** @brief 
-    *  Get material roughness information
-    */
-   double getRoughness() const;
-
-
-   double getSpecularIntensity() const;
-
-double getTransparency() const;
-
-
-
-   /**
-    * @brief 
-    * Find the bounce direction of ray on object based on normal vector of surface
-    * Ray must reflect within 90 degrees of normal vector
-    * 
-    * @param ray 
-    * @param normal 
-    * @return Vector 
-    */
     Vector findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
-    Vector findDiffuseBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
-    Vector findRefractionDirection(/* Ray &ray, Vector &normal */) const;
+
+    /**
+    * @brief
+    * Find the bounce direction after a ray hits an object based on a normal vector of a surface
+    * Ray must reflect within 90 degrees of normal vector
+    *
+    * @param ray
+    * @param normal
+    * @param randSeed
+    * @return Vector
+    */
+    Vector findDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const;
+
+    /**
+     * todo write description
+     *
+     * @param ray
+     * @param normal
+     * @return
+     */
+    Vector findRefractionDirection(Ray &ray, Vector &normal) const;
 
 };
 

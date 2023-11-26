@@ -9,188 +9,151 @@
   },
   "materials": [
     {
-      "type": "r",
-      "colour": [200, 100, 40],
+      "color": [200, 100, 40],
       "roughness": 0.4,
       "specularIntensity": 0.4,
-      "transparency": 0.0
+      "name": "Orange"
     },
     {
-      "type": "r",
-      "colour": [100, 180, 150],
+      "color": [100, 180, 150],
       "roughness": 0.75,
-      "specularIntensity": 0.0,
-      "transparency": 0.0
+      "specularIntensity": 0.3,
+      "name": "Cyan"
     },
     {
-      "type": "r",
-      "colour": [50, 100, 250],
+      "color": [50, 100, 250],
       "roughness": 0.7,
       "specularIntensity": 0.0,
-      "transparency": 0.0
+      "name": "Blue"
     },
     {
-      "type": "r",
-      "colour": [200, 60, 200],
+      "color": [200, 60, 200],
       "roughness": 0.6,
       "specularIntensity": 0.0,
-      "transparency": 0.0
+      "name": "Pink"
     },
     {
-      "type": "r",
-      "colour": [200, 200, 200],
+      "color": [200, 200, 200],
       "roughness": 1.0,
       "specularIntensity": 0.0,
-      "transparency": 0.0
+      "name": "Grey"
     },
     {
-      "type": "r",
-      "colour": [144, 20, 10],
+      "color": [144, 20, 10],
       "roughness": 0.75,
       "specularIntensity": 0.0,
-      "transparency": 0.0
+      "name": "Red"
     },
     {
-      "type": "r",
-      "colour": [245, 245, 245],
+      "color": [245, 245, 245],
       "roughness": 0.008,
       "specularIntensity": 1.0,
-      "transparency": 0.0
+      "name": "Mirror"
     },
     {
-      "type": "s",
-      "colour": [240, 240, 240],
-      "roughness": 1.0,
+      "color": [240, 240, 240],
+      "roughness": 0.3,
       "specularIntensity": 0.3,
-      "transparency": 0.005,
-      "specularColor": [255, 255, 255]
+      "specularColor": [255, 255, 255],
+      "name": "Silver"
     },
     {
-      "type": "e",
-      "colour": [250, 250, 10],
+      "color": [250, 250, 10],
       "roughness": 0.16,
       "specularIntensity": 1.0,
-      "transparency": 0.0,
       "specularColor": [250, 250, 10],
-      "emission": [0.0, 0.0, 0.0]
+      "emission": [0.5, 0.5, 0.5],
+      "name": "Yellow Metallic"
     },
     {
-      "type": "e",
-      "colour": [0, 0, 0],
+      "color": [0, 0, 0],
       "roughness": 0.5,
       "specularIntensity": 0.5,
-      "transparency": 0.0,
-      "specularColor": [255, 0, 255],
-      "emission": [1.0, 1.0, 1.0]
-    },
-    {
-      "type": "e",
-      "colour": [0, 0, 0],
-      "roughness": 0.5,
-      "specularIntensity": 0.5,
-      "transparency": 0.0,
-      "specularColor": [255, 255, 255],
-      "emission": [0.2, 0.5, 1.0]
-    },
-    {
-      "type": "e",
-      "colour": [0, 0, 0],
-      "roughness": 0.5,
-      "specularIntensity": 0.5,
-      "transparency": 0.0,
-      "specularColor": [255, 255, 255],
-      "emission": [1.0, 0.8, 0.6]
-    },
-    {
-      "type": "e",
-      "colour": [0, 0, 0],
-      "roughness": 0.5,
-      "specularIntensity": 0.5,
-      "transparency": 0.0,
-      "specularColor": [255, 255, 255],
-      "emission": [0.75, 1.0, 0.75]
+      "specularColor": [0, 0, 0],
+      "emission": [1.0, 1.0, 1.0],
+      "name": "Light"
     }
   ],
   "spheres": [
     {
       "origin": [0.0, 0.0, 44.0],
       "radius": 3.0,
-      "materialIndex": 9
+      "materialName": "Light"
     },
     {
       "origin": [4.0, -3.0, 48.0],
       "radius": 3.0,
-      "materialIndex": 0
+      "materialName": "Orange"
     },
     {
       "origin": [0.0, 0.0, 44.0],
       "radius": 3.0,
-      "materialIndex": 6
+      "materialName": "Mirror"
     },
     {
       "origin": [4.0, -3.0, 48.0],
       "radius": 3.0,
-      "materialIndex": 0
+      "materialName": "Orange"
     },
     {
       "origin": [0.0, -5.0, 36.0],
       "radius": 2.0,
-      "materialIndex": 1
+      "materialName": "Cyan"
     },
     {
       "origin": [-2.0, 4.0, 41.0],
       "radius": 2.0,
-      "materialIndex": 2
+      "materialName": "Red"
     },
     {
       "origin": [-3.0, -2.0, 40.0],
       "radius": 1.2,
-      "materialIndex": 3
+      "materialName": "Pink"
     },
     {
       "origin": [-5.0, -1.0, 36.0],
       "radius": 2.0,
-      "materialIndex": 7
+      "materialName": "Silver"
     },
     {
       "origin": [3.0, 3.0, 39.0],
       "radius": 1.8,
-      "materialIndex": 8
+      "materialName": "Yellow Metallic"
     },
     {
       "origin": [0.0, -2005.0, 0.0],
       "radius": 2000.0,
-      "materialIndex": 4
+      "materialName": "Grey"
     },
     {
       "origin": [0.0, 2010.0, 0.0],
       "radius": 2000.0,
-      "materialIndex": 9
+      "materialName": "Light"
     },
     {
       "origin": [0.0, 0.0, 0.0],
       "radius": 2000.0,
-      "materialIndex": 9
+      "materialName": "Light"
     },
     {
       "origin": [-2010.0, 0.0, 0.0],
       "radius": 2000.0,
-      "materialIndex": 6
+      "materialName": "Mirror"
     },
     {
       "origin": [2010.0, 0.0, 0.0],
       "radius": 2000.0,
-      "materialIndex": 6
+      "materialName": "Mirror"
     },
     {
       "origin": [0.0, 0.0, 2100.0],
       "radius": 2000.0,
-      "materialIndex": 2
+      "materialName": "Blue"
     },
     {
       "origin": [0.0, 0.0, -2000.0],
       "radius": 2000.0,
-      "materialIndex": 0
+      "materialName": "Orange"
     }
   ],
   "triangles": [
@@ -198,31 +161,31 @@
       "origin": [0.0, 3, 5.0],
       "a": [-1, 2.0, 5.0],
       "b": [1, 2.0, 5.0],
-      "materialIndex": 1
+      "materialName": "Cyan"
     },
     {
       "origin": [-4.0, 3, 5.0],
       "a": [-3, 2.0, 4.0],
       "b": [-5, 2.0, 4.0],
-      "materialIndex": 1
+      "materialName": "Cyan"
     },
     {
       "origin": [-4.0, 3, 5.0],
       "a": [-3, 2.0, 6.0],
       "b": [-3, 2.0, 4.0],
-      "materialIndex": 1
+      "materialName": "Cyan"
     },
     {
       "origin": [-4.0, 3, 5.0],
       "a": [-3, 2.0, 6.0],
       "b": [-5, 2.0, 6.0],
-      "materialIndex": 1
+      "materialName": "Cyan"
     },
     {
       "origin": [-4.0, 3, 5.0],
       "a": [-5, 2.0, 4.0],
       "b": [-5, 2.0, 6.0],
-      "materialIndex": 1
+      "materialName": "Cyan"
     }
   ],
   "parallelograms": [
@@ -230,7 +193,7 @@
       "origin": [4.0, 3, 5.0],
       "a": [3, 2.0, 5.0],
       "b": [5, 2.0, 5.0],
-      "materialIndex": 0
+      "materialName": "Orange"
     }
   ]
 }

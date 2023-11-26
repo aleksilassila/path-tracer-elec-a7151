@@ -1,14 +1,52 @@
 #include "doctest.h"
 
 #include "../src/utils/material.hpp"
+#include "../src/utils/materialbuilder.hpp"
 
-//todo remake material class
-TEST_CASE("Testing setters") {
-//    Material materialA = Material();
-//    Material materialB = Material(sf::Color::Black);
-//    Material materialC = Material(sf::Color::Black, 0.2);
-//    Material materialD = Material(sf::Color::Black, 0.2, 0.8);
-//    Material materialE = Material(sf::Color::Black, 0.2, 0.8, 0.1);
-//    Material materialF = Material(sf::Color::Black, 0.2, 0.8, 0.1, sf::Color::Blue);
-//    Material materialG = Material(sf::Color::Black, 0.2, 0.8, 0.1, sf::Color::Blue, Vector(0.1,0.1,0.1));
+// todo add tests for finding direction
+
+TEST_CASE("Testing getters") {
+    auto material = Material();
+    CHECK((material.getName() == "default"));
+    CHECK((material.getColor() == sf::Color::Magenta));
+    CHECK((material.getRoughness() == 0.5));
+    CHECK((material.getSpecularIntensity() == 0.5));
+    CHECK((material.getSpecularColor() == sf::Color::White));
+    CHECK((material.getEmission() == Vector(0,0,0)));
+}
+
+TEST_CASE("Testing default builder and getters") {
+    auto builder = MaterialBuilder();
+    auto material = builder.buildMaterial();
+    CHECK((material.getName() == "default"));
+    CHECK((material.getColor() == sf::Color::Magenta));
+    CHECK((material.getRoughness() == 0.5));
+    CHECK((material.getSpecularIntensity() == 0.5));
+    CHECK((material.getSpecularColor() == sf::Color::White));
+    CHECK((material.getEmission() == Vector(0,0,0)));
+}
+
+TEST_CASE("Testing builder") {
+    auto builder = MaterialBuilder();
+    builder.setName("test");
+    builder.setColor(sf::Color::Black);
+    builder.setRoughness(0.0);
+    builder.setSpecularIntensity(1.0);
+    builder.setSpecularColor(sf::Color::Red);
+    builder.setEmission(Vector(1.0, 1.0, 1.0));
+    auto material = builder.buildMaterial();
+
+    CHECK((material.getName() == "test"));
+    CHECK((material.getColor() == sf::Color::Black));
+    CHECK((material.getRoughness() == 0.0));
+    CHECK((material.getSpecularIntensity() == 1.0));
+    CHECK((material.getSpecularColor() == sf::Color::Red));
+    CHECK((material.getEmission() == Vector(1.0, 1.0, 1.0)));
+
+    CHECK_FALSE((material.getName() == "default"));
+    CHECK_FALSE((material.getColor() == sf::Color::Magenta));
+    CHECK_FALSE((material.getRoughness() == 0.5));
+    CHECK_FALSE((material.getSpecularIntensity() == 0.5));
+    CHECK_FALSE((material.getSpecularColor() == sf::Color::White));
+    CHECK_FALSE((material.getEmission() == Vector(0,0,0)));
 }

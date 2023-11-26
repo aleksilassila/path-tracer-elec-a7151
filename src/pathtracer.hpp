@@ -136,7 +136,7 @@ public:
                                                                                                 456789)).Norm();
                     surfaceCol = material.getSpecularColor();
                 } else {
-                    newRayDir = material.findDiffuseBounceDirection(ray_, normal,
+                    newRayDir = material.findDiffuseBounceDirection(normal,
                                                                     static_cast<unsigned int> (u * v * randSeed *
                                                                                                456789)).Norm();
                     surfaceCol = material.getColor();

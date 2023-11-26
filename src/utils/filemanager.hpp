@@ -37,44 +37,6 @@ namespace FileManager {
     bool saveRenderImage(const std::string& outputPath, sf::Image &image);
 
     /**
-     * Reads sf::Color from json format
-     * @param json reference
-     * @param name of the attribute
-     * @return sf::Color
-     */
-    auto ColorFromJSON(const json& j, const std::string& name);
-
-    /**
-     * Reads Vector from json format
-     * @param json reference
-     * @param name of the attribute
-     * @return Vector
-     */
-    auto VectorFromJSON(const json& j, const std::string& name);
-
-    /**
-     * Reads Camera from json format
-     * @param json reference
-     * @return Camera
-     */
-    Camera CameraFromJSON(const json& j);
-
-    /**
-     * Reads Material from json format
-     * @param json reference
-     * @return Material
-     */
-    auto MaterialFromJSON(const json& j);
-
-    /**
-     * Reads Sphere from json format
-     * @param json reference
-     * @param mat Material reference
-     * @return Sphere
-     */
-    auto SphereFromJSON(const json& j, const Material& mat);
-
-    /**
      * Creates a scene based on a json file
      * @param inputPath
      * @return Scene

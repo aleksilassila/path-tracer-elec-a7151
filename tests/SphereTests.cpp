@@ -2,13 +2,13 @@
 #include "../src/world/objects.hpp"
 
 
-//todo add material, color, radius check later
+// no radius getter
 TEST_CASE("Testing getters") {
-    Object::Sphere sphere = Object::Sphere(Vector(0, 0, 0), 3);
+    Object::Sphere sphere = Object::Sphere(Vector(), 3);
 
     CHECK((sphere.getOrigin() == Vector(0, 0, 0)));
-//    CHECK((sphere.GetColor() == sf::Color::White));
-//    CHECK((sphere.GetMaterial() == ));
+    CHECK((sphere.GetMaterial().getName() == "default"));
+    CHECK((sphere.GetColor() == sf::Color::Magenta));
 }
 
 TEST_CASE("Testing normal") {

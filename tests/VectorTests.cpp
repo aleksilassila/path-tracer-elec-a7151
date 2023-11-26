@@ -3,8 +3,10 @@
 
 
 TEST_CASE("Testing equals") {
+    Vector v = {};
+    CHECK((v == Vector(0, 0, 0)));
+    CHECK((Vector() == Vector(0, 0, 0)));
     CHECK((Vector(1, 1, 1) == Vector(1, 1, 1)));
-    CHECK((Vector(0, 0, 0) == Vector(0, 0, 0)));
     CHECK_FALSE((Vector(1, 1, 1) == Vector(3, 4, 5)));
     CHECK_FALSE((Vector(1, 1, 1) == Vector(-1, 1, 1)));
     CHECK_FALSE((Vector(1, 1, 1) == Vector(1, -1, 1)));

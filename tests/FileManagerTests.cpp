@@ -9,7 +9,7 @@ TEST_CASE("scene1") {
     Scene scene = FileManager::createScene("/files/scene1.json");
 }
 
-//todo so far it terminates, but at least complies
+// possibly writing should be redone?
 TEST_CASE("Testing output writing") {
 //    /*
 //    * test writing a buffer to file

@@ -9,35 +9,48 @@
   },
   "materials": [
     {
-      "type": "r",
-      "colour": [200, 100, 40],
+      "color": [200, 100, 40],
       "roughness": 0.4,
       "specularIntensity": 0.4,
-      "transparency": 0.0
+      "name": "A"
     },
     {
-      "type": "s",
-      "colour": [240, 240, 240],
+      "color": [240, 240, 240],
       "roughness": 1.0,
       "specularIntensity": 0.3,
-      "transparency": 0.005,
-      "specularColor": [255, 255, 255]
+      "specularColor": [255, 255, 255],
+      "name": "B"
     },
     {
-      "type": "e",
-      "colour": [0, 0, 0],
+      "color": [0, 0, 0],
       "roughness": 0.5,
       "specularIntensity": 0.5,
-      "transparency": 0.0,
       "specularColor": [255, 0, 255],
-      "emission": [1.0, 1.0, 1.0]
+      "emission": [1.0, 1.0, 1.0],
+      "name": "C"
     }
   ],
   "spheres": [
     {
       "origin": [0.0, 0.0, 44.0],
       "radius": 3.0,
-      "materialIndex": 0
+      "materialName": "A"
+    }
+  ],
+  "triangles": [
+    {
+      "origin": [0.0, 3, 5.0],
+      "a": [-1, 2.0, 5.0],
+      "b": [1, 2.0, 5.0],
+      "materialName": "A"
+    }
+  ],
+  "parallelograms": [
+    {
+      "origin": [4.0, 3, 5.0],
+      "a": [3, 2.0, 5.0],
+      "b": [5, 2.0, 5.0],
+      "materialName": "A"
     }
   ]
 }

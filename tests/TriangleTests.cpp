@@ -2,7 +2,6 @@
 #include "../src/world/objects.hpp"
 
 
-//todo add material test later
 TEST_CASE("Testing getters") {
     Object::Triangle triangle = Object::Triangle(
             Vector(0, 1, 0),
@@ -11,8 +10,8 @@ TEST_CASE("Testing getters") {
             Material()
     );
     CHECK((triangle.getOrigin() == Vector(0, 1, 0)));
-//    CHECK((triangle.GetColor() == sf::Color::White));
-//    CHECK((triangle.GetMaterial() == ));
+    CHECK((triangle.GetMaterial().getName() == "default"));
+    CHECK((triangle.GetColor() == sf::Color::Magenta));
 }
 
 TEST_CASE("Testing normal") {

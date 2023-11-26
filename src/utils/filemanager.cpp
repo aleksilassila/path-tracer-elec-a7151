@@ -1,5 +1,9 @@
 #include <fstream>
+#include <unordered_map>
+
 #include "filemanager.hpp"
+#include "materialbuilder.hpp"
+
 
 namespace FileManager {
 
@@ -31,16 +35,33 @@ namespace FileManager {
         return image.saveToFile(outputPath);
     }
 
+    /**
+     * Reads sf::Color from json format
+     * @param json reference
+     * @param name of the attribute
+     * @return sf::Color
+     */
     auto ColorFromJSON(const json& j, const std::string& name) {
         auto vec = j[name].get<std::vector<int>>();
         return sf::Color(vec[0], vec[1], vec[2]);
     }
 
+    /**
+     * Reads Vector from json format
+     * @param json reference
+     * @param name of the attribute
+     * @return Vector
+     */
     auto VectorFromJSON(const json& j, const std::string& name) {
         auto vec = j[name].get<std::vector<int>>();
         return Vector(vec[0], vec[1], vec[2]);
     }
 
+    /**
+     * Reads Camera from json format
+     * @param json reference
+     * @return Camera
+     */
     Camera CameraFromJSON(const json& j) {
         Camera camera(
                 VectorFromJSON(j, "position"),
@@ -53,46 +74,29 @@ namespace FileManager {
         return camera;
     }
 
-    /*
-     * type:
-     * - r regular no optional attributes
-     * - s specular [specularColor (vec)]
-     * - e emissive [specularColor (vec)], [emission (vec)]
+    /**
+     * Reads Material from json format
+     * @param json reference
+     * @return Material
      */
-
-    // ugly switch, gotta refactor Material
-    // using exact attributes name, they should be standardised (color/colour)
     auto MaterialFromJSON(const json& j) {
-        if (j.at("type") == "r") {
-            return Material(
-                    ColorFromJSON(j, "colour"),
-                    j.at("roughness"),
-                    j.at("specularIntensity"),
-                    j.at("transparency")
-            );
-        }
-        if (j.at("type") == "s") {
-            return Material(
-                    ColorFromJSON(j, "colour"),
-                    j.at("roughness"),
-                    j.at("specularIntensity"),
-                    j.at("transparency"),
-                    ColorFromJSON(j, "specularColor")
-            );
-        }
-        if (j.at("type") == "e") {
-            return Material(
-                    ColorFromJSON(j, "colour"),
-                    j.at("roughness"),
-                    j.at("specularIntensity"),
-                    j.at("transparency"),
-                    ColorFromJSON(j, "specularColor"),
-                    VectorFromJSON(j, "emission")
-            );
-        }
-        return Material();
+        auto builder = MaterialBuilder();
+        if (j.contains("color")) builder.setColor(ColorFromJSON(j, "color"));
+        if (j.contains("roughness")) builder.setRoughness(j.at("roughness"));
+        if (j.contains("specularIntensity")) builder.setSpecularIntensity(j.at("specularIntensity"));
+        if (j.contains("specularColor")) builder.setSpecularColor(ColorFromJSON(j, "specularColor"));
+        if (j.contains("emission")) builder.setEmission(VectorFromJSON(j, "emission"));
+        if (j.contains("name")) builder.setName(j.at("name"));
+
+        return builder.buildMaterial();
     }
 
+    /**
+     * Reads Sphere from json format
+     * @param json reference
+     * @param mat Material reference
+     * @return Sphere
+     */
     auto SphereFromJSON(const json& j, const Material& mat) {
         return Object::Sphere(
                 VectorFromJSON(j, "origin"),
@@ -101,6 +105,12 @@ namespace FileManager {
         );
     }
 
+    /**
+     * Reads Triangle from json format
+     * @param json reference
+     * @param mat Material reference
+     * @return Triangle
+     */
     auto TriangleFromJSON(const json& j, const Material& mat) {
         return Object::Triangle(
                 VectorFromJSON(j, "origin"),
@@ -110,6 +120,12 @@ namespace FileManager {
         );
     }
 
+    /**
+     * Reads Parallelogram from json format
+     * @param json reference
+     * @param mat Material reference
+     * @return Parallelogram
+     */
     auto ParallelogramFromJSON(const json& j, const Material& mat) {
         return Object::Parallelogram(
                 VectorFromJSON(j, "origin"),
@@ -119,36 +135,37 @@ namespace FileManager {
         );
     }
 
-    //gotta add try catch for failed or invalid input file
+    // todo add try catch for failed or invalid input files
     Scene createScene(const std::string &inputPath) {
-        std::fstream file;
         std::string filePath = MY_FILE_PATH + std::string(inputPath);
+        std::fstream file;
         file.open(filePath,std::ios::in);
-        std::cout << file.is_open() << " " << file.fail();
+
+        std::cout << "File open: " << file.is_open() << " failed: " << file.fail() << std::endl;
 
         json Data = json::parse(file);
 
         Camera camera = CameraFromJSON(Data.at("camera"));
         Scene scene = Scene(camera, {});
 
-        std::vector<Material> materials;
+        std::unordered_map<std::string, Material> materials;
         for (size_t i = 0; i < Data.at("materials").size(); i++) {
-            materials.push_back(MaterialFromJSON(Data.at("materials")[i]));
+            materials[Data.at("materials")[i].at("name")] = MaterialFromJSON(Data.at("materials")[i]);
         }
 
         for (size_t i = 0; i < Data.at("spheres").size(); i++) {
-            size_t materialIndex = Data.at("spheres")[i].at("materialIndex");
-            scene.AddObject(std::make_shared<Object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialIndex])));
+            std::string materialName = Data.at("spheres")[i].at("materialName");
+            scene.AddObject(std::make_shared<Object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialName])));
         }
 
         for (size_t i = 0; i < Data.at("triangles").size(); i++) {
-            size_t materialIndex = Data.at("triangles")[i].at("materialIndex");
-            scene.AddObject(std::make_shared<Object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialIndex])));
+            std::string materialName = Data.at("triangles")[i].at("materialName");
+            scene.AddObject(std::make_shared<Object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialName])));
         }
 
         for (size_t i = 0; i < Data.at("parallelograms").size(); i++) {
-            size_t materialIndex = Data.at("parallelograms")[i].at("materialIndex");
-            scene.AddObject(std::make_shared<Object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialIndex])));
+            std::string materialName = Data.at("parallelograms")[i].at("materialName");
+            scene.AddObject(std::make_shared<Object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialName])));
         }
 
         return scene;
