@@ -50,9 +50,6 @@ Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
     double n = n_;
     Vector ray_dir = ray.GetDirection().Norm();
     double dot_pro = ray_dir * normal;
-    if (dot_pro < 0) {
-        //std::cout << 'x' << std::endl;
-    }
     if (dot_pro > 0) {
         n = 1 / n;
         normal = normal * -1;
@@ -61,12 +58,12 @@ Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
     double theta1 = std::acos(abs(dot_pro));
     double temp = std::sin(theta1) / n;
 
-    if (temp > 1) {
-        //return ray_dir - (normal * (ray_dir * normal) * 2);
+    if (temp > 1) {     // Angle bigger than critical angle
         return {Vector(0, 0, 0)};
     }
     double theta2 = std::asin(temp);
 
+    // Parallel and perpendicular reflection coefficients for calculating the odds of reflection vs refraction
     double R_parallel = std::sin(theta1 - theta2) / std::sin(theta1 + theta2);
     double R_perpendicular = std::tan(theta1 - theta2) / std::tan(theta1 + theta2);
 
