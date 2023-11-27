@@ -68,11 +68,13 @@ Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
     double R_perpendicular = std::tan(theta1 - theta2) / std::tan(theta1 + theta2);
 
     double total_refl = 0.5 * (R_parallel * R_parallel + R_perpendicular * R_perpendicular);
+
+    // Play loaded dice on whether the ray will be reflected
     double x = rand() % 1000;
     if (x < (total_refl * 1000)) return {Vector(0, 0, 0)};
 
     Vector surface_dir = (ray_dir + (normal * abs(dot_pro))).Norm();
     Vector refr_dir = normal * -std::cos(theta2) +
            surface_dir * std::sin(theta2);
-    return {refr_dir};
+    return refr_dir;
 }

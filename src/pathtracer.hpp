@@ -126,8 +126,13 @@ public:
 
                 if (material.getn() > 1) {
                     newRayDir = material.findRefractionDirection(ray_, normal);
+                    /* findRefractionDirection calculates the odds of reflection and based on those odds plays dice if
+                     ray will be reflected. If reflected, returns a zero vector, and newRayDir will be decided by
+                     other methods.
+                    */
                     if (newRayDir != Vector(0, 0, 0)) {
                         surfaceCol = material.getColor();
+                        // Ray goes in, so its origin will be set inside the object
                         ray_.SetOrigin(point - (normal * 0.001));
                     }
                 }
@@ -158,7 +163,6 @@ public:
                 B *= (surfaceCol.b / 255.99);
 
                 // Update ray
-                //ray_.SetOrigin(point + (normal * 0.001));
                 ray_.SetDirection(newRayDir);
 
             } else {
