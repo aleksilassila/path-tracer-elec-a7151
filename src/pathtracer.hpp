@@ -121,15 +121,17 @@ public:
                 Vector point = lastHit_.point;
                 Vector normal = lastHit_.sNormal;
                 Material material = lastHit_.sMaterial;
-                Vector newRayDir;
+                Vector newRayDir = Vector(0, 0, 0);
                 sf::Color surfaceCol;
 
                 if (material.getn() > 1) {
                     newRayDir = material.findRefractionDirection(ray_, normal);
-                    surfaceCol = material.getColor();
-                    ray_.SetOrigin(point - (normal * 0.001));
+                    if (newRayDir != Vector(0, 0, 0)) {
+                        surfaceCol = material.getColor();
+                        ray_.SetOrigin(point - (normal * 0.001));
+                    }
                 }
-                else {
+                if (newRayDir == Vector(0, 0, 0)) {
                     // Handle diffuse and specular reflections
                     double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0,
                                                                            static_cast<unsigned int> (u * v * randSeed *

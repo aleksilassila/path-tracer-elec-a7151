@@ -17,21 +17,21 @@
     {
       "color": [255, 255, 255],
       "roughness": 0.07,
-      "specularIntensity": 0.4,
+      "specularIntensity": 0.9,
       "n": 1.5,
       "name": "White Glass"
     },
     {
       "color": [15, 82, 186],
       "roughness": 0.07,
-      "specularIntensity": 0.4,
+      "specularIntensity": 0.9,
       "n": 1.77,
       "name": "Sapphire"
     },
     {
       "color": [255, 255, 255],
       "roughness": 0.07,
-      "specularIntensity": 0.4,
+      "specularIntensity": 0.9,
       "n": 2.42,
       "name": "Diamond"
     },
