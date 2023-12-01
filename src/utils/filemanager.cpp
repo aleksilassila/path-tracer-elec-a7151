@@ -3,7 +3,9 @@
 
 #include "filemanager.hpp"
 #include "materialbuilder.hpp"
-
+#include "../world/Objects/sphere.hpp"
+#include "../world/Objects/triangle.hpp"
+#include "../world/Objects/parallelogram.hpp"
 
 namespace FileManager {
 
@@ -99,7 +101,7 @@ namespace FileManager {
      * @return Sphere
      */
     auto SphereFromJSON(const json& j, const Material& mat) {
-        return Object::Sphere(
+        return object::Sphere(
                 VectorFromJSON(j, "origin"),
                 j.at("radius"),
                 mat
@@ -113,7 +115,7 @@ namespace FileManager {
      * @return Triangle
      */
     auto TriangleFromJSON(const json& j, const Material& mat) {
-        return Object::Triangle(
+        return object::Triangle(
                 VectorFromJSON(j, "origin"),
                 VectorFromJSON(j, "a"),
                 VectorFromJSON(j, "b"),
@@ -128,7 +130,7 @@ namespace FileManager {
      * @return Parallelogram
      */
     auto ParallelogramFromJSON(const json& j, const Material& mat) {
-        return Object::Parallelogram(
+        return object::Parallelogram(
                 VectorFromJSON(j, "origin"),
                 VectorFromJSON(j, "a"),
                 VectorFromJSON(j, "b"),
@@ -156,17 +158,17 @@ namespace FileManager {
 
         for (size_t i = 0; i < Data.at("spheres").size(); i++) {
             std::string materialName = Data.at("spheres")[i].at("materialName");
-            scene.AddObject(std::make_shared<Object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialName])));
+            scene.AddObject(std::make_shared<object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialName])));
         }
 
         for (size_t i = 0; i < Data.at("triangles").size(); i++) {
             std::string materialName = Data.at("triangles")[i].at("materialName");
-            scene.AddObject(std::make_shared<Object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialName])));
+            scene.AddObject(std::make_shared<object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialName])));
         }
 
         for (size_t i = 0; i < Data.at("parallelograms").size(); i++) {
             std::string materialName = Data.at("parallelograms")[i].at("materialName");
-            scene.AddObject(std::make_shared<Object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialName])));
+            scene.AddObject(std::make_shared<object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialName])));
         }
 
         return scene;

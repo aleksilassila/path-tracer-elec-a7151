@@ -7,23 +7,23 @@
 
 #include <vector>
 #include <memory>
-#include "objects.hpp"
+#include "Objects/objects.hpp"
 #include "camera.h"
 
 class Scene {
 public:
     Scene() = default;
 
-    Scene(Camera &camera, std::initializer_list<std::shared_ptr<Object::Object>> objects) : camera_(camera),
+    Scene(Camera &camera, std::initializer_list<std::shared_ptr<object::Object>> objects) : camera_(camera),
                                                                                             objects_(objects) {}
 
     ~Scene() = default;
 
-    void AddObject(std::shared_ptr<Object::Object> object);
+    void AddObject(std::shared_ptr<object::Object> object);
 
-    void RemoveObject(std::shared_ptr<Object::Object> object);
+    void RemoveObject(std::shared_ptr<object::Object> object);
 
-    [[nodiscard]] std::vector<std::shared_ptr<Object::Object>> GetObjects() const;
+    [[nodiscard]] std::vector<std::shared_ptr<object::Object>> GetObjects() const;
 
     void SetAmbientLightDirection(Vector direction) {
         ambientLightDirection_ = direction.Norm();
@@ -39,7 +39,7 @@ public:
 
 private:
     Camera camera_;
-    std::vector<std::shared_ptr<Object::Object>> objects_;
+    std::vector<std::shared_ptr<object::Object>> objects_;
     Vector ambientLightDirection_ = Vector(1, -1, -0.5).Norm();
 };
 

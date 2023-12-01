@@ -1,9 +1,9 @@
 #include "doctest.h"
-#include "../src/world/objects.hpp"
+#include "../src/world/Objects/objects.hpp"
 
 
 TEST_CASE("Testing getters") {
-    Object::Triangle triangle = Object::Triangle(
+    object::Triangle triangle = object::Triangle(
             Vector(0, 1, 0),
             Vector(3, -1, 5),
             Vector(1, 0, 4),
@@ -15,7 +15,7 @@ TEST_CASE("Testing getters") {
 }
 
 TEST_CASE("Testing normal") {
-    Object::Triangle triangle = Object::Triangle(
+    object::Triangle triangle = object::Triangle(
             Vector(0, 1, 0),
             Vector(3, -1, 5),
             Vector(1, 0, 4),
@@ -26,7 +26,7 @@ TEST_CASE("Testing normal") {
 
 // todo ask about the intersection functions
 TEST_CASE("Testing intersection distance") {
-    Object::Triangle triangle = Object::Triangle(
+    object::Triangle triangle = object::Triangle(
             Vector(0, 1, 0),
             Vector(3, -1, 2),
             Vector(1, 0, 4),
@@ -37,7 +37,7 @@ TEST_CASE("Testing intersection distance") {
 }
 
 TEST_CASE("Testing intersection point") {
-    Object::Triangle triangle = Object::Triangle(
+    object::Triangle triangle = object::Triangle(
             Vector(0, 1, 0),
             Vector(3, -1, 2),
             Vector(1, 0, 4),

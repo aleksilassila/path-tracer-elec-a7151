@@ -4,15 +4,15 @@
 
 #include "scene.h"
 
-void Scene::AddObject(std::shared_ptr<Object::Object> object) {
+void Scene::AddObject(std::shared_ptr<object::Object> object) {
     objects_.push_back(object);
 }
 
-void Scene::RemoveObject(std::shared_ptr<Object::Object> object) {
+void Scene::RemoveObject(std::shared_ptr<object::Object> object) {
 //    objects_.erase(std::remove(objects_.begin(), objects_.end(), object), objects_.end());
 }
 
-std::vector<std::shared_ptr<Object::Object>> Scene::GetObjects() const {
+std::vector<std::shared_ptr<object::Object>> Scene::GetObjects() const {
     return objects_;
 }
 
