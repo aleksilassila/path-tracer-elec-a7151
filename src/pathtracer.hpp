@@ -10,15 +10,10 @@
 #include "utils/rand.h"
 
 struct HitInfo {
-
-    // Did ray hit an object
-    bool hit;
-    //point hit
-    Vector point;
-    // Surface normal of point hit
-    Vector sNormal;
-    // Material of object hit
-    Material sMaterial;
+    bool hit; // did ray hit an object
+    Vector point; // hit point
+    Vector sNormal; // surface normal of point hit
+    Material sMaterial; // material of object hit
 
     HitInfo() : hit(false), point(), sNormal(), sMaterial() {}
 };
@@ -112,9 +107,9 @@ public:
             HitInfo lastHit_ = GetNearestHitInfo(ray_, scene);
 
             if (lastHit_.hit) {
-                if (lastHit_.sMaterial.getEmission().Len() > 0.0) {
+                if (lastHit_.sMaterial.GetEmission().Len() > 0.0) {
                     // Break out of loop if ray hits a light.
-                    light += lastHit_.sMaterial.getEmission();
+                    light += lastHit_.sMaterial.GetEmission();
                     break;
                 }
 
@@ -124,10 +119,15 @@ public:
                 Vector newRayDir = Vector(0, 0, 0);
                 sf::Color surfaceCol;
 
-                if (material.getn() > 1) {
-                    newRayDir = material.findRefractionDirection(ray_, normal);
+                if (material.GetN() > 1) {
+                    newRayDir = material.FindRefractionDirection(ray_, normal);
+                    /* findRefractionDirection calculates the odds of reflection and based on those odds plays dice if
+                     ray will be reflected. If reflected, returns a zero vector, and newRayDir will be decided by
+                     other methods.
+                    */
                     if (newRayDir != Vector(0, 0, 0)) {
-                        surfaceCol = material.getColor();
+                        surfaceCol = material.GetColor();
+                        // Ray goes in, so its origin will be set inside the object
                         ray_.SetOrigin(point - (normal * 0.001));
                     }
                 }
@@ -138,16 +138,16 @@ public:
                                                                                                       456789) *
                                                                            std::numeric_limits<unsigned int>::max());
 
-                    if (specularChance < material.getSpecularIntensity()) {
-                        newRayDir = material.findSpecularBounceDirection(ray_, normal,
+                    if (specularChance < material.GetSpecularIntensity()) {
+                        newRayDir = material.FindSpecularBounceDirection(ray_, normal,
                                                                          static_cast<unsigned int> (u * v * randSeed *
                                                                                                     456789)).Norm();
-                        surfaceCol = material.getSpecularColor();
+                        surfaceCol = material.GetSpecularColor();
                     } else {
-                        newRayDir = material.findDiffuseBounceDirection(normal,
+                        newRayDir = material.FindDiffuseBounceDirection(normal,
                                                                         static_cast<unsigned int> (u * v * randSeed *
                                                                                                    456789)).Norm();
-                        surfaceCol = material.getColor();
+                        surfaceCol = material.GetColor();
                     }
                     ray_.SetOrigin(point + (normal * 0.001));
                 }
@@ -158,7 +158,6 @@ public:
                 B *= (surfaceCol.b / 255.99);
 
                 // Update ray
-                //ray_.SetOrigin(point + (normal * 0.001));
                 ray_.SetDirection(newRayDir);
 
             } else {

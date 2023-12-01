@@ -31,9 +31,9 @@ public:
     ~Colour() = default;
     
     // Colour component getters
-    unsigned char red() const {return red_;}
-    unsigned char green() const {return green_;}
-    unsigned char blue() const {return blue_;}
+    unsigned char GetRed() const {return red_;}
+    unsigned char GetGreen() const {return green_;}
+    unsigned char GetBlue() const {return blue_;}
 
     friend std::ostream &operator<<(std::ostream &os, Colour &colour); 
 

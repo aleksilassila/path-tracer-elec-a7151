@@ -27,17 +27,18 @@ public:
 
     ~MaterialBuilder() = default;
 
-    inline Material buildMaterial() const {
-        return Material(color_, roughness_, specularIntensity_, specularColor_, emission_, n_, name_);
+    inline Material BuildMaterial() const {
+        return Material(color_, roughness_, specularIntensity_,
+                        specularColor_, emission_, n_, name_);
     }
 
-    inline void setColor(const sf::Color &color) { color_ = color; }
-    inline void setRoughness(double roughness) { roughness_ = roughness; }
-    inline void setSpecularIntensity(double specularIntensity) { specularIntensity_ = specularIntensity; }
-    inline void setSpecularColor(const sf::Color &specularColor) { specularColor_ = specularColor; }
-    inline void setEmission(const Vector &emission) { emission_ = emission; }
-    inline void setn(double n) { n_ = n; }
-    inline void setName(const std::string& name) { name_ = name; }
+    inline void SetColor(const sf::Color &color) { color_ = color; }
+    inline void SetRoughness(double roughness) { roughness_ = roughness; }
+    inline void SetSpecularIntensity(double specularIntensity) { specularIntensity_ = specularIntensity; }
+    inline void SetSpecularColor(const sf::Color &specularColor) { specularColor_ = specularColor; }
+    inline void SetEmission(const Vector &emission) { emission_ = emission; }
+    inline void SetN(double n) { n_ = n; }
+    inline void SetName(const std::string& name) { name_ = name; }
 
 private:
     sf::Color color_;

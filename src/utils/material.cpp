@@ -15,7 +15,7 @@ Material::Material(sf::Color color, double roughness, double specularIntensity, 
  *      U = v − 2 * (v * n) * n
  * Then generate a random vector based on the ideal bounce and roughness
  */
-Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const {
+Vector Material::FindSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const {
     Vector rayDirection = ray.GetDirection().Norm();
     Vector idealBounceDirection = rayDirection - (normal * (rayDirection * normal) * 2);
 
@@ -30,7 +30,7 @@ Vector Material::findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned 
     return bounceDir;
 }
 
-Vector Material::findDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const {
+Vector Material::FindDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const {
     Vector inHemisphere(
             Random::GetRandomDoubleNormal(roughness_, normal.x(), randSeed * std::numeric_limits<unsigned int>::max() * 12314),
             Random::GetRandomDoubleNormal(roughness_, normal.y(), randSeed * std::numeric_limits<unsigned int>::max() * 73495),
@@ -41,7 +41,7 @@ Vector Material::findDiffuseBounceDirection(Vector &normal, unsigned int randSee
     return inHemisphere;
 }
 
-Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
+Vector Material::FindRefractionDirection(Ray &ray, Vector &normal) const {
 
    /**
     * todo Implement refraction
@@ -68,11 +68,13 @@ Vector Material::findRefractionDirection(Ray &ray, Vector &normal) const {
     double R_perpendicular = std::tan(theta1 - theta2) / std::tan(theta1 + theta2);
 
     double total_refl = 0.5 * (R_parallel * R_parallel + R_perpendicular * R_perpendicular);
+
+    // Play loaded dice on whether the ray will be reflected
     double x = rand() % 1000;
     if (x < (total_refl * 1000)) return {Vector(0, 0, 0)};
 
     Vector surface_dir = (ray_dir + (normal * abs(dot_pro))).Norm();
     Vector refr_dir = normal * -std::cos(theta2) +
            surface_dir * std::sin(theta2);
-    return {refr_dir};
+    return refr_dir;
 }

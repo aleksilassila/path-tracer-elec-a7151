@@ -32,7 +32,11 @@ namespace Object {
 
         virtual ~Object() = default;
 
-        Vector getOrigin() const { return origin_; }
+        Vector GetOrigin() const { return origin_; }
+
+        Material GetMaterial() const;
+
+        sf::Color GetColor() const;
 
         Vector GetIntersectionPoint(const Ray &ray);
 
@@ -42,14 +46,11 @@ namespace Object {
 
         friend std::ostream &operator<<(std::ostream &os, const Object &obj);
 
-        sf::Color GetColor() const;
-
-        Material GetMaterial() const;
     };
 
     class Sphere : public Object {
 
-/*
+/**
 * Sphere class inherits from Object
 */
 
@@ -65,22 +66,22 @@ namespace Object {
 
         ~Sphere() override = default;
 
-        /*
+        /**
         * Calculates intersection of Ray and Sphere if it exists
         */
         double GetIntersectionDistance(const Ray &ray) override;
 
-        Vector Normal(const Vector &point) override;
-        /*
+        /**
         * Calculates normal vector of sphere at point given by vector point
         */
+        Vector Normal(const Vector &point) override;
 
     };
 
 
     class Triangle : public Object {
 
-/*
+/**
 * Triangle class inherits from Object
 */
 
@@ -100,13 +101,13 @@ namespace Object {
 
         ~Triangle() override = default;
 
-        /*
+        /**
         * Calculates intersection of Ray and Triangle if it exists
         */
         double GetIntersectionDistance(const Ray &ray) override;
 
         Vector Normal(const Vector &point) override;
-        /*
+        /**
         * Calculates normal vector of triangle at point given by vector point
         */
 
@@ -114,7 +115,7 @@ namespace Object {
 
     class Parallelogram : public Object {
 
-/*
+/**
 * Parallelogram class inherits from Object
 */
 
@@ -134,15 +135,15 @@ namespace Object {
 
         ~Parallelogram() override = default;
 
-        /*
+        /**
         * Calculates intersection of Ray and Parallelogram if it exists
         */
         double GetIntersectionDistance(const Ray &ray) override;
 
-        Vector Normal(const Vector &point) override;
-        /*
+        /**
         * Calculates normal vector of triangle at point given by vector point
         */
+        Vector Normal(const Vector &point) override;
 
     };
 } // namespace Object

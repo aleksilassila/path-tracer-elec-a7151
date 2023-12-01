@@ -7,7 +7,7 @@
 
 namespace FileManager {
 
-    bool writeOutput(const std::string& outputPath, const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim) {
+    bool WriteOutput(const std::string& outputPath, const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim) {
         std::ofstream ofs(outputPath, std::ios::out | std::ios::binary);
 
         if (!ofs) {
@@ -22,7 +22,7 @@ namespace FileManager {
         // write image data
         for (unsigned int i = 0; i < yDim; i++) {
             for (unsigned int j = 0; j < xDim; j++) {
-                ofs << outputBuffer[i][j].red() << outputBuffer[i][j].green() << outputBuffer[i][j].blue();
+                ofs << outputBuffer[i][j].GetRed() << outputBuffer[i][j].GetGreen() << outputBuffer[i][j].GetBlue();
             }
         }
         ofs.close();
@@ -31,7 +31,7 @@ namespace FileManager {
         return true;
     }
 
-    bool saveRenderImage(const std::string& outputPath, sf::Image &image) {
+    bool SaveRenderImage(const std::string& outputPath, sf::Image &image) {
         return image.saveToFile(outputPath);
     }
 
@@ -81,15 +81,15 @@ namespace FileManager {
      */
     auto MaterialFromJSON(const json& j) {
         auto builder = MaterialBuilder();
-        if (j.contains("color")) builder.setColor(ColorFromJSON(j, "color"));
-        if (j.contains("roughness")) builder.setRoughness(j.at("roughness"));
-        if (j.contains("specularIntensity")) builder.setSpecularIntensity(j.at("specularIntensity"));
-        if (j.contains("specularColor")) builder.setSpecularColor(ColorFromJSON(j, "specularColor"));
-        if (j.contains("emission")) builder.setEmission(VectorFromJSON(j, "emission"));
-        if (j.contains("n")) builder.setn(j.at("n"));
-        if (j.contains("name")) builder.setName(j.at("name"));
+        if (j.contains("color")) builder.SetColor(ColorFromJSON(j, "color"));
+        if (j.contains("roughness")) builder.SetRoughness(j.at("roughness"));
+        if (j.contains("specularIntensity")) builder.SetSpecularIntensity(j.at("specularIntensity"));
+        if (j.contains("specularColor")) builder.SetSpecularColor(ColorFromJSON(j, "specularColor"));
+        if (j.contains("emission")) builder.SetEmission(VectorFromJSON(j, "emission"));
+        if (j.contains("n")) builder.SetN(j.at("n"));
+        if (j.contains("name")) builder.SetName(j.at("name"));
 
-        return builder.buildMaterial();
+        return builder.BuildMaterial();
     }
 
     /**
@@ -137,7 +137,7 @@ namespace FileManager {
     }
 
     // todo add try catch for failed or invalid input files
-    Scene createScene(const std::string &inputPath) {
+    Scene CreateScene(const std::string &inputPath) {
         std::string filePath = MY_FILE_PATH + std::string(inputPath);
         std::fstream file;
         file.open(filePath,std::ios::in);

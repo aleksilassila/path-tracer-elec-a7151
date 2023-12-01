@@ -1,12 +1,3 @@
-/**
- * @file rand.h
- * @authors Markus Lång
- * @brief Random number generation. Set of functions used for ray bounce direction
- * @version 0.1
- * @date 2023-11-08
- */
-
-
 #ifndef RAND_H
 #define RAND_H
 
@@ -15,6 +6,9 @@
 #include <iostream>
 #include "vector.hpp"
 
+/**
+ * Random number generation. Set of functions used for ray bounce direction
+ */
 namespace Random {
 
     /**

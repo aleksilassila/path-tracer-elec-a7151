@@ -76,7 +76,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     sf::Image image = tracer.GetLatestImage();
-                    FileManager::saveRenderImage("out.png", image);
+                    FileManager::SaveRenderImage("out.png", image);
                 } else {
                     Camera &camera = scene.GetCamera();
 
@@ -157,7 +157,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 int main() {
     sf::Vector2u windowSize(400, 400);
 
-    Scene scene = FileManager::createScene("/files/scene1.json");
+    Scene scene = FileManager::CreateScene("/files/scene1.json");
     std::cout << scene << std::endl;
     std::cout << "Number of threads used: " << threadCount << std::endl;
 

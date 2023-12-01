@@ -1,7 +1,3 @@
-//
-// Created by Aleksi Lassila on 4.11.2023.
-//
-
 #ifndef PATHTRACER_CAMERA_H
 #define PATHTRACER_CAMERA_H
 
@@ -21,8 +17,10 @@ class Camera {
 
 public:
     Camera(Vector position = Vector(0, 0, 0), double viewPlaneDistance = 1, double yaw = 0, double pitch = 0) :
-            position_(position), viewPlaneDistance_(viewPlaneDistance), yaw_(yaw), pitch_(pitch) {
-    }
+            position_(position),
+            viewPlaneDistance_(viewPlaneDistance),
+            yaw_(yaw),
+            pitch_(pitch) {}
 
     void MoveTo(const Vector &position) { position_ = position; }
 

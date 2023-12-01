@@ -13,7 +13,7 @@ Object::Sphere::Sphere(const Vector &origin, double radius) : Object(origin), ra
 Object::Sphere::Sphere(const Vector &origin, double radius, const Material &material): Object(origin, material), radius_(radius) { }
 
 double Object::Sphere::GetIntersectionDistance(const Ray &ray) {
-    Vector or_or = getOrigin() - ray.GetOrigin();
+    Vector or_or = GetOrigin() - ray.GetOrigin();
 //    std::cout << "or_or: " << or_or << std::endl;
 //    std::cout << "ray or: " << ray.GetOrigin() << std::endl;
 //    std::cout << "ray direction: " << ray.GetDirection() << std::endl;
@@ -120,7 +120,7 @@ std::ostream &Object::operator<<(std::ostream &os, const Object &obj) {
 }
 
 sf::Color Object::Object::GetColor() const {
-    sf::Color materialColor = material_.getColor();
+    sf::Color materialColor = material_.GetColor();
     return materialColor;
 }
 

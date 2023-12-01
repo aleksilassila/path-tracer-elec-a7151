@@ -32,13 +32,13 @@ public:
 
     ~Material() = default;
 
-    inline sf::Color getColor() const { return color_; }
-    inline double getRoughness() const { return roughness_; }
-    inline double getSpecularIntensity() const { return specularIntensity_; }
-    inline sf::Color getSpecularColor() const { return specularColor_; }
-    inline Vector getEmission() const { return emission_; }
-    inline double getn() const { return n_; }
-    inline const std::string& getName() const { return name_; }
+    inline sf::Color GetColor() const { return color_; }
+    inline double GetRoughness() const { return roughness_; }
+    inline double GetSpecularIntensity() const { return specularIntensity_; }
+    inline sf::Color GetSpecularColor() const { return specularColor_; }
+    inline Vector GetEmission() const { return emission_; }
+    inline double GetN() const { return n_; }
+    inline const std::string& GetName() const { return name_; }
 
 
     /**
@@ -51,7 +51,7 @@ public:
      * @param randSeed
      * @return Vector
      */
-    Vector findSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
+    Vector FindSpecularBounceDirection(Ray &ray, Vector &normal, unsigned int randSeed) const;
 
     /**
     * @brief
@@ -63,7 +63,7 @@ public:
     * @param randSeed
     * @return Vector
     */
-    Vector findDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const;
+    Vector FindDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const;
 
     /**
      * todo write description
@@ -72,7 +72,7 @@ public:
      * @param normal
      * @return
      */
-    Vector findRefractionDirection(Ray &ray, Vector &normal) const;
+    Vector FindRefractionDirection(Ray &ray, Vector &normal) const;
 
 };
 

@@ -26,7 +26,7 @@ namespace FileManager {
      * @param yDim
      * @return bool
      */
-    bool writeOutput(const std::string& outputPath, const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
+    bool WriteOutput(const std::string& outputPath, const std::vector<std::vector<Colour>> &outputBuffer, unsigned int xDim, unsigned int yDim);
 
     /**
      * Saves an image using SFML method
@@ -34,14 +34,14 @@ namespace FileManager {
      * @param image
      * @return bool
      */
-    bool saveRenderImage(const std::string& outputPath, sf::Image &image);
+    bool SaveRenderImage(const std::string& outputPath, sf::Image &image);
 
     /**
      * Creates a scene based on a json file
      * @param inputPath
      * @return Scene
      */
-    Scene createScene(const std::string &inputPath);
+    Scene CreateScene(const std::string &inputPath);
 }
 
 #endif // FILEMANAGER_HPP
