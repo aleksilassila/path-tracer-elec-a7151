@@ -158,6 +158,7 @@ public:
                 B *= (surfaceCol.b / 255.99);
 
                 // Update ray
+                //ray_.SetOrigin(point + (normal * 0.001));
                 ray_.SetDirection(newRayDir);
 
             } else {
