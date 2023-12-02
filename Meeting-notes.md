@@ -206,9 +206,34 @@ We have camera movement, fov, ray accumulation and basic materials.
 
 1. Aleksi will work on GPU acceleration next
 2. Markus will work on translucent materials (Refractions)
-3. Weronica will add function documentation, refactor Material class and improve tests.
+3. Weronika will add function documentation, refactor Material class and improve tests.
 4. Johannes will help with refractions and possibly implement additional types of geometry.
 
+# Meeting 02.12.23 12:00
+
+**Participants**: All members
+
+## Summary of works
+
+1. Weronika: 
+   - made scene work correctly
+   - refactored all files a little for consistency
+   - split object into multiple files
+2. Johannes
+
+3. Markus
+
+4. Aleksi
+
+## Challenges
+
+
+## Actions
+
+1. Aleksi will 
+2. Markus will 
+3. Weronika will add more functionality to sfml window
+4. Johannes will 
 
 Upcoming features (if time allows):
 
