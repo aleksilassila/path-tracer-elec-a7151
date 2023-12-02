@@ -153,13 +153,13 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 1. Johannes
 
-   Worked on Camera class: movement and rotation. 
+   Worked on Camera class: movement and rotation.
    Helped with PathTracer
 
 2. Markus
-   
+
    Worked on PathTracer class: Path tracing algorithm.
-   Worked on Material class: Specular, emissive, and diffuse materials. 
+   Worked on Material class: Specular, emissive, and diffuse materials.
 
 3. Aleksi
 
@@ -167,7 +167,7 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 4. Weronica
 
-   Worked on testing using Doctest library. Rewritten most tests and created new ones. 
+   Worked on testing using Doctest library. Rewritten most tests and created new ones.
 
 ## Challenges
 
@@ -193,10 +193,14 @@ We have camera movement, fov, ray accumulation and basic materials.
 ## Summary of works
 
 1. Weronika: <br>
-   - fully implemented tests. <br>
-   - refactored FileMangager to namespace <br>
-   - wrote scene creation function from json input file using nlohmann library. <br>
-   link: https://json.nlohmann.me/
+    - fully implemented tests. <br>
+    - refactored FileMangager to namespace <br>
+    - wrote scene creation function from json input file using nlohmann library. <br>
+      link: https://json.nlohmann.me/
+
+
+2. Aleksi:
+    - Implemented multithreading for rendering
 
 ## Challenges
 
@@ -204,7 +208,7 @@ We have camera movement, fov, ray accumulation and basic materials.
 
 ## Actions
 
-1. Aleksi will work on GPU acceleration next
+1. Aleksi was in military rehearsal exercise
 2. Markus will work on translucent materials (Refractions)
 3. Weronika will add function documentation, refactor Material class and improve tests.
 4. Johannes will help with refractions and possibly implement additional types of geometry.
@@ -237,7 +241,7 @@ We have camera movement, fov, ray accumulation and basic materials.
 
 Upcoming features (if time allows):
 
-- [ ] GPU Acceleration
+- [X] Multithreading
 - [ ] Refractions
     - [ ] Subsurface scattering?
     - [ ] Volumetric rendering?
