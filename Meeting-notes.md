@@ -224,27 +224,11 @@ We have camera movement, fov, ray accumulation and basic materials.
    - refactored all files a little for consistency
    - split object into multiple files
 2. Johannes
+   - implemented refractions
+   - added parallelogram object
 
-3. Markus
+# Meeting 09.12.23 12:00
 
-4. Aleksi
+**Participants**: All members
 
-## Challenges
-
-
-## Actions
-
-1. Aleksi will 
-2. Markus will 
-3. Weronika will add more functionality to sfml window
-4. Johannes will 
-
-Upcoming features (if time allows):
-
-- [X] Multithreading
-- [ ] Refractions
-    - [ ] Subsurface scattering?
-    - [ ] Volumetric rendering?
-- [ ] Triangle meshes
-- [ ] Load models from files (.obj)
-- [ ] Animation / Blur?
+We split work on the documentation and talked about final touches before the final commit.
