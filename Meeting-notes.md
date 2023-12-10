@@ -65,7 +65,7 @@ Short summary of current project status.
 For the past weekend, each of the members have researched the topic and familiarized themselves with the project
 concepts.
 
-On monday Weronica, Johannes and Markus had a quick meeting to discuss the project plan, UML and to write a base for the
+On monday Weronika, Johannes and Markus had a quick meeting to discuss the project plan, UML and to write a base for the
 project plan.
 
 In this meeting we have:
@@ -94,7 +94,7 @@ In this meeting we have:
 
 ## Actions
 
-1. Weronica and Markus are going to start with tangible things like Vector, Objects, FileManager, Camera
+1. Weronika and Markus are going to start with tangible things like Vector, Objects, FileManager, Camera
 2. Johannes and Aleksi are going to start with ray tracing things considered like Rays, Effects, Materials
 3. We are aiming to get a working renderer that produces a flat shaded sphere by the project plan deadline or preferably
    earlier
@@ -137,7 +137,7 @@ implement. We have familiarized ourselves with the concepts and algorithms used 
 1. Johannes is going to work on the camera class, implementing some sort of controls for camera movement and possibly
    parameters for FOV etc.
 2. Markus is going to work on ray bounces and emissive materials
-3. Weronica is going to remove coupling with SFML and add input functionality
+3. Weronika is going to remove coupling with SFML and add input functionality
 4. Aleksi is going to help with the Camera class and possibly work on material and reflections
 
 ## Project status
@@ -165,7 +165,7 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
    Work on camera class: Fov, movement, rotation and utility. Window resizing.
 
-4. Weronica
+4. Weronika
 
    Worked on testing using Doctest library. Rewritten most tests and created new ones.
 
@@ -178,7 +178,7 @@ Project is set up, basic tests are implemented, and we have a simple shaded rend
 
 1. Aleksi will work on GPU acceleration next
 2. Markus will work on translucent materials (Refractions)
-3. Weronica will continue with improving automated testing, and then on input file management.
+3. Weronika will continue with improving automated testing, and then on input file management.
 4. Johannes will help with refractions and possibly implement additional types of geometry.
 
 ## Project status
@@ -224,27 +224,11 @@ We have camera movement, fov, ray accumulation and basic materials.
    - refactored all files a little for consistency
    - split object into multiple files
 2. Johannes
+   - implemented refractions
+   - added parallelogram object
 
-3. Markus
+# Meeting 09.12.23 12:00
 
-4. Aleksi
+**Participants**: All members
 
-## Challenges
-
-
-## Actions
-
-1. Aleksi will 
-2. Markus will 
-3. Weronika will add more functionality to sfml window
-4. Johannes will 
-
-Upcoming features (if time allows):
-
-- [X] Multithreading
-- [ ] Refractions
-    - [ ] Subsurface scattering?
-    - [ ] Volumetric rendering?
-- [ ] Triangle meshes
-- [ ] Load models from files (.obj)
-- [ ] Animation / Blur?
+We split work on the documentation and talked about final touches before the final commit.

@@ -30,7 +30,7 @@ private:
     const Scene scene_;
     const sf::Vector2u dimensions_;
 
-//    const std::vector<sf::Vector3f> colorBuffer;
+    std::vector<sf::Vector3f> colorBuffer_ = std::vector<sf::Vector3f>(dimensions_.x * dimensions_.y);
     sf::Image image_;
 
     std::mutex mutex;
@@ -68,6 +68,19 @@ public:
         std::lock_guard<std::mutex> lock(mutex);
         return dimensions_;
     }
+
+    sf::Color AverageColor(sf::Vector2u pos, sf::Color color) {
+        std::lock_guard<std::mutex> lock(mutex);
+
+        int bufferIndex = pos.y * dimensions_.x + pos.x;
+        colorBuffer_[bufferIndex] += sf::Vector3f(color.r, color.g, color.b);
+
+        return sf::Color(
+                colorBuffer_[bufferIndex].x / (frameCount + 1),
+                colorBuffer_[bufferIndex].y / (frameCount + 1),
+                colorBuffer_[bufferIndex].z / (frameCount + 1)
+        );
+    }
 };
 
 /**
@@ -88,6 +101,39 @@ public:
         : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
     ~PathTracer() = default;
 
+    sf::Image GetLatestImage() {
+        std::lock_guard<std::mutex> lock(imageMutex_);
+        return image_;
+    }
+
+    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene) {
+        context_ = std::make_shared<RenderContext>(dimensions, scene);
+    }
+
+    /**
+     * This function runs inside a thread and continuously renders an image based on the rendering context.
+     * @param window
+     */
+    void Renderer(sf::RenderWindow &window) {
+        while (window.isOpen()) {
+            std::shared_ptr<RenderContext> context = context_;
+
+            std::thread threads[threadCount];
+            for (int i = 0; i < threadCount; i++) {
+                threads[i] = std::thread(RenderWorker, i, threadCount, context);
+            }
+
+            for (int i = 0; i < threadCount; i++) {
+                threads[i].join();
+            }
+
+            std::lock_guard<std::mutex> lock(imageMutex_);
+            image_ = context->GetImage();
+            context->frameCount++;
+        }
+    }
+
+private:
     /**
      * @brief Get the Pixel Color
      * 
@@ -216,38 +262,6 @@ public:
         return hit;
     }
 
-    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene) {
-        context_ = std::make_shared<RenderContext>(dimensions, scene);
-    }
-
-    sf::Image GetLatestImage() {
-        std::lock_guard<std::mutex> lock(imageMutex_);
-        return image_;
-    }
-
-    /**
-     * This function runs inside a thread and continuously renders an image based on the rendering context.
-     * @param window
-     */
-    void Renderer(sf::RenderWindow &window) {
-        while (window.isOpen()) {
-            std::shared_ptr<RenderContext> context = context_;
-
-            std::thread threads[threadCount];
-            for (int i = 0; i < threadCount; i++) {
-                threads[i] = std::thread(RenderWorker, i, threadCount, context);
-            }
-
-            for (int i = 0; i < threadCount; i++) {
-                threads[i].join();
-            }
-
-            std::lock_guard<std::mutex> lock(imageMutex_);
-            image_ = context->GetImage();
-            context->frameCount++;
-        }
-    }
-
     /**
      * This function renders a specific part of the image inside a thread.
      * @param threadIndex Current thread eg which part of the image to render
@@ -279,19 +293,23 @@ public:
 
                 sf::Vector2u pixel(x, y);
 
-                // Accumulate rays
-                if (frameCount == 0) {
-                    context->SetPixel(pixel, nextColor);
-                } else {
-                    sf::Color previousColor = context->GetPixel(pixel);
+                auto average = context->AverageColor(pixel, nextColor);
 
-                    context->SetPixel(pixel,
-                                      sf::Color(
-                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-                                              (previousColor.b * (frameCount) + nextColor.b) /
-                                              (frameCount + 1)));
-                }
+                context->SetPixel(pixel, average);
+
+//                // Accumulate rays
+//                if (frameCount == 0) {
+//                    context->SetPixel(pixel, nextColor);
+//                } else {
+//                    sf::Color previousColor = context->GetPixel(pixel);
+//
+//                    context->SetPixel(pixel,
+//                                      sf::Color(
+//                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+//                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+//                                              (previousColor.b * (frameCount) + nextColor.b) /
+//                                              (frameCount + 1)));
+//                }
             }
         }
     }
