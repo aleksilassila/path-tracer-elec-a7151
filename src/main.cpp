@@ -6,38 +6,12 @@
 #include <thread>
 #include "utils/filemanager.hpp"
 
-const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
-
 /**
  * The main file
  */
 
-//void
-//renderIndexes(int startIndex, int endIndex, int frameCount, std::vector<sf::Vector3f> &colorBuffer,
-//              sf::Vector2u &windowSize,
-//              Scene &scene, sf::Image &image) {
-//    PathTracer tracer;
-//
-//    double aspectRatio = (double) windowSize.x / (double) windowSize.y;
-//    for (unsigned int x = startIndex; x < endIndex; x++) {
-//        for (unsigned int y = 0; y < windowSize.y; y++) {
-//            double scaledX = ((double) x * 2 / (double) windowSize.x - 1) * std::min(1.0, aspectRatio);
-//            double scaledY = (-((double) y * 2 / (double) windowSize.y) + 1) / std::max(1.0, aspectRatio);
-//
-//            sf::Color pixelColor = tracer.GetPixelColor(scaledX, scaledY, scene, x * y * frameCount);
-//            sf::Vector3f currentColor(pixelColor.r, pixelColor.g, pixelColor.b);
-//
-//            // Accumulate color
-//            unsigned int bufferIndex = y * windowSize.x + x;
-//            colorBuffer[bufferIndex] += currentColor;
-//
-//            // average color over the frames
-//            sf::Vector3f averagedColor = colorBuffer[bufferIndex] / static_cast<float>(frameCount + 1);
-//
-//            image.setPixel(sf::Vector2u(x, y), sf::Color(averagedColor.x, averagedColor.y, averagedColor.z));
-//        }
-//    }
-//}
+
+const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
 
 /**
  * Loop that handles rendering
