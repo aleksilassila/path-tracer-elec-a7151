@@ -1,0 +1,97 @@
+{
+  "camera": {
+    "position": [0.0, 0.0, 0.0],
+    "viewPlaneDistance": 6.0,
+    "yaw": 0.2,
+    "pitch": 0.0,
+    "target": [-4.0, 4.0, 70.0],
+    "fov": 30.0
+  },
+  "materials": [
+    {
+      "color": [200, 100, 40],
+      "roughness": 0.4,
+      "name": "A"
+    },
+    {
+      "color": [100, 180, 150],
+      "roughness": 0.5,
+      "specularIntensity": 0.3,
+      "name": "B"
+    },
+    {
+      "color": [30, 30, 150],
+      "roughness": 0.9,
+      "specularIntensity": 0.5,
+      "name": "C"
+    },
+    {
+      "color": [200, 60, 200],
+      "roughness": 0.6,
+      "name": "D"
+    },
+    {
+      "color": [256, 256, 256],
+      "roughness": 0.03,
+      "name": "Mirror"
+    },
+    {
+      "emission": [1.0, 1.0, 1.0],
+      "name": "Light"
+    }
+  ],
+  "spheres": [
+    {
+      "origin": [0.0, 0.0, 70.0],
+      "radius": 4.0,
+      "materialName": "Mirror"
+    },
+    {
+      "origin": [0.0, -5.0, 36.0],
+      "radius": 2.0,
+      "materialName": "A"
+    },
+    {
+      "origin": [-2.0, 4.0, 41.0],
+      "radius": 2.0,
+      "materialName": "B"
+    },
+    {
+      "origin": [4.0, 1.0, 40.0],
+      "radius": 2.0,
+      "materialName": "C"
+    },
+    {
+      "origin": [3.0, 3.0, 39.0],
+      "radius": 2.0,
+      "materialName": "D"
+    },
+    {
+      "origin": [0.0, -2005.0, 0.0],
+      "radius": 2000.0,
+      "materialName": "Light"
+    },
+    {
+      "origin": [0.0, 2005.0, 0.0],
+      "radius": 2000.0,
+      "materialName": "B"
+    },
+    {
+      "origin": [-2005.0, 0.0, 0.0],
+      "radius": 2000.0,
+      "materialName": "A"
+    },
+    {
+      "origin": [2005.0, 0.0, 0.0],
+      "radius": 2000.0,
+      "materialName": "C"
+    },
+    {
+      "origin": [0.0, 0.0, -1005.0],
+      "radius": 2000.0,
+      "materialName": "D"
+    }
+  ],
+  "triangles": [],
+  "parallelograms": []
+}
