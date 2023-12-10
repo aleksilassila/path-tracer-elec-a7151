@@ -82,7 +82,7 @@ public:
             std::make_shared<RenderContext>(dimensions, scene)
     ) {}
 
-    ~PathTracer();
+    ~PathTracer() = default;
 
     /**
      * @brief Get the Pixel Color
