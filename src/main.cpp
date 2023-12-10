@@ -28,6 +28,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         tracer.Renderer(window);
     });
 
+    auto lastMousePosition = sf::Vector2u(0, 0);
+
     // Update loop
     while (window.isOpen()) {
         sf::Event event;
@@ -45,9 +47,29 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 window.setView(sf::View(view));
 
                 resetContext = true;
-                // Reset color buffer
-//                colorBuffer = std::vector<sf::Vector3f>(windowSize.x * windowSize.y, sf::Vector3f(0, 0, 0));
-//                frameCount = 0;
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    lastMousePosition = sf::Vector2u(event.mouseButton.x, event.mouseButton.y);
+                }
+            } else if (event.type == sf::Event::MouseMoved) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    sf::Vector2u screenResolution = sf::VideoMode::getDesktopMode().size;
+
+                    sf::Vector2u currentMousePosition = sf::Vector2u(event.mouseMove.x, event.mouseMove.y);
+                    double deltaX =
+                            (double) ((int) currentMousePosition.x - (int) lastMousePosition.x) /
+                            (double) screenResolution.x;
+                    double deltaY =
+                            (double) ((int) currentMousePosition.y - (int) lastMousePosition.y) /
+                            (double) screenResolution.y;
+
+                    Camera &camera = scene.GetCamera();
+                    camera.Rotate(deltaX * 2 * M_PI, deltaY * M_PI);
+                    lastMousePosition = currentMousePosition;
+                    resetContext = true;
+                }
             }
 
             if (event.type == sf::Event::KeyPressed) {
