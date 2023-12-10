@@ -11,7 +11,7 @@ namespace object {
         n_ = oa_ob_.Norm();
     }
 
-    //This does actually not need a point, have to think about this...
+    // The point parameter is not needed here
     Vector Parallelogram::Normal(const Vector &point) { return n_; }
 
     double Parallelogram::GetIntersectionDistance(const Ray &ray) {

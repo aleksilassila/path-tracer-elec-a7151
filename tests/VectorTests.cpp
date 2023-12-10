@@ -63,17 +63,11 @@ TEST_CASE("Testing vector length") {
     CHECK((vectorC.Len() == 14.7648230602334));
 }
 
-//todo normalise
 TEST_CASE("Testing transformation to unit vector") {
     Vector vectorA = Vector(1,1,1);
     Vector vectorB = Vector(-3,4,-5);
     Vector vectorC = Vector(5,-7,12);
     Vector vectorD = Vector(0,0,0);
-
-    Vector vector1 = vectorA.Norm();
-    Vector vector2 = vectorB.Norm();
-    Vector vector3 = vectorC.Norm();
-    Vector vector4 = vectorD.Norm();
 
     CHECK((vectorA.Norm() == Vector(0.57735026918962584, 0.57735026918962584, 0.57735026918962584)));
     CHECK((vectorB.Norm() == Vector(-0.42426406871192851, 0.56568542494923801, -0.70710678118654746)));
@@ -82,7 +76,6 @@ TEST_CASE("Testing transformation to unit vector") {
 }
 
 
-//todo refactor to only one dot/cross product function
 TEST_CASE("Testing dot product") {
     Vector vectorA = Vector(1,1,1);
     Vector vectorB = Vector(-3,2,-5);

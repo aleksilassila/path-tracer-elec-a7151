@@ -1,13 +1,12 @@
 #ifndef RAND_H
 #define RAND_H
 
-
 #include <random>
 #include <iostream>
 #include "vector.hpp"
 
 /**
- * Random number generation. Set of functions used for ray bounce direction
+ * Random number generation. Contains a set of functions used for ray bounce direction
  */
 namespace Random {
 

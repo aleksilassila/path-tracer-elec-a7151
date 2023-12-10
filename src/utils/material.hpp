@@ -13,11 +13,11 @@ class Material {
 private:
     sf::Color color_;
     double roughness_;
-    double specularIntensity_;     // How likely rays are to reflect specularly vs diffusely (0 to 1)
-    sf::Color specularColor_;     // Specular reflections color.
+    double specularIntensity_;      // How likely rays are to reflect specularly vs diffusely (0 to 1)
+    sf::Color specularColor_;       // Specular reflections color.
     Vector emission_;
     std::string name_;
-    double n_;  // Refractive index
+    double n_;                      // Refractive index
 
 public:
     explicit Material(
@@ -39,7 +39,6 @@ public:
     inline Vector GetEmission() const { return emission_; }
     inline double GetN() const { return n_; }
     inline const std::string& GetName() const { return name_; }
-
 
     /**
      * @brief
@@ -66,11 +65,13 @@ public:
     Vector FindDiffuseBounceDirection(Vector &normal, unsigned int randSeed) const;
 
     /**
-     * todo write description
+     * Calculates the odds of reflection and based on those odds plays dice if ray will be reflected.
+     * If reflected, returns a zero vector, and new ray direction will be decided by other methods.
+     * Otherwise finds refraction direction using Snells'law.
      *
      * @param ray
      * @param normal
-     * @return
+     * @return Vector
      */
     Vector FindRefractionDirection(Ray &ray, Vector &normal) const;
 

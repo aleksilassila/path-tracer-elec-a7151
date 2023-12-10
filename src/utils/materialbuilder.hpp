@@ -6,7 +6,7 @@
 #include "material.hpp"
 
 /**
- * The builder design pattern to keep Material class encapsulated
+ * Builder design pattern used for keeping Material class encapsulated and immutable
  */
 
 // A tiny bit unnecessary (simple setters would've been enough)

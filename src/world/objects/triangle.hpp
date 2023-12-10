@@ -5,7 +5,7 @@
 
 namespace object {
     /**
-     * Triangle class inherits from Object
+     * Triangle class that inherits from Object
      */
     class Triangle: public Object {
 
@@ -22,7 +22,6 @@ namespace object {
     public:
 
         Triangle(const Vector &origin, const Vector &a, const Vector &b, const Material &material);
-
         ~Triangle() override = default;
 
         /**

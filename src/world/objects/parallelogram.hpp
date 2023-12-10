@@ -5,7 +5,7 @@
 
 namespace object {
     /**
-     * Parallelogram class inherits from Object
+     * Parallelogram class that inherits from Object
      */
     class Parallelogram : public Object {
 
@@ -22,7 +22,6 @@ namespace object {
     public:
 
         Parallelogram(const Vector &origin, const Vector &a, const Vector &b, const Material &material);
-
         ~Parallelogram() override = default;
 
         /**

@@ -4,6 +4,10 @@
 #include "vector.hpp"
 #include <SFML/Graphics.hpp>
 
+
+/**
+ * Ray class for bundling information about a ray together
+ */
 class Ray {
 
 public:

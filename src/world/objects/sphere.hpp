@@ -6,7 +6,7 @@
 namespace object {
 
     /**
-     * Sphere class inherits from Object
+     * Sphere class that inherits from Object
      */
     class Sphere : public Object {
 
@@ -17,9 +17,7 @@ namespace object {
     public:
 
         Sphere(const Vector &origin, double radius);
-
         Sphere(const Vector &origin, double radius, const Material &material);
-
         ~Sphere() override = default;
 
         /**

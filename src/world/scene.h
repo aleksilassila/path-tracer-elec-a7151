@@ -1,7 +1,3 @@
-//
-// Created by Aleksi Lassila on 4.11.2023.
-//
-
 #ifndef PATHTRACER_SCENE_H
 #define PATHTRACER_SCENE_H
 
@@ -10,30 +6,27 @@
 #include "Objects/objects.hpp"
 #include "camera.h"
 
+/**
+ * Class for implementing a scene
+ * It bundles the camera and objects together
+ */
 class Scene {
 public:
     Scene() = default;
 
-    Scene(Camera &camera, std::initializer_list<std::shared_ptr<object::Object>> objects) : camera_(camera),
-                                                                                            objects_(objects) {}
-
+    Scene(Camera &camera, std::initializer_list<std::shared_ptr<object::Object>> objects)
+        : camera_(camera), objects_(objects) {}
     ~Scene() = default;
+
+    Camera &GetCamera() { return camera_; }
+    [[nodiscard]] std::vector<std::shared_ptr<object::Object>> GetObjects() const;
+    Vector GetAmbientLightDirection() const { return ambientLightDirection_; }
+
+    void SetAmbientLightDirection(Vector direction) { ambientLightDirection_ = direction.Norm(); }
 
     void AddObject(std::shared_ptr<object::Object> object);
 
     void RemoveObject(std::shared_ptr<object::Object> object);
-
-    [[nodiscard]] std::vector<std::shared_ptr<object::Object>> GetObjects() const;
-
-    void SetAmbientLightDirection(Vector direction) {
-        ambientLightDirection_ = direction.Norm();
-    }
-
-    Vector GetAmbientLightDirection() const {
-        return ambientLightDirection_;
-    }
-
-    Camera &GetCamera();
 
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 

@@ -1,18 +1,16 @@
-/*
-* Main file
-*/
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "utils/ray.hpp"
 #include "world/scene.h"
-#include "utils/material.hpp"
 #include "pathtracer.hpp"
 #include <vector>
 #include <thread>
 #include "utils/filemanager.hpp"
 
 const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
+
+/**
+ * The main file
+ */
 
 //void
 //renderIndexes(int startIndex, int endIndex, int frameCount, std::vector<sf::Vector3f> &colorBuffer,
@@ -41,6 +39,11 @@ const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() *
 //    }
 //}
 
+/**
+ * Loop that handles rendering
+ * @param windowSize
+ * @param scene
+ */
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
 
@@ -154,6 +157,9 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     }
 }
 
+/**
+ * Main function that reads from file and starts the rendering
+ */
 int main() {
     sf::Vector2u windowSize(400, 400);
 

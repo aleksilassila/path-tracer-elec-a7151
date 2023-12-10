@@ -42,11 +42,6 @@ Vector Material::FindDiffuseBounceDirection(Vector &normal, unsigned int randSee
 }
 
 Vector Material::FindRefractionDirection(Ray &ray, Vector &normal) const {
-
-   /**
-    * todo Implement refraction
-    *
-    */
     double n = n_;
     Vector ray_dir = ray.GetDirection().Norm();
     double dot_pro = ray_dir * normal;
@@ -58,9 +53,9 @@ Vector Material::FindRefractionDirection(Ray &ray, Vector &normal) const {
     double theta1 = std::acos(abs(dot_pro));
     double temp = std::sin(theta1) / n;
 
-    if (temp > 1) {     // Angle bigger than critical angle
-        return {Vector(0, 0, 0)};
-    }
+    // Angle bigger than critical angle
+    if (temp > 1) return {Vector(0, 0, 0)};
+
     double theta2 = std::asin(temp);
 
     // Parallel and perpendicular reflection coefficients for calculating the odds of reflection vs refraction
@@ -74,7 +69,7 @@ Vector Material::FindRefractionDirection(Ray &ray, Vector &normal) const {
     if (x < (total_refl * 1000)) return {Vector(0, 0, 0)};
 
     Vector surface_dir = (ray_dir + (normal * abs(dot_pro))).Norm();
-    Vector refr_dir = normal * -std::cos(theta2) +
-           surface_dir * std::sin(theta2);
+    Vector refr_dir = normal * -std::cos(theta2) + surface_dir * std::sin(theta2);
+
     return refr_dir;
 }

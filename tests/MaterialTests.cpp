@@ -3,7 +3,6 @@
 #include "../src/utils/material.hpp"
 #include "../src/utils/materialbuilder.hpp"
 
-// todo add tests for finding direction
 
 TEST_CASE("Testing getters") {
     auto material = Material();

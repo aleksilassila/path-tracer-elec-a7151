@@ -1,7 +1,3 @@
-//
-// Created by Aleksi Lassila on 5.11.2023.
-//
-
 #include "scene.h"
 
 void Scene::AddObject(std::shared_ptr<object::Object> object) {
@@ -24,8 +20,4 @@ std::ostream &operator<<(std::ostream &os, const Scene &scene) {
     }
 
     return os;
-}
-
-Camera &Scene::GetCamera() {
-    return camera_;
 }

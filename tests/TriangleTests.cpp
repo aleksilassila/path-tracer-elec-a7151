@@ -25,7 +25,7 @@ TEST_CASE("Testing normal") {
     CHECK((triangle.Normal(Vector(2, 1, 5)) == Vector(-0.39056673294247168, -0.91132237686576723, -0.13018891098082389)));
 }
 
-// todo ask about the intersection functions
+
 TEST_CASE("Testing intersection distance") {
     object::Triangle triangle = object::Triangle(
             Vector(0, 1, 0),

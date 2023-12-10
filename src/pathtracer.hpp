@@ -9,6 +9,10 @@
 #include "world/scene.h"
 #include "utils/rand.h"
 
+
+/**
+ * Struct that keeps information about a hit point
+ */
 struct HitInfo {
     bool hit; // did ray hit an object
     Vector point; // hit point
@@ -36,10 +40,9 @@ public:
 
     RenderContext(sf::Vector2u &dimensions, Scene &scene) : RenderContext(dimensions, scene, 12) {}
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces) : scene_(scene), dimensions_(dimensions),
-                                                                            maxBounces(maxBounces) {
-        image_.create(dimensions, sf::Color::Transparent);
-    }
+    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces)
+        : scene_(scene), dimensions_(dimensions), maxBounces(maxBounces)
+        { image_.create(dimensions, sf::Color::Transparent); }
 
     sf::Color GetPixel(sf::Vector2u pos) {
         std::lock_guard<std::mutex> lock(mutex);
@@ -67,6 +70,9 @@ public:
     }
 };
 
+/**
+ * The core class of this application which defines the rendering logic
+ */
 class PathTracer {
 
 private:
@@ -78,10 +84,8 @@ private:
     std::mutex imageMutex_;
 
 public:
-    PathTracer(sf::Vector2u &dimensions, Scene &scene) : context_(
-            std::make_shared<RenderContext>(dimensions, scene)
-    ) {}
-
+    PathTracer(sf::Vector2u &dimensions, Scene &scene)
+        : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
     ~PathTracer() = default;
 
     /**
