@@ -1,5 +1,6 @@
 #include "doctest.h"
 #include "../src/world/Objects/objects.hpp"
+#include "../src/world/objects/triangle.hpp"
 
 
 TEST_CASE("Testing getters") {
@@ -9,8 +10,8 @@ TEST_CASE("Testing getters") {
             Vector(1, 0, 4),
             Material()
     );
-    CHECK((triangle.getOrigin() == Vector(0, 1, 0)));
-    CHECK((triangle.GetMaterial().getName() == "default"));
+    CHECK((triangle.GetOrigin() == Vector(0, 1, 0)));
+    CHECK((triangle.GetMaterial().GetName() == "default"));
     CHECK((triangle.GetColor() == sf::Color::Magenta));
 }
 

@@ -1,13 +1,14 @@
 #include "doctest.h"
 #include "../src/world/Objects/objects.hpp"
+#include "../src/world/objects/sphere.hpp"
 
 
 // no radius getter
 TEST_CASE("Testing getters") {
     object::Sphere sphere = object::Sphere(Vector(), 3);
 
-    CHECK((sphere.getOrigin() == Vector(0, 0, 0)));
-    CHECK((sphere.GetMaterial().getName() == "default"));
+    CHECK((sphere.GetOrigin() == Vector(0, 0, 0)));
+    CHECK((sphere.GetMaterial().GetName() == "default"));
     CHECK((sphere.GetColor() == sf::Color::Magenta));
 }
 
