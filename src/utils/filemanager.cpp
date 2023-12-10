@@ -138,40 +138,42 @@ namespace FileManager {
         );
     }
 
-    // todo add try catch for failed or invalid input files
     Scene CreateScene(const std::string &inputPath) {
         std::string filePath = MY_FILE_PATH + std::string(inputPath);
         std::fstream file;
-        file.open(filePath,std::ios::in);
+        try {
+            file.open(filePath, std::ios::in);
+            json Data = json::parse(file);
 
-        std::cout << "File open: " << file.is_open() << " failed: " << file.fail() << std::endl;
+            Camera camera = CameraFromJSON(Data.at("camera"));
+            Scene scene = Scene(camera, {});
 
-        json Data = json::parse(file);
+            std::unordered_map<std::string, Material> materials;
+            for (size_t i = 0; i < Data.at("materials").size(); i++) {
+                materials[Data.at("materials")[i].at("name")] = MaterialFromJSON(Data.at("materials")[i]);
+            }
 
-        Camera camera = CameraFromJSON(Data.at("camera"));
-        Scene scene = Scene(camera, {});
+            for (size_t i = 0; i < Data.at("spheres").size(); i++) {
+                std::string materialName = Data.at("spheres")[i].at("materialName");
+                scene.AddObject(std::make_shared<object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialName])));
+            }
 
-        std::unordered_map<std::string, Material> materials;
-        for (size_t i = 0; i < Data.at("materials").size(); i++) {
-            materials[Data.at("materials")[i].at("name")] = MaterialFromJSON(Data.at("materials")[i]);
+            for (size_t i = 0; i < Data.at("triangles").size(); i++) {
+                std::string materialName = Data.at("triangles")[i].at("materialName");
+                scene.AddObject(std::make_shared<object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialName])));
+            }
+
+            for (size_t i = 0; i < Data.at("parallelograms").size(); i++) {
+                std::string materialName = Data.at("parallelograms")[i].at("materialName");
+                scene.AddObject(std::make_shared<object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialName])));
+            }
+            file.close();
+            return scene;
         }
-
-        for (size_t i = 0; i < Data.at("spheres").size(); i++) {
-            std::string materialName = Data.at("spheres")[i].at("materialName");
-            scene.AddObject(std::make_shared<object::Sphere>(SphereFromJSON(Data.at("spheres")[i], materials[materialName])));
+        catch (...)
+        {
+            std::cerr << "Exception opening or reading file\n";
         }
-
-        for (size_t i = 0; i < Data.at("triangles").size(); i++) {
-            std::string materialName = Data.at("triangles")[i].at("materialName");
-            scene.AddObject(std::make_shared<object::Triangle>(TriangleFromJSON(Data.at("triangles")[i], materials[materialName])));
-        }
-
-        for (size_t i = 0; i < Data.at("parallelograms").size(); i++) {
-            std::string materialName = Data.at("parallelograms")[i].at("materialName");
-            scene.AddObject(std::make_shared<object::Parallelogram>(ParallelogramFromJSON(Data.at("parallelograms")[i], materials[materialName])));
-        }
-
-        return scene;
     }
 
 }
