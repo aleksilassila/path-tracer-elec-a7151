@@ -105,27 +105,35 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     } else if (event.key.code == sf::Keyboard::W) {
                         camera.MoveForward();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::S) {
                         camera.MoveBackward();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::A) {
                         camera.MoveLeft();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::D) {
                         camera.MoveRight();
                         resetContext = true;
-                    } else if (event.key.code == sf::Keyboard::Q) {
+                        renderPreviewFrame = true;
+                    } else if (event.key.code == sf::Keyboard::E) {
                         camera.MoveUpAlongYaxis();
                         resetContext = true;
-                    } else if (event.key.code == sf::Keyboard::E) {
+                        renderPreviewFrame = true;
+                    } else if (event.key.code == sf::Keyboard::Q) {
                         camera.MoveDownAlongYaxis();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::Y) {
                         camera.MoveUp();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::H) {
                         camera.MoveDown();
                         resetContext = true;
+                        renderPreviewFrame = true;
 
                         // Set moving speed and angle change amount
                     } else if (event.key.code == sf::Keyboard::U) {
@@ -137,6 +145,14 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     } else if (event.key.code == sf::Keyboard::L) {
                         camera.DecrementMoveSpeed();
                     }
+                }
+            } else if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S ||
+                    event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D ||
+                    event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::E ||
+                    event.key.code == sf::Keyboard::Y || event.key.code == sf::Keyboard::H) {
+                    renderPreviewFrame = false;
+                    resetContext = true;
                 }
             }
 
