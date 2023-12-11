@@ -107,8 +107,7 @@ public:
     ~PathTracer() = default;
 
     sf::Image GetLatestImage() {
-        std::lock_guard<std::mutex> lock(imageMutex_);
-        return image_;
+        return context_->GetImage();
     }
 
     void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene) {
@@ -116,7 +115,7 @@ public:
         context_ = std::make_shared<RenderContext>(dimensions, scene);
     }
 
-    void Draw(sf::RenderWindow &window, sf::Image &image) {
+    static void Draw(sf::RenderWindow &window, sf::Image &image) {
         if (image.getSize().x != 0 && image.getSize().y != 0) {
             sf::Texture texture;
             bool textureDidLoad = texture.loadFromImage(image);

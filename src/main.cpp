@@ -83,7 +83,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     sf::Image image = tracer.GetLatestImage();
-                    FileManager::SaveRenderImage("out.png", image);
+                    std::string filename = "out-" + std::to_string(std::time(nullptr)) + ".png";
+                    FileManager::SaveRenderImage(filename, image);
                 } else {
                     Camera &camera = scene.GetCamera();
 
