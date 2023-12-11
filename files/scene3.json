@@ -1,0 +1,177 @@
+{
+  "camera": {
+    "position": [0.0, 0.0, 0.0],
+    "viewPlaneDistance": 6.0,
+    "yaw": 0.0,
+    "pitch": 0.0,
+    "target": [0.0, 0.0, 70.0],
+    "fov": 80.0
+  },
+  "materials": [
+    {
+      "color": [200, 100, 40],
+      "roughness": 0.4,
+      "specularIntensity": 0.4,
+      "name": "Orange"
+    },
+    {
+      "color": [255, 255, 255],
+      "roughness": 0.07,
+      "specularIntensity": 0.9,
+      "n": 1.5,
+      "name": "White Glass"
+    },
+    {
+      "color": [15, 82, 186],
+      "roughness": 0.07,
+      "specularIntensity": 0.9,
+      "n": 1.77,
+      "name": "Sapphire"
+    },
+    {
+      "color": [255, 255, 255],
+      "roughness": 0.07,
+      "specularIntensity": 0.9,
+      "n": 2.42,
+      "name": "Diamond"
+    },
+    {
+      "color": [0, 255, 255],
+      "roughness": 0.75,
+      "specularIntensity": 0.3,
+      "name": "Cyan"
+    },
+    {
+      "color": [50, 100, 250],
+      "roughness": 0.7,
+      "specularIntensity": 0.0,
+      "name": "Blue"
+    },
+    {
+      "color": [200, 60, 200],
+      "roughness": 0.6,
+      "specularIntensity": 0.0,
+      "name": "Pink"
+    },
+    {
+      "color": [200, 200, 200],
+      "roughness": 1.0,
+      "specularIntensity": 0.0,
+      "name": "Grey"
+    },
+    {
+      "color": [144, 20, 10],
+      "roughness": 0.75,
+      "specularIntensity": 0.0,
+      "name": "Red"
+    },
+    {
+      "color": [255, 255, 255],
+      "roughness": 0.75,
+      "specularIntensity": 0.3,
+      "emission": [0.2,0.2,0.2],
+      "name": "White"
+    },
+    {
+      "color": [245, 245, 245],
+      "roughness": 0.008,
+      "specularIntensity": 1.0,
+      "name": "Mirror"
+    },
+    {
+      "color": [240, 240, 240],
+      "roughness": 0.3,
+      "specularIntensity": 0.3,
+      "specularColor": [255, 255, 255],
+      "name": "Silver"
+    },
+    {
+      "color": [250, 250, 10],
+      "roughness": 0.16,
+      "specularIntensity": 1.0,
+      "specularColor": [250, 250, 10],
+      "emission": [0.5, 0.5, 0.5],
+      "name": "Yellow Metallic"
+    },
+    {
+      "color": [0, 0, 0],
+      "roughness": 0.5,
+      "specularIntensity": 0.5,
+      "specularColor": [0, 0, 0],
+      "emission": [1.0, 1.0, 1.0],
+      "name": "Light"
+    }
+  ],
+  "spheres": [
+    {
+      "origin": [0, 4005.1, 10.0],
+      "radius": 4000,
+      "materialName": "White"
+    },
+    {
+      "origin": [-2.0, -0.0, 4.0],
+      "radius": 0.7,
+      "materialName": "White Glass"
+    },
+    {
+      "origin": [2.0, 0.0, 4.0],
+      "radius": 0.7,
+      "materialName": "Diamond"
+    },
+    {
+      "origin": [-7.0, -2.0, 44.0],
+      "radius": 4.0,
+      "materialName": "Sapphire"
+    },
+    {
+      "origin": [0.0, 0.0, 5.0],
+      "radius": 0.8,
+      "materialName": "Mirror"
+    },
+    {
+      "origin": [-5.0, -1.0, 36.0],
+      "radius": 2.0,
+      "materialName": "Silver"
+    }
+  ],
+  "triangles": [
+  ],
+  "parallelograms": [
+    {
+      "origin": [5.0, 5, -2.0],
+      "a": [5, 5.0, 20.0],
+      "b": [5, -1.0, -2.0],
+      "materialName": "Blue"
+    },
+    {
+      "origin": [-5.0, 5, -2.0],
+      "b": [-5, 5.0, 20.0],
+      "a": [-5, -1.0, -2.0],
+      "materialName": "Red"
+    },
+    {
+      "origin": [5.0, 5, -2.0],
+      "a": [-5, 5.0, -2.0],
+      "b": [5, -1.0, -2.0],
+      "materialName": "White"
+    },
+    {
+      "origin": [5.0, 5, 15.0],
+      "a": [-5, 5.0, 15.0],
+      "b": [5, -1.0, 15.0],
+      "materialName": "White"
+    },
+    {
+      "origin": [5.0, 5, -2.0],
+      "b": [5, 5.0, 20.0],
+      "a": [-5, 5.0, -2.0],
+      "materialName": "Light"
+    },
+    {
+      "origin": [5.0, -1, -2.0],
+      "b": [5, -1, 20.0],
+      "a": [-5, -1, -2.0],
+      "materialName": "White"
+    }
+  ]
+}

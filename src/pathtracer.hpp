@@ -182,6 +182,9 @@ private:
                     }
                 }
                 if (newRayDir == Vector(0, 0, 0)) {
+                    if (normal * ray_.GetDirection() > 0) {
+                        normal = normal * (-1);
+                    }
                     // Handle diffuse and specular reflections
                     double specularChance = Random::GetRandomDoubleUniform(0.0, 1.0,
                                                                            static_cast<unsigned int> (u * v * randSeed *
