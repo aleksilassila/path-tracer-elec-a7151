@@ -93,15 +93,19 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     if (event.key.code == sf::Keyboard::Left) {
                         camera.LookRight();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::Right) {
                         camera.LookLeft();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::Up) {
                         camera.LookUp();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::Down) {
                         camera.LookDown();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::W) {
                         camera.MoveForward();
                         resetContext = true;
@@ -150,7 +154,9 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S ||
                     event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D ||
                     event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::E ||
-                    event.key.code == sf::Keyboard::Y || event.key.code == sf::Keyboard::H) {
+                    event.key.code == sf::Keyboard::Y || event.key.code == sf::Keyboard::H ||
+                    event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right ||
+                    event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down) {
                     renderPreviewFrame = false;
                     resetContext = true;
                 }
