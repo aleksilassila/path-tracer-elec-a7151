@@ -21,10 +21,10 @@ private:
 
 public:
     explicit Material(
-            sf::Color color = sf::Color::Magenta,
+            sf::Color color = sf::Color(255,0,255),
             double roughness = 0.5,
             double specularIntensity = 0.5,
-            sf::Color specularColour = sf::Color::White,
+            sf::Color specularColour = sf::Color(255,255,255),
             Vector emission = Vector(),
             double n = 1,
             const std::string& name = "default"

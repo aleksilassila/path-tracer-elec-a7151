@@ -55,7 +55,7 @@ namespace FileManager {
      * @return Vector
      */
     auto VectorFromJSON(const json& j, const std::string& name) {
-        auto vec = j[name].get<std::vector<int>>();
+        auto vec = j[name].get<std::vector<double>>();
         return Vector(vec[0], vec[1], vec[2]);
     }
 
@@ -174,6 +174,7 @@ namespace FileManager {
         {
             std::cerr << "Exception opening or reading file\n";
         }
+        return {};
     }
 
 }
