@@ -104,7 +104,7 @@ private:
 
 public:
     PathTracer(sf::Vector2u &dimensions, Scene &scene)
-            : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
+            : context_(std::make_shared<RenderContext>(dimensions, scene, true)) {}
 
     ~PathTracer() = default;
 

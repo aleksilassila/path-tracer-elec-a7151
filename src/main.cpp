@@ -32,6 +32,8 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         tracer.Renderer(window);
     });
 
+    tracer.UpdateRenderContext(windowSize, scene, false);
+
     auto lastMousePosition = sf::Vector2u(0, 0);
     // Update loop
     while (window.isOpen()) {
