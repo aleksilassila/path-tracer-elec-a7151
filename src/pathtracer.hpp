@@ -123,28 +123,20 @@ public:
      * @param window
      */
     void Renderer(sf::RenderWindow &window) {
-        unsigned int frameTime = 2000;
         while (window.isOpen()) {
             std::shared_ptr<RenderContext> context = context_;
             bool isPreviewFrame = context->isPreview_;
-            auto start = std::chrono::high_resolution_clock::now();
 
             std::thread threads[threadCount];
             for (int i = 0; i < threadCount; i++) {
                 unsigned int startIndex = i * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
                 unsigned int endIndex =
                         (i + 1) * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
-                float resolution = isPreviewFrame ? ((1000 / ((float) REAL_TIME_TARGET_FPS)) / ((float) frameTime)) : 1;
                 threads[i] = std::thread(RenderWorker, startIndex, endIndex, context, isPreviewFrame);
             }
 
             for (int i = 0; i < threadCount; i++) {
                 threads[i].join();
-            }
-
-            if (!isPreviewFrame) {
-                frameTime = std::chrono::duration_cast<std::chrono::milliseconds>(
-                        std::chrono::high_resolution_clock::now() - start).count();
             }
 
             std::lock_guard<std::mutex> lock(imageMutex_);
