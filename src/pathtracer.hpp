@@ -139,9 +139,19 @@ public:
                 threads[i].join();
             }
 
-            std::lock_guard<std::mutex> lock(imageMutex_);
-            image_ = context->GetImage();
             context->frameCount++;
+            sf::Image image = context->GetImage();
+            if (image.getSize().x != 0 && image.getSize().y != 0) {
+                sf::Texture texture;
+                bool textureDidLoad = texture.loadFromImage(image);
+                if (!textureDidLoad) continue;
+
+                sf::Sprite sprite(texture);
+
+                window.clear();
+                window.draw(sprite);
+                window.display();
+            }
         }
     }
 
@@ -302,7 +312,7 @@ private:
         std::shuffle(indexes.begin(), indexes.end(), g);
 
         for (unsigned int i: indexes) {
-            if (context->cancelled) {
+            if (!isPreview && context->cancelled) {
                 break;
             }
 

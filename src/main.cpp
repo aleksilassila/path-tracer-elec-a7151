@@ -26,6 +26,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
     PathTracer tracer(windowSize, scene);
 
+    window.setActive(false);
     // Start render thread
     std::thread renderer([&tracer, &window]() {
         tracer.Renderer(window);
@@ -144,22 +145,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                 tracer.UpdateRenderContext(windowSize, scene, renderPreviewFrame);
             }
         }
-
-        sf::Image image = tracer.GetLatestImage();
-        if (image.getSize().x == 0 || image.getSize().y == 0) {
-            continue;
-        }
-
-        sf::Texture texture;
-        bool textureDidLoad = texture.loadFromImage(image);
-        if (!textureDidLoad) continue;
-
-        sf::Sprite sprite(texture);
-//        sprite.setScale(sf::Vector2f(4, 4));
-
-        window.clear();
-        window.draw(sprite);
-        window.display();
     }
 }
 
