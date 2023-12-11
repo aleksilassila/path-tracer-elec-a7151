@@ -39,6 +39,7 @@ public:
     std::atomic<int> frameCount = 0;
     std::atomic<int> maxBounces = 12;
     const std::atomic<bool> isPreview_;
+    std::atomic<bool> cancelled = false;
 
     RenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) : RenderContext(dimensions, scene, 12,
                                                                                                   isPreview) {}
@@ -113,6 +114,7 @@ public:
     }
 
     void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) {
+        context_->cancelled = true;
         context_ = std::make_shared<RenderContext>(dimensions, scene, isPreview);
     }
 
@@ -133,7 +135,7 @@ public:
                 unsigned int endIndex =
                         (i + 1) * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
                 float resolution = isPreviewFrame ? ((1000 / ((float) REAL_TIME_TARGET_FPS)) / ((float) frameTime)) : 1;
-                threads[i] = std::thread(RenderWorker, startIndex, endIndex, context, resolution);
+                threads[i] = std::thread(RenderWorker, startIndex, endIndex, context, isPreviewFrame);
             }
 
             for (int i = 0; i < threadCount; i++) {
@@ -288,22 +290,38 @@ private:
      */
     static void
     RenderWorker(unsigned int startPixelIndex, unsigned int endPixelIndex, std::shared_ptr<RenderContext> context,
-                 float resolution = 1) {
+                 bool isPreview = false) {
         auto dimensions = context->GetDimensions();
         auto scene = context->GetScene();
         int frameCount = context->frameCount;
         int maxBounces = context->maxBounces;
 
         double aspectRatio = (double) dimensions.x / dimensions.y;
+        auto startTime = std::chrono::high_resolution_clock::now();
 
-        for (unsigned int i = startPixelIndex; i < endPixelIndex; i++) {
+
+        std::vector<int> indexes(endPixelIndex - startPixelIndex);
+
+        std::iota(indexes.begin(), indexes.end(), startPixelIndex);
+
+        std::random_device rd;
+        std::mt19937 g(rd());
+
+        std::shuffle(indexes.begin(), indexes.end(), g);
+
+        for (unsigned int i: indexes) {
+            if (context->cancelled) {
+                break;
+            }
+
+            auto timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::high_resolution_clock::now() - startTime).count();
+            if (isPreview && timeElapsed > 1000 / REAL_TIME_TARGET_FPS) {
+                break;
+            }
+
             unsigned int x = i % dimensions.x;
             unsigned int y = i / dimensions.x;
-
-            if (resolution < 1 &&
-                Random::GetRandomDoubleUniform(0.0, 1.0, i * frameCount * 456789) > resolution) {
-                continue;
-            }
 
             double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
             double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);

@@ -10,6 +10,8 @@
  * The main file
  */
 
+#define WINDOW_TARGET_FPS 60.0
+
 
 const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
 
@@ -20,6 +22,7 @@ const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() *
  */
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
+    window.setFramerateLimit(WINDOW_TARGET_FPS);
 
     PathTracer tracer(windowSize, scene);
 
@@ -29,7 +32,6 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     });
 
     auto lastMousePosition = sf::Vector2u(0, 0);
-
     // Update loop
     while (window.isOpen()) {
         sf::Event event;

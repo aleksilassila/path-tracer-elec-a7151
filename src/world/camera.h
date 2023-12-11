@@ -22,9 +22,13 @@ public:
             pitch_(pitch) {}
 
     Vector GetPosition() { return position_; }
+
     [[nodiscard]] double GetViewPlaneDistance() const { return viewPlaneDistance_; }
+
     [[nodiscard]] double GetYaw() const { return yaw_; }
+
     [[nodiscard]] double GetPitch() const { return pitch_; }
+
     [[nodiscard]] double GetFovDeg() const { return std::atan(1 / viewPlaneDistance_) * 360 / M_PI; }
 
     void SetViewPlaneDistance(double viewPlaneDistance) { viewPlaneDistance_ = viewPlaneDistance; }
@@ -33,6 +37,7 @@ public:
         yaw_ = std::fmod(yaw, 2 * M_PI);
         UpdateCamera_();
     }
+
     void SetPitch(double pitch) {
         pitch_ = std::clamp(pitch, -M_PI / 2, M_PI / 2);
         UpdateCamera_();
@@ -107,8 +112,8 @@ public:
         std::cout.setf(std::ios::fixed);
         std::cout.setf(std::ios::showpoint);
         std::cout.precision(2);
-        std::cout << "Yaw: " << yaw_ / M_PI * 180 << std::endl;
-        std::cout << "Pitch: " << pitch_ / M_PI * 180 << std::endl;
+//        std::cout << "Yaw: " << yaw_ / M_PI * 180 << std::endl;
+//        std::cout << "Pitch: " << pitch_ / M_PI * 180 << std::endl;
     }
 
     void Move(double x, double y, double z) { position_ += Vector(x, y, z); }
