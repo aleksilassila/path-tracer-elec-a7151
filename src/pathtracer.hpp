@@ -118,6 +118,20 @@ public:
         context_ = std::make_shared<RenderContext>(dimensions, scene, isPreview);
     }
 
+    void Draw(sf::RenderWindow &window, sf::Image &image) {
+        if (image.getSize().x != 0 && image.getSize().y != 0) {
+            sf::Texture texture;
+            bool textureDidLoad = texture.loadFromImage(image);
+            if (!textureDidLoad) return;
+
+            sf::Sprite sprite(texture);
+
+            window.clear();
+            window.draw(sprite);
+            window.display();
+        }
+    }
+
     /**
      * This function runs inside a thread and continuously renders an image based on the rendering context.
      * @param window
@@ -127,12 +141,35 @@ public:
             std::shared_ptr<RenderContext> context = context_;
             bool isPreviewFrame = context->isPreview_;
 
+            std::vector<int> indexes(context->GetDimensions().x * context->GetDimensions().y);
+            std::iota(indexes.begin(), indexes.end(), 0);
+
+            std::random_device rd;
+            std::mt19937 g(rd());
+
+            std::shuffle(indexes.begin(), indexes.end(), g);
+
             std::thread threads[threadCount];
+            std::vector<std::atomic<bool>> isDone(threadCount);
             for (int i = 0; i < threadCount; i++) {
-                unsigned int startIndex = i * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
-                unsigned int endIndex =
-                        (i + 1) * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
-                threads[i] = std::thread(RenderWorker, startIndex, endIndex, context, isPreviewFrame);
+                auto threadIndexes = std::vector<int>(indexes.begin() + i * indexes.size() / threadCount,
+                                                      indexes.begin() + (i + 1) * indexes.size() / threadCount);
+
+                threads[i] = std::thread(RenderWorker, threadIndexes, context, std::ref(isDone[i]), isPreviewFrame);
+            }
+
+            while (true) {
+                bool allDone = true;
+                for (int i = 0; i < threadCount; i++) {
+                    if (!isDone[i]) {
+                        allDone = false;
+                        break;
+                    }
+                }
+                if (allDone) break;
+                sf::Image image = context->GetImage();
+                Draw(window, image);
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / REAL_TIME_TARGET_FPS));
             }
 
             for (int i = 0; i < threadCount; i++) {
@@ -141,17 +178,7 @@ public:
 
             context->frameCount++;
             sf::Image image = context->GetImage();
-            if (image.getSize().x != 0 && image.getSize().y != 0) {
-                sf::Texture texture;
-                bool textureDidLoad = texture.loadFromImage(image);
-                if (!textureDidLoad) continue;
-
-                sf::Sprite sprite(texture);
-
-                window.clear();
-                window.draw(sprite);
-                window.display();
-            }
+            Draw(window, image);
         }
     }
 
@@ -294,7 +321,7 @@ private:
      * @param context Rendering context from which to copy values
      */
     static void
-    RenderWorker(unsigned int startPixelIndex, unsigned int endPixelIndex, std::shared_ptr<RenderContext> context,
+    RenderWorker(std::vector<int> indexes, std::shared_ptr<RenderContext> context, std::atomic<bool> &isDone,
                  bool isPreview = false) {
         auto dimensions = context->GetDimensions();
         auto scene = context->GetScene();
@@ -303,16 +330,6 @@ private:
 
         double aspectRatio = (double) dimensions.x / dimensions.y;
         auto startTime = std::chrono::high_resolution_clock::now();
-
-
-        std::vector<int> indexes(endPixelIndex - startPixelIndex);
-
-        std::iota(indexes.begin(), indexes.end(), startPixelIndex);
-
-        std::random_device rd;
-        std::mt19937 g(rd());
-
-        std::shuffle(indexes.begin(), indexes.end(), g);
 
         for (unsigned int i: indexes) {
             if (!isPreview && context->cancelled) {
@@ -338,58 +355,9 @@ private:
             auto average = context->AverageColor(pixel, nextColor);
 
             context->SetPixel(pixel, average);
-
-//            // Accumulate rays
-//            if (frameCount == 0) {
-//                context->SetPixel(pixel, nextColor);
-//            } else {
-//                sf::Color previousColor = context->GetPixel(pixel);
-//
-//                context->SetPixel(pixel,
-//                                  sf::Color(
-//                                          (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-//                                          (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-//                                          (previousColor.b * (frameCount) + nextColor.b) /
-//                                          (frameCount + 1)));
-//            }
         }
 
-//        for (unsigned int x = threadIndex; x < dimensions.x; x += threadCount) {
-//            for (unsigned int y = 0; y < dimensions.y; y++) {
-//                if (isPreview) {
-//                    // Skip frames based on realTimeResolution and modulo pos
-//                    if ((y % (int) (1 / realTimeResolution_) != 0) ||
-//                        (x % (int) (1 / realTimeResolution_) != 0)) {
-//                        continue;
-//                    }
-//                }
-//
-//                double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
-//                double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
-//
-//                sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, maxBounces);
-//
-//                sf::Vector2u pixel(x, y);
-//
-//                auto average = context->AverageColor(pixel, nextColor);
-//
-//                context->SetPixel(pixel, average);
-//
-////                // Accumulate rays
-////                if (frameCount == 0) {
-////                    context->SetPixel(pixel, nextColor);
-////                } else {
-////                    sf::Color previousColor = context->GetPixel(pixel);
-////
-////                    context->SetPixel(pixel,
-////                                      sf::Color(
-////                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-////                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-////                                              (previousColor.b * (frameCount) + nextColor.b) /
-////                                              (frameCount + 1)));
-////                }
-//            }
-//        }
+        isDone = true;
     }
 };
 
