@@ -35,6 +35,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
         sf::Event event;
         while (window.pollEvent(event)) {
             bool resetContext = false;
+            bool renderPreviewFrame = false;
 
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -50,14 +51,20 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
+//                if (event.mouseButton.button == sf::Mouse::Left) {
+//                    lastMousePosition = sf::Vector2u(event.mouseButton.x, event.mouseButton.y);
+//
+//                }
+            } else if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    lastMousePosition = sf::Vector2u(event.mouseButton.x, event.mouseButton.y);
+                    renderPreviewFrame = false;
+                    resetContext = true;
                 }
             } else if (event.type == sf::Event::MouseMoved) {
+                sf::Vector2u currentMousePosition = sf::Vector2u(event.mouseMove.x, event.mouseMove.y);
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     sf::Vector2u screenResolution = sf::VideoMode::getDesktopMode().size;
 
-                    sf::Vector2u currentMousePosition = sf::Vector2u(event.mouseMove.x, event.mouseMove.y);
                     double deltaX =
                             (double) ((int) currentMousePosition.x - (int) lastMousePosition.x) /
                             (double) screenResolution.x;
@@ -67,9 +74,10 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
                     Camera &camera = scene.GetCamera();
                     camera.Rotate(deltaX * 2 * M_PI, deltaY * M_PI);
-                    lastMousePosition = currentMousePosition;
                     resetContext = true;
+                    renderPreviewFrame = true;
                 }
+                lastMousePosition = currentMousePosition;
             }
 
             if (event.type == sf::Event::KeyPressed) {
@@ -131,7 +139,7 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
             // If the camera has moved, send the new render context to the renderer thread
             if (resetContext) {
-                tracer.UpdateRenderContext(windowSize, scene);
+                tracer.UpdateRenderContext(windowSize, scene, renderPreviewFrame);
             }
         }
 
