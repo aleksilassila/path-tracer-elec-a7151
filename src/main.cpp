@@ -10,6 +10,8 @@
  * The main file
  */
 
+#define WINDOW_TARGET_FPS 60.0
+
 
 const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
 
@@ -20,21 +22,23 @@ const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() *
  */
 void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
     sf::RenderWindow window(sf::VideoMode(windowSize, 32), "SFML Window");
+    window.setFramerateLimit(WINDOW_TARGET_FPS);
 
     PathTracer tracer(windowSize, scene);
 
+    window.setActive(false);
     // Start render thread
     std::thread renderer([&tracer, &window]() {
         tracer.Renderer(window);
     });
 
     auto lastMousePosition = sf::Vector2u(0, 0);
-
     // Update loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             bool resetContext = false;
+            bool renderPreviewFrame = false;
 
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -50,14 +54,20 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
+//                if (event.mouseButton.button == sf::Mouse::Left) {
+//                    lastMousePosition = sf::Vector2u(event.mouseButton.x, event.mouseButton.y);
+//
+//                }
+            } else if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    lastMousePosition = sf::Vector2u(event.mouseButton.x, event.mouseButton.y);
+                    renderPreviewFrame = false;
+                    resetContext = true;
                 }
             } else if (event.type == sf::Event::MouseMoved) {
+                sf::Vector2u currentMousePosition = sf::Vector2u(event.mouseMove.x, event.mouseMove.y);
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     sf::Vector2u screenResolution = sf::VideoMode::getDesktopMode().size;
 
-                    sf::Vector2u currentMousePosition = sf::Vector2u(event.mouseMove.x, event.mouseMove.y);
                     double deltaX =
                             (double) ((int) currentMousePosition.x - (int) lastMousePosition.x) /
                             (double) screenResolution.x;
@@ -67,9 +77,10 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
 
                     Camera &camera = scene.GetCamera();
                     camera.Rotate(deltaX * 2 * M_PI, deltaY * M_PI);
-                    lastMousePosition = currentMousePosition;
                     resetContext = true;
+                    renderPreviewFrame = true;
                 }
+                lastMousePosition = currentMousePosition;
             }
 
             if (event.type == sf::Event::KeyPressed) {
@@ -94,27 +105,35 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                     } else if (event.key.code == sf::Keyboard::W) {
                         camera.MoveForward();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::S) {
                         camera.MoveBackward();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::A) {
                         camera.MoveLeft();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::D) {
                         camera.MoveRight();
                         resetContext = true;
-                    } else if (event.key.code == sf::Keyboard::Q) {
+                        renderPreviewFrame = true;
+                    } else if (event.key.code == sf::Keyboard::E) {
                         camera.MoveUpAlongYaxis();
                         resetContext = true;
-                    } else if (event.key.code == sf::Keyboard::E) {
+                        renderPreviewFrame = true;
+                    } else if (event.key.code == sf::Keyboard::Q) {
                         camera.MoveDownAlongYaxis();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::Y) {
                         camera.MoveUp();
                         resetContext = true;
+                        renderPreviewFrame = true;
                     } else if (event.key.code == sf::Keyboard::H) {
                         camera.MoveDown();
                         resetContext = true;
+                        renderPreviewFrame = true;
 
                         // Set moving speed and angle change amount
                     } else if (event.key.code == sf::Keyboard::U) {
@@ -127,29 +146,21 @@ void renderLoop(sf::Vector2u &windowSize, Scene &scene) {
                         camera.DecrementMoveSpeed();
                     }
                 }
+            } else if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S ||
+                    event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D ||
+                    event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::E ||
+                    event.key.code == sf::Keyboard::Y || event.key.code == sf::Keyboard::H) {
+                    renderPreviewFrame = false;
+                    resetContext = true;
+                }
             }
 
             // If the camera has moved, send the new render context to the renderer thread
             if (resetContext) {
-                tracer.UpdateRenderContext(windowSize, scene);
+                tracer.UpdateRenderContext(windowSize, scene, renderPreviewFrame);
             }
         }
-
-        sf::Image image = tracer.GetLatestImage();
-        if (image.getSize().x == 0 || image.getSize().y == 0) {
-            continue;
-        }
-
-        sf::Texture texture;
-        bool textureDidLoad = texture.loadFromImage(image);
-        if (!textureDidLoad) continue;
-
-        sf::Sprite sprite(texture);
-//        sprite.setScale(sf::Vector2f(4, 4));
-
-        window.clear();
-        window.draw(sprite);
-        window.display();
     }
 }
 

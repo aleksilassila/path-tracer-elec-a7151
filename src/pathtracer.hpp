@@ -9,6 +9,7 @@
 #include "world/scene.h"
 #include "utils/rand.h"
 
+#define REAL_TIME_TARGET_FPS 15
 
 /**
  * Struct that keeps information about a hit point
@@ -37,12 +38,16 @@ private:
 public:
     std::atomic<int> frameCount = 0;
     std::atomic<int> maxBounces = 12;
+    const std::atomic<bool> isPreview_;
+    std::atomic<bool> cancelled = false;
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene) : RenderContext(dimensions, scene, 12) {}
+    RenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) : RenderContext(dimensions, scene, 12,
+                                                                                                  isPreview) {}
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces)
-        : scene_(scene), dimensions_(dimensions), maxBounces(maxBounces)
-        { image_.create(dimensions, sf::Color::Transparent); }
+    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces, bool isPreview = false)
+            : scene_(scene), dimensions_(dimensions), isPreview_(isPreview), maxBounces(maxBounces) {
+        image_.create(dimensions, sf::Color::Transparent);
+    }
 
     sf::Color GetPixel(sf::Vector2u pos) {
         std::lock_guard<std::mutex> lock(mutex);
@@ -91,6 +96,7 @@ class PathTracer {
 private:
 
     const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
+    constexpr const static float realTimeResolution_ = 0.1;
     std::shared_ptr<RenderContext> context_;
 
     sf::Image image_;
@@ -98,7 +104,8 @@ private:
 
 public:
     PathTracer(sf::Vector2u &dimensions, Scene &scene)
-        : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
+            : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
+
     ~PathTracer() = default;
 
     sf::Image GetLatestImage() {
@@ -106,8 +113,9 @@ public:
         return image_;
     }
 
-    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene) {
-        context_ = std::make_shared<RenderContext>(dimensions, scene);
+    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) {
+        context_->cancelled = true;
+        context_ = std::make_shared<RenderContext>(dimensions, scene, isPreview);
     }
 
     /**
@@ -117,19 +125,33 @@ public:
     void Renderer(sf::RenderWindow &window) {
         while (window.isOpen()) {
             std::shared_ptr<RenderContext> context = context_;
+            bool isPreviewFrame = context->isPreview_;
 
             std::thread threads[threadCount];
             for (int i = 0; i < threadCount; i++) {
-                threads[i] = std::thread(RenderWorker, i, threadCount, context);
+                unsigned int startIndex = i * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
+                unsigned int endIndex =
+                        (i + 1) * (context->GetDimensions().x * context->GetDimensions().y) / threadCount;
+                threads[i] = std::thread(RenderWorker, startIndex, endIndex, context, isPreviewFrame);
             }
 
             for (int i = 0; i < threadCount; i++) {
                 threads[i].join();
             }
 
-            std::lock_guard<std::mutex> lock(imageMutex_);
-            image_ = context->GetImage();
             context->frameCount++;
+            sf::Image image = context->GetImage();
+            if (image.getSize().x != 0 && image.getSize().y != 0) {
+                sf::Texture texture;
+                bool textureDidLoad = texture.loadFromImage(image);
+                if (!textureDidLoad) continue;
+
+                sf::Sprite sprite(texture);
+
+                window.clear();
+                window.draw(sprite);
+                window.display();
+            }
         }
     }
 
@@ -272,49 +294,102 @@ private:
      * @param context Rendering context from which to copy values
      */
     static void
-    RenderWorker(int threadIndex, int threadCount, std::shared_ptr<RenderContext> context) {
+    RenderWorker(unsigned int startPixelIndex, unsigned int endPixelIndex, std::shared_ptr<RenderContext> context,
+                 bool isPreview = false) {
         auto dimensions = context->GetDimensions();
-//        auto &colorBuffer = context->colorBuffer;
         auto scene = context->GetScene();
         int frameCount = context->frameCount;
         int maxBounces = context->maxBounces;
 
-//        double resolution = 0.5;
-
         double aspectRatio = (double) dimensions.x / dimensions.y;
-        for (unsigned int x = threadIndex; x < dimensions.x; x += threadCount) {
-            for (unsigned int y = 0; y < dimensions.y; y++) {
-//                if (Random::GetRandomDoubleUniform(0.0, 1.0,
-//                                                   frameCount) > resolution) {
-//                    continue;
-//                }
+        auto startTime = std::chrono::high_resolution_clock::now();
 
-                double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
-                double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
 
-                sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, maxBounces);
+        std::vector<int> indexes(endPixelIndex - startPixelIndex);
 
-                sf::Vector2u pixel(x, y);
+        std::iota(indexes.begin(), indexes.end(), startPixelIndex);
 
-                auto average = context->AverageColor(pixel, nextColor);
+        std::random_device rd;
+        std::mt19937 g(rd());
 
-                context->SetPixel(pixel, average);
+        std::shuffle(indexes.begin(), indexes.end(), g);
 
-//                // Accumulate rays
-//                if (frameCount == 0) {
-//                    context->SetPixel(pixel, nextColor);
-//                } else {
-//                    sf::Color previousColor = context->GetPixel(pixel);
-//
-//                    context->SetPixel(pixel,
-//                                      sf::Color(
-//                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
-//                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
-//                                              (previousColor.b * (frameCount) + nextColor.b) /
-//                                              (frameCount + 1)));
-//                }
+        for (unsigned int i: indexes) {
+            if (!isPreview && context->cancelled) {
+                break;
             }
+
+            auto timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::high_resolution_clock::now() - startTime).count();
+            if (isPreview && timeElapsed > 1000 / REAL_TIME_TARGET_FPS) {
+                break;
+            }
+
+            unsigned int x = i % dimensions.x;
+            unsigned int y = i / dimensions.x;
+
+            double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
+            double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
+
+            sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, maxBounces);
+
+            sf::Vector2u pixel(x, y);
+
+            auto average = context->AverageColor(pixel, nextColor);
+
+            context->SetPixel(pixel, average);
+
+//            // Accumulate rays
+//            if (frameCount == 0) {
+//                context->SetPixel(pixel, nextColor);
+//            } else {
+//                sf::Color previousColor = context->GetPixel(pixel);
+//
+//                context->SetPixel(pixel,
+//                                  sf::Color(
+//                                          (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+//                                          (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+//                                          (previousColor.b * (frameCount) + nextColor.b) /
+//                                          (frameCount + 1)));
+//            }
         }
+
+//        for (unsigned int x = threadIndex; x < dimensions.x; x += threadCount) {
+//            for (unsigned int y = 0; y < dimensions.y; y++) {
+//                if (isPreview) {
+//                    // Skip frames based on realTimeResolution and modulo pos
+//                    if ((y % (int) (1 / realTimeResolution_) != 0) ||
+//                        (x % (int) (1 / realTimeResolution_) != 0)) {
+//                        continue;
+//                    }
+//                }
+//
+//                double scaledX = ((double) x * 2 / (double) dimensions.x - 1) * std::min(1.0, aspectRatio);
+//                double scaledY = (-((double) y * 2 / (double) dimensions.y) + 1) / std::max(1.0, aspectRatio);
+//
+//                sf::Color nextColor = GetPixelColor(scaledX, scaledY, scene, x * y * frameCount, maxBounces);
+//
+//                sf::Vector2u pixel(x, y);
+//
+//                auto average = context->AverageColor(pixel, nextColor);
+//
+//                context->SetPixel(pixel, average);
+//
+////                // Accumulate rays
+////                if (frameCount == 0) {
+////                    context->SetPixel(pixel, nextColor);
+////                } else {
+////                    sf::Color previousColor = context->GetPixel(pixel);
+////
+////                    context->SetPixel(pixel,
+////                                      sf::Color(
+////                                              (previousColor.r * (frameCount) + nextColor.r) / (frameCount + 1),
+////                                              (previousColor.g * (frameCount) + nextColor.g) / (frameCount + 1),
+////                                              (previousColor.b * (frameCount) + nextColor.b) /
+////                                              (frameCount + 1)));
+////                }
+//            }
+//        }
     }
 };
 
