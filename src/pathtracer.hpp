@@ -38,14 +38,13 @@ private:
 public:
     std::atomic<int> frameCount = 0;
     std::atomic<int> maxBounces = 12;
-    const std::atomic<bool> isPreview_;
     std::atomic<bool> cancelled = false;
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) : RenderContext(dimensions, scene, 12,
-                                                                                                  isPreview) {}
+    RenderContext(sf::Vector2u &dimensions, Scene &scene) : RenderContext(dimensions, scene,
+                                                                          12) {}
 
-    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces, bool isPreview = false)
-            : scene_(scene), dimensions_(dimensions), isPreview_(isPreview), maxBounces(maxBounces) {
+    RenderContext(sf::Vector2u &dimensions, Scene &scene, int maxBounces)
+            : scene_(scene), dimensions_(dimensions), maxBounces(maxBounces) {
         image_.create(dimensions, sf::Color::Transparent);
     }
 
@@ -96,7 +95,6 @@ class PathTracer {
 private:
 
     const int threadCount = std::max(1, (int) (std::thread::hardware_concurrency() * 0.8));
-    constexpr const static float realTimeResolution_ = 0.1;
     std::shared_ptr<RenderContext> context_;
 
     sf::Image image_;
@@ -104,7 +102,7 @@ private:
 
 public:
     PathTracer(sf::Vector2u &dimensions, Scene &scene)
-            : context_(std::make_shared<RenderContext>(dimensions, scene, true)) {}
+            : context_(std::make_shared<RenderContext>(dimensions, scene)) {}
 
     ~PathTracer() = default;
 
@@ -113,9 +111,9 @@ public:
         return image_;
     }
 
-    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene, bool isPreview = false) {
+    void UpdateRenderContext(sf::Vector2u &dimensions, Scene &scene) {
         context_->cancelled = true;
-        context_ = std::make_shared<RenderContext>(dimensions, scene, isPreview);
+        context_ = std::make_shared<RenderContext>(dimensions, scene);
     }
 
     void Draw(sf::RenderWindow &window, sf::Image &image) {
@@ -139,7 +137,6 @@ public:
     void Renderer(sf::RenderWindow &window) {
         while (window.isOpen()) {
             std::shared_ptr<RenderContext> context = context_;
-            bool isPreviewFrame = context->isPreview_;
 
             std::vector<int> indexes(context->GetDimensions().x * context->GetDimensions().y);
             std::iota(indexes.begin(), indexes.end(), 0);
@@ -155,10 +152,11 @@ public:
                 auto threadIndexes = std::vector<int>(indexes.begin() + i * indexes.size() / threadCount,
                                                       indexes.begin() + (i + 1) * indexes.size() / threadCount);
 
-                threads[i] = std::thread(RenderWorker, threadIndexes, context, std::ref(isDone[i]), isPreviewFrame);
+                threads[i] = std::thread(RenderWorker, threadIndexes, context, std::ref(isDone[i]));
             }
 
             while (true) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / REAL_TIME_TARGET_FPS));
                 bool allDone = true;
                 for (int i = 0; i < threadCount; i++) {
                     if (!isDone[i]) {
@@ -169,7 +167,6 @@ public:
                 if (allDone) break;
                 sf::Image image = context->GetImage();
                 Draw(window, image);
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / REAL_TIME_TARGET_FPS));
             }
 
             for (int i = 0; i < threadCount; i++) {
@@ -321,8 +318,7 @@ private:
      * @param context Rendering context from which to copy values
      */
     static void
-    RenderWorker(std::vector<int> indexes, std::shared_ptr<RenderContext> context, std::atomic<bool> &isDone,
-                 bool isPreview = false) {
+    RenderWorker(std::vector<int> indexes, std::shared_ptr<RenderContext> context, std::atomic<bool> &isDone) {
         auto dimensions = context->GetDimensions();
         auto scene = context->GetScene();
         int frameCount = context->frameCount;
@@ -332,13 +328,10 @@ private:
         auto startTime = std::chrono::high_resolution_clock::now();
 
         for (unsigned int i: indexes) {
-            if (!isPreview && context->cancelled) {
-                break;
-            }
-
             auto timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - startTime).count();
-            if (isPreview && timeElapsed > 1000 / REAL_TIME_TARGET_FPS) {
+
+            if (context->cancelled && timeElapsed > 1000 / REAL_TIME_TARGET_FPS) {
                 break;
             }
 
