@@ -17,3 +17,8 @@ The major features include:
  - Real time preview and camera movement & controls
  - Multithreaded rendering on CPU
  - Saving the result in a file
+
+## Additional Screenshots
+
+![Screenshot 1](images/path-tracer-scene5.png)
+![Screenshot 2](images/path-tracer-3.png)
