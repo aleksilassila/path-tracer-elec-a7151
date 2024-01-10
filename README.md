@@ -8,7 +8,7 @@
 
 ## Documentation
 
-The project documentation and screenshots can be found in [docs/Documentation.pdf](/docs/Documentation.pdf).
+The project documentation and screenshots can be found in [doc/Documentation.pdf](/doc/Documentation.pdf).
 The major features include:
  - Scene files using .json format
  - Objects, such as spheres, triangles, parallelograms
